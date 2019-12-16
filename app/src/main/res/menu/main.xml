@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main_shujia"
+        android:checked="true"
+        android:icon="@drawable/icon_shujia"
+        android:title="书架" />
+    <item
+        android:id="@+id/main_shucheng"
+        android:icon="@drawable/icon_shucheng"
+        android:title="书城" />
+    <item
+        android:id="@+id/main_huodong"
+        android:icon="@drawable/icon_huodong"
+        android:title="活动" />
+    <item
+        android:id="@+id/main_my"
+        android:icon="@drawable/icon_my"
+        android:title="我的" />
+</menu>
