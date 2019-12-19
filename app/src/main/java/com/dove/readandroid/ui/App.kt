@@ -9,6 +9,7 @@ import androidx.room.Room
 
 import com.alibaba.android.arouter.launcher.ARouter
 import com.appbaselib.app.ActivityLifecycle
+import com.appbaselib.app.BaseApplication
 import com.appbaselib.app.CrashHandler
 import com.appbaselib.ext.toast
 import com.appbaselib.utils.LogUtils
@@ -34,14 +35,14 @@ import org.json.JSONObject
  * 创建日期：2019/3/18 15:42
  * ===============================
  */
-class App : Application() {
+class App : BaseApplication() {
     lateinit var mActivityLifecycle: ActivityLifecycle
 
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
         //activity 生命周期监听
+       instance=this
         mActivityLifecycle = ActivityLifecycle(this)
         registerActivityLifecycleCallbacks(mActivityLifecycle)
         initArouter()
@@ -105,19 +106,8 @@ class App : Application() {
         ARouter.init(this) // 尽可能早，推荐在Application中初始化
     }
 
-    /**
-     * Logger自定义Tag
-     */
-
-    override fun attachBaseContext(base: Context) {
-        super.attachBaseContext(base)
-        MultiDex.install(base)
-    }
-
     companion object {
-
-        @get:Synchronized
-        lateinit var instance: App
-
+        lateinit var instance: Context
     }
+
 }

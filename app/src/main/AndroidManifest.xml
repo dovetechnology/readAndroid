@@ -10,15 +10,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.shujia.MainActivity">
+        <activity android:name=".ui.me.AlterPasswordActivity"></activity>
+        <activity android:name=".ui.me.EditUserActivity" />
+        <activity
+            android:name=".ui.shujia.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTask"
+            android:theme="@style/SpalashActivityTheme"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity android:name=".ui.shujia.RegisterActivity" />
+        <activity android:name=".ui.shujia.LoginActivity" />
+        <activity android:name="com.dove.imuguang.ui.start.SpalashActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.shujia.RegisterActivity" />
-        <activity android:name=".ui.shujia.LoginActivity" />
     </application>
 
 </manifest>

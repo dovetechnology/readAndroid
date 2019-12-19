@@ -17,13 +17,11 @@ class ShujiaFragment :BaseMvcFragment(){
 
 
     override fun getContentViewLayoutID(): Int {
-        return R.layout.fragment_huodong
+        return R.layout.fragment_shujia
     }
 
     override fun initView() {
-        lin.click {
-            start(LoginActivity::class.java)
-        }
+
     }
 
 }

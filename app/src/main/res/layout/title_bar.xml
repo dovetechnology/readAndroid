@@ -1,0 +1,7 @@
+<com.appbaselib.base.TitleBar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/titleBar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_47"
+    android:background="#FFFFFFFF"
+    android:elevation="0dp"/>
