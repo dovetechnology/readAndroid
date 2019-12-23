@@ -4,10 +4,9 @@ import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.appbaselib.base.BaseMvcActivity
-import com.appbaselib.ext.toast
-import com.dove.imuguang.model.http.http.get3
-import com.dove.imuguang.model.http.http.http
 import com.dove.readandroid.R
+import com.dove.readandroid.network.get3
+import com.dove.readandroid.network.http
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.safframework.ext.click
 import io.reactivex.Observable
@@ -32,7 +31,8 @@ class RegisterActivity : BaseMvcActivity() {
         tv_register.click {
             http().mApiService.register(tv_name.text.toString(),tv_mima.text.toString(),tv_email.text.toString())
                 .get3 {
-                        start(MainActivity::class.java)
+
+                    start(MainActivity::class.java)
                     finish()
                 }
         }

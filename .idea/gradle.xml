@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/../common/baselibrary" />
             <option value="$PROJECT_DIR$/../common/photopicker" />
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/FlycoTabLayout_Lib" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

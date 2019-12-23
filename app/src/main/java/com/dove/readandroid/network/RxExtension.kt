@@ -1,5 +1,4 @@
-package com.dove.imuguang.model.http.http
-
+package com.dove.readandroid.network
 import androidx.lifecycle.LifecycleOwner
 import android.content.Context
 import com.appbaselib.app.AppManager

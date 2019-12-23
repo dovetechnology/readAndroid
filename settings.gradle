@@ -1,7 +1,8 @@
 include ':app'
-include':photopicker'
-project(':photopicker').projectDir=new File('../common/photopicker')
+include ':FlycoTabLayout_Lib'
+include ':photopicker'
+project(':photopicker').projectDir = new File('../common/photopicker')
 include ':baselibrary'
-project(':baselibrary').projectDir=new File('../common/baselibrary')
+project(':baselibrary').projectDir = new File('../common/baselibrary')
 include ':adressselectorlib'
-project(':adressselectorlib').projectDir=new File('../common/adressselectorlib')
+project(':adressselectorlib').projectDir = new File('../common/adressselectorlib')

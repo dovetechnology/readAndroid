@@ -1,11 +1,10 @@
 package com.dove.readandroid.ui.shujia
-
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.appbaselib.base.BaseMvcActivity
-import com.dove.imuguang.model.http.http.get3
-import com.dove.imuguang.model.http.http.http
 import com.dove.readandroid.R
+import com.dove.readandroid.network.get3
+import com.dove.readandroid.network.http
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.safframework.ext.click
 import io.reactivex.Observable
