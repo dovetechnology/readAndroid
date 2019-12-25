@@ -5,6 +5,7 @@ import com.dove.readandroid.ui.base.PagingBean
 import com.dove.readandroid.ui.model.Fenlei
 import com.dove.readandroid.ui.model.Top
 import com.dove.readandroid.ui.model.UserBean
+import com.dove.readandroid.ui.model.UserData
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.http.*
@@ -30,8 +31,14 @@ interface ApiService {
     fun login(
         @Field("username") username: String,
         @Field("password") password: String
-    ): Observable<ResponseBean<UserBean>>
+    ): Observable<ResponseBean<UserData>>
 
+    @FormUrlEncoded
+    @POST("read/novel/user/modify")
+    fun xiugai(
+        @Field("username") username: String,
+        @Field("mail") mail: String
+    ): Observable<ResponseBean<UserData>>
 
     @GET("read/novel/classify")
     fun tag(): Observable<ResponseBean<List<Fenlei>>>

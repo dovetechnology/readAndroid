@@ -1,5 +1,7 @@
 package com.dove.readandroid.ui.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
 /**
@@ -12,4 +14,12 @@ import java.io.Serializable;
 public class UserBean implements Serializable {
 
     public String name;
+    public String id;
+    public String phone;
+    public String  headUrl;
+    public String money;
+    public String sign;
+    public String username;
+    public String gender;
+    public String mail;
 }

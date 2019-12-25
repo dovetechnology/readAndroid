@@ -1,6 +1,7 @@
 package com.dove.readandroid.ui.common;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * ===============================
@@ -15,4 +16,6 @@ public class Constants {
     public static final String USER = "user";
     public static final String TOKEN = "token";
     public static final String IMAGE="";
+    @Nullable
+    public static String IS_BLACK ="is_black";
 }

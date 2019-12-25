@@ -32,8 +32,8 @@ class ShuchengFragment : BaseMvcFragment() {
 
     override fun initView() {
         jingxuanFragment = JingxuanFragment()
-        paihangFragment = PaihangFragment()
         fenleiFragment = FenleiFragment()
+        paihangFragment = PaihangFragment()
         fragments.add(jingxuanFragment)
         fragments.add(fenleiFragment)
         fragments.add(paihangFragment)

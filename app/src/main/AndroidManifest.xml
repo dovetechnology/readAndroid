@@ -6,8 +6,7 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission
         android:name="android.permission.WRITE_SECURE_SETTINGS"
-        tools:ignore="ProtectedPermissions" />
-    <!-- 允许装载和卸载文件系统权限 -->
+        tools:ignore="ProtectedPermissions" /> <!-- 允许装载和卸载文件系统权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -30,21 +29,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup,android:label">
-        <activity android:name=".ui.me.AlterPasswordActivity"></activity>
+        <activity
+            android:name=".ui.ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ui.BookDetailActivity" />
+        <activity android:name=".ui.me.SettingActivity" />
+        <activity android:name=".ui.me.AlterPasswordActivity" />
         <activity android:name=".ui.me.EditUserActivity" />
         <activity
             android:name=".ui.shujia.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.shujia.RegisterActivity" />
         <activity android:name=".ui.shujia.LoginActivity" />
         <activity
             android:name="com.dove.imuguang.ui.start.SpalashActivity"
             android:theme="@style/SpalashActivityTheme">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
