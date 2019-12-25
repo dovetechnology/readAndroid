@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:orientation="vertical">
 
+    <com.appbaselib.view.RatioFramlayout
+        android:id="@+id/ratiolayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/paihang"
+        app:ratio="0.7">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="凌天战尊"
+            android:textColor="#ffffffff"
+            android:textSize="12sp" />
+    </com.appbaselib.view.RatioFramlayout>
+
+    <TextView
+        android:layout_margin="12dp"
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="凌天战尊"
+        android:textColor="#ff2d2d2d"
+        android:textSize="13sp"
+        android:textStyle="bold" />
 </LinearLayout>

@@ -37,10 +37,9 @@ class PaihangFragment : BaseMvcFragment() {
         }
         titleAdapter.setOnItemClickListener { adapter, view, position ->
             contentAdapter.setNewData(list.get(position).totalList)
-            contentAdapter.notifyDataSetChanged()
         }
 
-        rv_content.layoutManager = GridLayoutManager(mContext, 2)
+        rv_content.layoutManager = GridLayoutManager(mContext, 3)
         rv_content.adapter = PaihangContentAdapter(R.layout.item_paihang_content, mutableListOf()).apply {
             contentAdapter=this
         }
@@ -59,6 +58,8 @@ class PaihangFragment : BaseMvcFragment() {
                     titles.add(it.topName)
                 }
                 (rv_title.adapter as PaihangTitleAdapter).addData(titles)
+                contentAdapter.setNewData(list.get(0).totalList)
+
             }, err = {
                 toast(it)
             })

@@ -23,6 +23,7 @@ class PaihangContentAdapter(layout: Int, data: MutableList<Top>?) : BaseQuickAda
     override fun convert(helper: BaseViewHolder, item: Top) {
         
        helper.setText(R.id.tvName, item.novelName)
+        helper.setText(R.id.name, item.novelName)
 
 
     }
