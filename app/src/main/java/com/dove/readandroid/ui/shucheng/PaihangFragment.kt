@@ -49,7 +49,7 @@ class PaihangFragment : BaseMvcFragment() {
         contentAdapter.setOnItemClickListener { adapter, view, position ->
 
             start(BookDetailActivity::class.java, Bundle().apply {
-                putSerializable("data", contentAdapter.data.get(position))
+                putSerializable("data", contentAdapter.data.get(position).novelUrl)
             })
         }
 

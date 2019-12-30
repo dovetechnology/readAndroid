@@ -72,5 +72,5 @@ interface ApiService {
     ): Observable<ResponseBean<Any>>
 
     @GET("read/novel/open")
-    fun open(@Query("bookUrl") bookUrl: String, @Query("chapterUrl") chapterUrl: String): Observable<ResponseBean<Book>>
+    fun open(@Query("bookUrl") bookUrl: String, @Query("chapterUrl") chapterUrl: String): Observable<ResponseBean<BookWrap>>
 }

@@ -1,5 +1,6 @@
 package com.dove.rea
 
+import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.appbaselib.base.BaseMvcFragment
@@ -7,6 +8,7 @@ import com.appbaselib.common.load
 import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
+import com.dove.readandroid.ui.BookDetailActivity
 import com.dove.readandroid.ui.shucheng.HomeBookAdapter
 import kotlinx.android.synthetic.main.fragment_jingxuan.*
 
@@ -34,11 +36,21 @@ class JingxuanFragment : BaseMvcFragment() {
         rv_jingxuan.adapter = HomeBookAdapter(R.layout.item_shu, arrayListOf()).apply {
             adapter = this
         }
-
+        adapter.setOnItemClickListener { a, view, position ->
+            start(BookDetailActivity::class.java, Bundle().apply {
+                putSerializable("data", adapter.data.get(position).novelUrl)
+            })
+        }
         rv_xinshu.layoutManager = GridLayoutManager(mContext, 3)
         rv_xinshu.adapter = HomeBookAdapter(R.layout.item_shu, arrayListOf()).apply {
             adapterx = this
         }
+        adapterx.setOnItemClickListener { a, view, position ->
+            start(BookDetailActivity::class.java, Bundle().apply {
+                putSerializable("data", adapterx.data.get(position).novelUrl)
+            })
+        }
+
         toggleShowLoading(true)
         getData()
         //广告
@@ -48,6 +60,7 @@ class JingxuanFragment : BaseMvcFragment() {
                     iv_ad_one.load(it?.list?.get(0)?.imgUrl)
                 }
             }
+
     }
 
     fun getData() {
