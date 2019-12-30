@@ -276,4 +276,6 @@ dependencies {
     implementation "org.greenrobot:eventbus:3.0.0"
     implementation 'com.github.ittianyu:BottomNavigationViewEx:2.0.4'
     implementation project(path: ':FlycoTabLayout_Lib')
+    implementation project(path: ':flowlayout_lib')
+    implementation 'com.github.Ye-Miao:StatusBarUtil:1.7.5'
 }

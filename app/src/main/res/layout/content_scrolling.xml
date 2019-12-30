@@ -20,7 +20,7 @@
             android:layout_marginTop="8dp"
             android:background="@color/white"
             app:cardCornerRadius="4dp"
-            app:cardElevation="8dp">
+            app:cardElevation="1dp">
 
             <com.appbaselib.view.RatioFramlayout
                 android:id="@+id/ratiolayout"
@@ -72,12 +72,13 @@
 
         <TextView
             android:layout_width="match_parent"
+            android:id="@+id/jianjie"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:ellipsize="end"
             android:lineSpacingExtra="3dp"
             android:maxLines="3"
-            android:text="简介：十年后，他终于回到了江南，只想陪着他的爱人平平淡淡过日子，然鹅，冷艳的妍美剑圣找上门来，桃花纷纷……"
+            tools:text="简介：十年后，他终于回到了江南，只想陪着他的爱人平平淡淡过日子，然鹅，冷艳的妍美剑圣找上门来，桃花纷纷……"
             android:textColor="#ff2f2f2f"
             android:textSize="14sp" />
 
@@ -111,7 +112,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="第一章  古村少年"
+                tools:text="第一章  古村少年"
                 android:textColor="#ff262626"
                 android:textSize="15sp"
                 />

@@ -5,8 +5,10 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.appbaselib.base.BaseMvcFragment
 import com.dove.readandroid.R
+import com.dove.readandroid.ui.SearchActivity
 import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
+import com.safframework.ext.click
 import kotlinx.android.synthetic.main.fragment_shucheng.*
 
 /**
@@ -67,7 +69,7 @@ class ShuchengFragment : BaseMvcFragment() {
 
             }
         })
-        vpView.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
+        vpView.adapter = object : FragmentPagerAdapter(childFragmentManager) {
             override fun getItem(position: Int): Fragment {
                 when (position) {
                     0 -> return jingxuanFragment
@@ -81,6 +83,11 @@ class ShuchengFragment : BaseMvcFragment() {
             override fun getCount(): Int {
                 return 3
             }
+        }
+        etSearch.click {
+
+            start(SearchActivity::class.java)
+
         }
     }
 

@@ -45,11 +45,12 @@
                     android:layout_marginRight="8dp"
                     android:src="@drawable/sousuo_icon" />
 
-                <EditText
+                <TextView
                     android:id="@+id/etSearch"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_toRightOf="@id/iv"
+                    android:gravity="center_vertical"
                     android:background="@null"
                     android:hint="请输入书名或作者"
                     android:imeOptions="actionSearch"

@@ -1,5 +1,6 @@
 package com.dove.rea
 
+import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appbaselib.base.BaseMvcFragment
@@ -7,6 +8,7 @@ import com.appbaselib.ext.toast
 import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
+import com.dove.readandroid.ui.BookDetailActivity
 import com.dove.readandroid.ui.model.Top
 import com.dove.readandroid.ui.shucheng.PaihangContentAdapter
 import com.dove.readandroid.ui.shucheng.PaihangTitleAdapter
@@ -40,8 +42,15 @@ class PaihangFragment : BaseMvcFragment() {
         }
 
         rv_content.layoutManager = GridLayoutManager(mContext, 3)
-        rv_content.adapter = PaihangContentAdapter(R.layout.item_paihang_content, mutableListOf()).apply {
-            contentAdapter=this
+        rv_content.adapter =
+            PaihangContentAdapter(R.layout.item_paihang_content, mutableListOf()).apply {
+                contentAdapter = this
+            }
+        contentAdapter.setOnItemClickListener { adapter, view, position ->
+
+            start(BookDetailActivity::class.java, Bundle().apply {
+                putSerializable("data", contentAdapter.data.get(position))
+            })
         }
 
         getData()
@@ -52,7 +61,7 @@ class PaihangFragment : BaseMvcFragment() {
 
         http().mApiService.top()
             .get3(next = {
-                list= it as ArrayList<Top>
+                list = it as ArrayList<Top>
                 var titles = mutableListOf<String>()
                 it?.forEach {
                     titles.add(it.topName)

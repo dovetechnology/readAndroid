@@ -1,6 +1,7 @@
 package com.dove.readandroid.ui.model;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 
@@ -14,4 +15,5 @@ import java.io.Serializable;
 public class Fenlei implements Serializable {
 
     public  String name;
+    public String url;
 }

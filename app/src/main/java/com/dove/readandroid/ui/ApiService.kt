@@ -2,10 +2,7 @@ package com.dove.readandroid.ui
 
 import com.appbaselib.network.ResponseBean
 import com.dove.readandroid.ui.base.PagingBean
-import com.dove.readandroid.ui.model.Fenlei
-import com.dove.readandroid.ui.model.Top
-import com.dove.readandroid.ui.model.UserBean
-import com.dove.readandroid.ui.model.UserData
+import com.dove.readandroid.ui.model.*
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.http.*
@@ -43,6 +40,37 @@ interface ApiService {
     @GET("read/novel/classify")
     fun tag(): Observable<ResponseBean<List<Fenlei>>>
 
+    @GET("read/novel/classify/detail")
+    fun jingxuan(@Query("url") string: String): Observable<ResponseBean<List<Top>>>
+
     @GET("read/novel/top")
     fun top(): Observable<ResponseBean<List<Top>>>
+
+    @GET("read/novel/home")
+    fun home(): Observable<ResponseBean<HomeData>>
+
+    @GET("read/novel/search")
+    fun search(@Query("key") string: String): Observable<ResponseBean<Any>>
+
+    @GET("read/novel/other/ad/list")
+    fun ad(@Query("location") string: String): Observable<ResponseBean<AdDataWrapper>>
+
+    @GET("read/novel/user/collect/list")
+    fun shujiaList(): Observable<ResponseBean<List<Book>>>
+
+    @GET("read/novel/other/act/list")
+    fun huodong(
+        @Query("page") page: Int, //页码号
+        @Query("size") size: Int
+    ): Observable<ResponseBean<PagingBean<Huodong>>>
+
+    @FormUrlEncoded
+    @POST("read/novel/user/collect")
+    fun addShujia(
+        @Field("name") name: String, @Field("author") author: String,
+        @Field("title") title: String
+    ): Observable<ResponseBean<Any>>
+
+    @GET("read/novel/open")
+    fun open(@Query("bookUrl") bookUrl: String, @Query("chapterUrl") chapterUrl: String): Observable<ResponseBean<Book>>
 }

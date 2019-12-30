@@ -18,4 +18,6 @@ public class Constants {
     public static final String IMAGE="";
     @Nullable
     public static String IS_BLACK ="is_black";
+    public static final String HISTORY = "history";
+
 }

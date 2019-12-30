@@ -1,5 +1,7 @@
 package com.dove.readandroid.ui.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,4 +20,5 @@ public class Top implements Serializable {
     public List<Top> totalList ;
     public String updateTime;
     public  List<Top> weekList;
+    public String name;
 }

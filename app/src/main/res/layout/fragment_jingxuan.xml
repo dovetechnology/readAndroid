@@ -1,47 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp">
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@color/white"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="8dp">
-
-        <com.appbaselib.view.RatioFramlayout
-            android:id="@+id/ratiolayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:ratio="2.5">
+    android:background="@color/white"
+    android:orientation="vertical">
 
 
-            <com.gcssloop.widget.RCRelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:round_corner="8dp">
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/detail_player"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY" />
-
-            </com.gcssloop.widget.RCRelativeLayout>
-
-
-        </com.appbaselib.view.RatioFramlayout>
-
-
-    </androidx.cardview.widget.CardView>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -51,14 +22,46 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_margin="16dp"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="3dp">
+
+                <com.appbaselib.view.RatioFramlayout
+                    android:id="@+id/ratiolayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:ratio="3">
+
+
+                    <com.gcssloop.widget.RCRelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:round_corner="8dp">
+
+                        <ImageView
+                            android:id="@+id/iv_ad_one"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY" />
+
+                    </com.gcssloop.widget.RCRelativeLayout>
+
+
+                </com.appbaselib.view.RatioFramlayout>
+
+
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:background="@color/white"
                 app:cardCornerRadius="4dp"
-                app:cardElevation="8dp">
+                app:cardElevation="3dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -91,7 +94,7 @@
                     </FrameLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/gl_xinshu"
+                        android:id="@+id/rv_jingxuan"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
@@ -103,22 +106,22 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_margin="16dp"
                 android:background="@color/white"
                 app:cardCornerRadius="4dp"
-                app:cardElevation="8dp">
+                app:cardElevation="3dp">
 
                 <com.appbaselib.view.RatioFramlayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    app:ratio="2.5">
+                    app:ratio="3">
 
 
                     <com.gcssloop.widget.RCRelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:round_corner="8dp">
+                        app:round_corner="4dp">
 
                         <ImageView
                             android:layout_width="match_parent"
@@ -136,10 +139,12 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
                 android:background="@color/white"
                 app:cardCornerRadius="4dp"
-                app:cardElevation="8dp">
+                app:cardElevation="3dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -171,12 +176,12 @@
                             android:textSize="12sp" />
                     </FrameLayout>
 
-                    <androidx.gridlayout.widget.GridLayout
-                        android:id="@+id/gl_jingxuan"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_xinshu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                    </androidx.gridlayout.widget.GridLayout>
+                    </androidx.recyclerview.widget.RecyclerView>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -185,5 +190,6 @@
 
 
     </androidx.core.widget.NestedScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

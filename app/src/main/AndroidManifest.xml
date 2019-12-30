@@ -29,10 +29,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup,android:label">
-        <activity
-            android:name=".ui.ScrollingActivity"
-            android:label="@string/title_activity_scrolling"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ui.ReadActivity"></activity>
+        <activity android:name=".ui.shucheng.FenleiDetailActivity" />
+        <activity android:name=".ui.SearchActivity" />
         <activity android:name=".ui.BookDetailActivity" />
         <activity android:name=".ui.me.SettingActivity" />
         <activity android:name=".ui.me.AlterPasswordActivity" />

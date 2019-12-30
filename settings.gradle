@@ -1,5 +1,6 @@
 include ':app'
 include ':FlycoTabLayout_Lib'
+include':flowlayout_lib'
 include ':photopicker'
 project(':photopicker').projectDir = new File('../common/photopicker')
 include ':baselibrary'
