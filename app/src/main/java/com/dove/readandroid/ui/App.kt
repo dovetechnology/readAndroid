@@ -8,7 +8,6 @@ import android.util.Log
 import androidx.room.Room
 
 import com.alibaba.android.arouter.launcher.ARouter
-import com.appbaselib.app.ActivityLifecycle
 import com.appbaselib.app.BaseApplication
 import com.appbaselib.app.CrashHandler
 import com.appbaselib.ext.toast

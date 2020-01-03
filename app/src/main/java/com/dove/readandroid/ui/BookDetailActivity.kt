@@ -46,7 +46,9 @@ class BookDetailActivity : BaseMvcActivity() {
                 }
         }
         tv_start.click {
-            start(ReadActivity::class.java)
+            start(ReadActivity::class.java,Bundle().apply {
+                putSerializable("data",book)
+            })
         }
     }
 
