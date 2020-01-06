@@ -1,6 +1,7 @@
 package com.dove.rea
 
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appbaselib.base.BaseMvcFragment
@@ -52,8 +53,12 @@ class PaihangFragment : BaseMvcFragment() {
                 putSerializable("data", contentAdapter.data.get(position).novelUrl)
             })
         }
-
+        toggleShowLoading(true)
         getData()
+    }
+
+    override fun getLoadingTargetView(): View {
+        return swipe
     }
 
     var list = arrayListOf<Top>()
@@ -61,6 +66,7 @@ class PaihangFragment : BaseMvcFragment() {
 
         http().mApiService.top()
             .get3(next = {
+                toggleShowLoading(false)
                 list = it as ArrayList<Top>
                 var titles = mutableListOf<String>()
                 it?.forEach {
@@ -70,6 +76,7 @@ class PaihangFragment : BaseMvcFragment() {
                 contentAdapter.setNewData(list.get(0).totalList)
 
             }, err = {
+                toggleShowLoading(false)
                 toast(it)
             })
     }

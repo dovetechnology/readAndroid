@@ -54,17 +54,15 @@
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:background="#DDD8C5"
             android:id="@+id/read_rv_section"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:paddingTop="25dp"
             app:fastScrollEnabled="true"
-            app:fastScrollHorizontalThumbDrawable="@drawable/thumb_read_section_fast_scroll"
-            app:fastScrollHorizontalTrackDrawable="@drawable/track_read_section_fast_scroll"
-            app:fastScrollVerticalThumbDrawable="@drawable/thumb_read_section_fast_scroll"
-            app:fastScrollVerticalTrackDrawable="@drawable/track_read_section_fast_scroll" />
+            app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"
+            app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"
+            app:fastScrollVerticalThumbDrawable="@drawable/thumb_drawable"
+            app:fastScrollVerticalTrackDrawable="@drawable/line_drawable" />
 
 
     </LinearLayout>

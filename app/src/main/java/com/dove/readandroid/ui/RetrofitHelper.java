@@ -8,8 +8,10 @@ import com.dove.readandroid.BuildConfig;
 import com.dove.readandroid.ui.common.CommonParamsInterceptor;
 import com.dove.readandroid.ui.common.Constants;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -87,6 +89,10 @@ public class RetrofitHelper {
         builder.callTimeout(5, TimeUnit.SECONDS);
         //错误重连
         builder.retryOnConnectionFailure(true);
+        File httpCacheDirectory = new File(App.instance.getCacheDir(), "responses");
+        int cacheSize = 10 * 1024 * 1024; // 10 MiB
+        Cache cache = new Cache(httpCacheDirectory, cacheSize);
+        builder.cache(cache);
         return builder.build();
     }
 }

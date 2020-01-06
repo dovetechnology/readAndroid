@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -44,7 +45,7 @@ public class PageView extends View {
     private int moveX = 0;
     private int moveY = 0;
     //初始化参数
-    private int mBgColor = 0xFFCEC29C;
+    private int mBgColor = 0xDDD8C5;
     private int mPageMode = PAGE_MODE_COVER;
 
     //是否允许点击
@@ -113,16 +114,24 @@ public class PageView extends View {
 
     public PageView(Context context) {
         this(context, null);
+        init();
+    }
+
+    private void init() {
+        mBgColor=Color.parseColor("#DDD8C5");
     }
 
     public PageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
+        init();
 
     }
 
     public PageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         scaledTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+        init();
+
     }
 
     @Override

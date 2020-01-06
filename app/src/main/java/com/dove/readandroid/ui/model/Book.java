@@ -1,5 +1,7 @@
 package com.dove.readandroid.ui.model;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -40,4 +42,5 @@ public class Book implements Serializable {
     public String updateTime;
     public String description;
     public List<Book> novelList;
+    public String content;
 }

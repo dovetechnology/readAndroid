@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.dove.readandroid.R
 import com.dove.readandroid.ui.model.Fenlei
 
@@ -19,10 +19,9 @@ import com.dove.readandroid.ui.model.Fenlei
  * ===============================
  */
 class FenLeiAdapter(layout: Int, data: MutableList<Fenlei>?) : BaseQuickAdapter<Fenlei, BaseViewHolder>(layout, data) {
-    override fun convert(helper: BaseViewHolder, item: Fenlei) {
+    override fun convert(helper: BaseViewHolder, item: Fenlei?) {
         
-       helper.setText(R.id.tvName, item.name)
-
+       helper.setText(R.id.tvName, item?.name)
 
     }
 

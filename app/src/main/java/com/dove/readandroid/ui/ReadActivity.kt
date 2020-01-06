@@ -26,6 +26,8 @@ import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.model.Book
+import com.dove.readandroid.ui.model.BookSectionContent
+import com.dove.readandroid.ui.model.BookSectionItem
 import com.dove.readandroid.utils.AppConfig
 import com.dove.readandroid.utils.BrightnessUtils
 import com.dove.readandroid.utils.SystemBarUtils
@@ -33,6 +35,7 @@ import com.dove.readandroid.view.page.ReadTheme
 import com.dove.readandroid.view.page.ReaderSettingManager
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.safframework.ext.click
 import com.zchu.reader.PageLoaderAdapter
 import com.zchu.reader.PageView
 import kotlinx.android.synthetic.main.activity_read.*
@@ -42,7 +45,7 @@ import q.rorbin.badgeview.DisplayUtil
 
 class ReadActivity : BaseMvcActivity() {
 
-   lateinit var mbook:Book
+    lateinit var mbook: Book
 
     //适配5.0 以下手机可以正常显示vector图片
 
@@ -66,17 +69,13 @@ class ReadActivity : BaseMvcActivity() {
 
     private var isShowCollectionDialog = false
 
-    private var sectionAdapter: BookSectionAdapter? = null
+    lateinit var sectionAdapter: BookSectionAdapter
+    lateinit var readAdapter: ReadAdapter
 
 
     @SuppressLint("InvalidWakeLockTag")
     override fun initView(mSavedInstanceState: Bundle?) {
-        mbook= intent.getSerializableExtra("data") as Book
-
-        http().mApiService.open(url, chapUrl)
-            .get3 {
-
-            }
+        mbook = intent.getSerializableExtra("data") as Book
 
         //
         ReaderSettingManager.init(this)
@@ -88,7 +87,6 @@ class ReadActivity : BaseMvcActivity() {
 //            readTvNightMode,
 //            readTvSetting
 //        )
-        read_rv_section.setLayoutManager(LinearLayoutManager(this))
 
         if (Build.VERSION.SDK_INT >= 19) {
             appbar.setPadding(0, ScreenUtils.getStatusHeight(this), 0, 0)
@@ -106,12 +104,7 @@ class ReadActivity : BaseMvcActivity() {
         } else {
             BrightnessUtils.setBrightness(this, ReaderSettingManager.getInstance().getBrightness())
         }
-        pv_read.setOnThemeChangeListener(PageView.OnThemeChangeListener { textColor, backgroundColor, textSize ->
-            read_rv_section.setBackgroundColor(backgroundColor)
-            if (sectionAdapter != null) {
-                sectionAdapter.setTextColor(textColor)
-            }
-        })
+
         pv_read.setTextSize(ReaderSettingManager.getInstance().getTextSize())
         if (AppConfig.isNightMode()) {
             ReaderSettingManager.getInstance()
@@ -137,11 +130,67 @@ class ReadActivity : BaseMvcActivity() {
             }
             false
         })
-    //loaddata
+        //loaddata
+        //加载目录
+        var titles = arrayListOf<BookSectionItem>()
+        mbook.novelList.forEach {
+            titles.add(BookSectionItem(it.title, it.chapterUrl))
+        }
+        sectionAdapter = BookSectionAdapter(R.layout.list_item_book_section, titles)
+        sectionAdapter.setTextColor(pv_read.textColor)
+        read_rv_section.setLayoutManager(LinearLayoutManager(this))
+        read_rv_section.adapter = sectionAdapter
 
+        sectionAdapter.setOnItemClickListener { adapter, view, position ->
 
+            read_drawer.closeDrawers()
+            getContentByChap(titles.get(position).chapterUrl)
+        }
+        pv_read.setOnThemeChangeListener(PageView.OnThemeChangeListener { textColor, backgroundColor, textSize ->
+            read_rv_section.setBackgroundColor(backgroundColor)
+            if (sectionAdapter != null) {
+                sectionAdapter.setTextColor(textColor)
+            }
+        })
+
+        mTopInAnim = AnimationUtils.loadAnimation(this, R.anim.slide_top_in)
+        mTopOutAnim = AnimationUtils.loadAnimation(this, R.anim.slide_top_out)
+        mBottomInAnim = AnimationUtils.loadAnimation(this, R.anim.slide_bottom_in)
+        mBottomOutAnim = AnimationUtils.loadAnimation(this, R.anim.slide_bottom_out)
+        //退出的速度要快
+        mTopOutAnim.setDuration(200)
+        mBottomOutAnim.setDuration(200)
+
+        readAdapter = ReadAdapter()
+        pv_read.setAdapter(readAdapter)
+
+        //点击事件
+
+        read_tv_category.click {
+            read_drawer.openDrawer(read_side)
+        }
+        read_tv_setting.click {
+            openReadSetting(this)
+        }
     }
 
+    fun getContentByChap(url: String) {
+        http().mApiService.openChap(mbook.novelUrl, url)
+            .get3 {
+                var content = it?.data?.content?.replace("<br>", "")
+
+                content = content?.replace("&nbsp;", "")
+
+                readAdapter.addData(1, BookSectionContent(1, it?.data?.title, content))
+                pv_read.openSection(1, 1)
+            }
+    }
+    private fun openReadSetting(context: Context) {
+        if (mReadSettingDialog == null) {
+            mReadSettingDialog = ReaderSettingDialog(context, pv_read)
+        }
+        mReadSettingDialog?.show()
+    }
 
     private fun hideSystemBar() {
         //隐藏
@@ -153,11 +202,7 @@ class ReadActivity : BaseMvcActivity() {
 
     //初始化菜单动画
     private fun initMenuAnim() {
-        if (mTopInAnim != null) return
 
-        mTopInAnim = AnimationUtils.loadAnimation(this, R.anim.slide_top_in)
-        mTopOutAnim = AnimationUtils.loadAnimation(this, R.anim.slide_top_out)
-        mBottomInAnim = AnimationUtils.loadAnimation(this, R.anim.slide_bottom_in)
         mBottomInAnim?.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation) {
                 pv_read.setCanTouch(false)
@@ -171,7 +216,7 @@ class ReadActivity : BaseMvcActivity() {
 
             }
         })
-        mBottomOutAnim = AnimationUtils.loadAnimation(this, R.anim.slide_bottom_out)
+
         mBottomOutAnim.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation) {
 
@@ -186,9 +231,7 @@ class ReadActivity : BaseMvcActivity() {
 
             }
         })
-        //退出的速度要快
-        mTopOutAnim.setDuration(200)
-        mBottomOutAnim.setDuration(200)
+
     }
 
     /**
@@ -218,8 +261,12 @@ class ReadActivity : BaseMvcActivity() {
                 pv_read.getPageBackground(),
                 pv_read.getTextColor()
             ) === ReadTheme.NIGHT
-            readTvNightMode.setSelected(isNight)
-            readTvNightMode.setText(if (isNight) getString(R.string.read_daytime) else getString(R.string.read_night))
+            read_tv_night_mode.setSelected(isNight)
+            read_tv_night_mode.setText(
+                if (isNight) getString(R.string.read_daytime) else getString(
+                    R.string.read_night
+                )
+            )
             showSystemBar()
         }
     }
@@ -236,6 +283,14 @@ class ReadActivity : BaseMvcActivity() {
             return true
         }
         return false
+    }
+
+    private fun showSystemBar() {
+        //显示
+        SystemBarUtils.showUnStableStatusBar(this)
+        if (isFullScreen) {
+            SystemBarUtils.showUnStableNavBar(this)
+        }
     }
 
     override fun getContentViewLayoutID(): Int {

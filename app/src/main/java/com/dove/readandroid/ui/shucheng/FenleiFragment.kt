@@ -24,6 +24,7 @@ class FenleiFragment : BaseRefreshFragment<Fenlei>() {
     override fun initView() {
         super.initView()
         recyclerview.layoutManager = GridLayoutManager(mContext, 2)
+        toggleShowLoading(true)
         requestData()
     }
 

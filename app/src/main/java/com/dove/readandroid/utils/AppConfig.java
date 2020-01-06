@@ -1,5 +1,11 @@
 package com.dove.readandroid.utils;
 
+import com.appbaselib.utils.PreferenceUtils;
+import com.dove.readandroid.ui.App;
+import com.dove.readandroid.ui.common.Constants;
+
+import static com.dove.readandroid.ui.common.Constants.K_NIGHT_MODE;
+
 /**
  * ===============================
  * 描    述：
@@ -9,13 +15,10 @@ package com.dove.readandroid.utils;
  */
 public class AppConfig {
     public static boolean isNightMode() {
-        return getPreferences().getBoolean(K_NIGHT_MODE, false);
+        return PreferenceUtils.getPrefBoolean(App.instance, K_NIGHT_MODE, false);
     }
 
     public static void setNightMode(boolean isNightMode) {
-        getPreferences()
-                .edit()
-                .putBoolean(K_NIGHT_MODE, isNightMode)
-                .apply();
+        PreferenceUtils.setPrefBoolean(App.instance, K_NIGHT_MODE, isNightMode);
     }
 }

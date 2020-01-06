@@ -72,8 +72,6 @@ public abstract class StringAdapter implements PageLoaderAdapter {
                 paragraph = StringUtils.halfToFull("  " + paragraph + "\n");
                 paragraph = StringUtils.trimBeforeReplace(paragraph, "　　");
                 while (paragraph.length() > 0) {
-
-
                     //测量一行占用的字节数
                     int count = textPaint.breakText(paragraph, true, visibleWidth, null);
                     String subStr = paragraph.substring(0, count);

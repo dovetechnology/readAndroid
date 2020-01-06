@@ -6,7 +6,7 @@
 
     <color name="md_blue_grey_700">#ff455a64</color>
     <color name="color_cb">#cbcbcb</color>
-    <color name="read_menu_container_bg">#fa263238</color>
+    <color name="read_menu_container_bg">#DDD8C5</color>
     <color name="read_menu_text">@color/md_blue_grey_400</color>
     <color name="md_blue_grey_400">#ff78909c</color>
     <color name="textSecondaryInverted">#c8ffffff</color>
@@ -20,7 +20,7 @@
     <color name="md_blue_grey_600">#ff546e7a</color>
     <color name="md_blue_grey_800">#ff37474f</color>
     <color name="md_blue_grey_900">#ff263238</color>
-    <color name="read_icon_primary">@color/md_blue_grey_100</color>
+    <color name="read_icon_primary">#462E0B</color>
 
     <color name="md_grey_400">#ffbdbdbd</color>
     <!--night mode-->
@@ -44,5 +44,8 @@
     <!--black-->
     <color name="read_theme_black_page_background">#001C29</color>
     <color name="read_theme_black_text">#637079</color>
+    <color name="bg_list_item_book_section">#33757575</color>
+    <color name="read_text_primary">@color/md_blue_grey_100</color>
+
 
 </resources>

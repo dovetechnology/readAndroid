@@ -19,5 +19,6 @@ public class Constants {
     @Nullable
     public static String IS_BLACK ="is_black";
     public static final String HISTORY = "history";
+    public final static String K_NIGHT_MODE = "night_mode";
 
 }

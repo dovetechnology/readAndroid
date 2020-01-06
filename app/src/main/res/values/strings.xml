@@ -102,7 +102,7 @@
     <string name="read_setting_font_size_minus">A-</string>
     <string name="read_setting_font_size_plus">A+</string>
     <string name="read_setting_font_size_default">默认</string>
-    <string name="read_setting_font_setting">字体</string>
+    <string name="read_setting_font_setting">字号</string>
     <string name="read_setting_flip_over_cover">覆盖</string>
     <string name="read_setting_flip_over_simulation">仿真</string>
     <string name="read_setting_flip_over_slide">滑动</string>

@@ -30,7 +30,7 @@ class BookDetailActivity : BaseMvcActivity() {
         }
         top = intent.getStringExtra("data")
         progressDialog = ProgressDialog.show(mContext, "", "加载中", false, true)
-        http().mApiService.open(top, "")
+        http().mApiService.open(top)
             .get3(next = {
                 progressDialog.dismiss()
                 setValue(it?.data)

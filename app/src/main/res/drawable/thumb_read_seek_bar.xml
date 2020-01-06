@@ -5,9 +5,9 @@
 
     <stroke
         android:width="1dp"
-        android:color="@color/md_blue_grey_100"/>
+        android:color="#462E0B"/>
 
-    <solid android:color="@color/md_blue_grey_900"/>
+    <solid android:color="#462E0B"/>
     <size
         android:width="14dp"
         android:height="14dp"/>
