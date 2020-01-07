@@ -21,6 +21,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appbaselib.base.BaseMvcActivity
+import com.appbaselib.ext.toast
 import com.appbaselib.utils.ScreenUtils
 import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
@@ -35,11 +36,13 @@ import com.dove.readandroid.view.page.ReadTheme
 import com.dove.readandroid.view.page.ReaderSettingManager
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.leaf.library.StatusBarUtil
 import com.safframework.ext.click
 import com.zchu.reader.PageLoaderAdapter
 import com.zchu.reader.PageView
 import kotlinx.android.synthetic.main.activity_read.*
 import kotlinx.android.synthetic.main.layout_read_bottom.*
+import kotlinx.android.synthetic.main.title_bar.*
 import kotlinx.android.synthetic.main.toolbar_read.*
 import q.rorbin.badgeview.DisplayUtil
 
@@ -78,6 +81,7 @@ class ReadActivity : BaseMvcActivity() {
         mbook = intent.getSerializableExtra("data") as Book
 
         //
+        StatusBarUtil.setTransparentForWindow(this)
         ReaderSettingManager.init(this)
 //        bindOnClickLister(
 //            this,
@@ -163,7 +167,6 @@ class ReadActivity : BaseMvcActivity() {
 
         readAdapter = ReadAdapter()
         pv_read.setAdapter(readAdapter)
-
         //点击事件
 
         read_tv_category.click {
@@ -171,6 +174,13 @@ class ReadActivity : BaseMvcActivity() {
         }
         read_tv_setting.click {
             openReadSetting(this)
+        }
+        tv_add.click {
+
+            http().mApiService.addShujia(mbook.name, mbook.author, mbook.title)
+                .get3 (isShowDialog = true){
+                    toast("已加入书架")
+                }
         }
     }
 
@@ -187,7 +197,7 @@ class ReadActivity : BaseMvcActivity() {
     }
     private fun openReadSetting(context: Context) {
         if (mReadSettingDialog == null) {
-            mReadSettingDialog = ReaderSettingDialog(context, pv_read)
+            mReadSettingDialog = ReaderSettingDialog(context, pv_read,lin)
         }
         mReadSettingDialog?.show()
     }

@@ -1,5 +1,6 @@
 package com.dove.readandroid.ui
 
+import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dove.imuguang.base.BaseRefreshFragment
 import com.dove.readandroid.R
@@ -7,6 +8,7 @@ import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.model.Book
 import com.dove.readandroid.ui.shucheng.HomeBookAdapter
+import com.safframework.ext.dp2px
 import kotlinx.android.synthetic.main.fragment_recyclerview.*
 
 /**
@@ -18,19 +20,33 @@ import kotlinx.android.synthetic.main.fragment_recyclerview.*
  */
 class BookFragment : BaseRefreshFragment<Book>() {
     override fun initAdapter() {
-        mAdapter=HomeBookAdapter(R.layout.item_shu,mList)
-        recyclerview.layoutManager=GridLayoutManager(mContext,3)
+        mAdapter = HomeBookAdapter(R.layout.item_shu, mList)
+        recyclerview.layoutManager = GridLayoutManager(mContext, 3)
+        recyclerview.setPadding(
+            mContext.dp2px(16),
+            mContext.dp2px(16),
+            mContext.dp2px(16),
+            mContext.dp2px(16)
+        )
+        mAdapter.setOnItemClickListener { adapter, view, position ->
+            start(BookDetailActivity::class.java, Bundle().apply {
+                putSerializable("data", mList.get(position).novelUrl)
+            })
+        }
     }
 
     override fun requestData() {
         http().mApiService.search(ms)
-            .get3 {
-
-            }
+            .get3(next = {
+                loadComplete(it?.data)
+            }, err = {
+                loadError(it)
+            })
     }
- var ms=""
+
+    var ms = ""
     fun search(string: String) {
-        ms=string
-            requestData()
+        ms = string
+        requestData()
     }
 }

@@ -8,7 +8,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
+import com.appbaselib.base.TitleBar;
 import com.dove.readandroid.R;
 import com.dove.readandroid.utils.BrightnessUtils;
 import com.dove.readandroid.view.ShapeView;
@@ -49,13 +51,15 @@ public class ReaderSettingDialog extends BottomSheetDialog implements View.OnCli
     private ShapeView readThemeBrown;
     private ShapeView readThemeBlack;
     private View[] themeViews;
+    private View mTitlebar;
 
 
-    public ReaderSettingDialog(@NonNull Context context, @NonNull PageView pageView) {
+    public ReaderSettingDialog(@NonNull Context context, @NonNull PageView pageView,View mview) {
         super(context, R.style.Read_Setting_Dialog);
         setOwnerActivity((Activity) context);
         super.setContentView(R.layout.bottom_sheet_read_setting);
         this.mPageView = pageView;
+        this.mTitlebar=mTitlebar;
         initView();
         initListener();
         initDisplay();
@@ -208,18 +212,27 @@ public class ReaderSettingDialog extends BottomSheetDialog implements View.OnCli
         switch (readTheme) {
             case WHITE:
                 selectedThemeView(readThemeWhite);
+                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.read_theme_white_page_background));
                 break;
             case AMBER:
                 selectedThemeView(readThemeAmber);
+                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.read_theme_amber_page_background));
+
                 break;
             case GREEN:
                 selectedThemeView(readThemeGreen);
+                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.read_theme_green_page_background));
+
                 break;
             case BROWN:
                 selectedThemeView(readThemeBrown);
+                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.read_theme_brown_page_background));
+
                 break;
             case BLACK:
                 selectedThemeView(readThemeBlack);
+                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.read_theme_black_page_background));
+
                 break;
         }
     }

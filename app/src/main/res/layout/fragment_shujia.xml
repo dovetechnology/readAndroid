@@ -37,12 +37,12 @@
                 android:src="@drawable/sousuo_icon" />
 
             <TextView
-                android:gravity="center_vertical"
                 android:id="@+id/etSearch"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_toRightOf="@id/iv"
                 android:background="@null"
+                android:gravity="center_vertical"
                 android:hint="请输入书名或作者"
                 android:imeOptions="actionSearch"
                 android:inputType="text"

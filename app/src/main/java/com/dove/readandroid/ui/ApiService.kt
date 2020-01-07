@@ -50,7 +50,7 @@ interface ApiService {
     fun home(): Observable<ResponseBean<HomeData>>
 
     @GET("read/novel/search")
-    fun search(@Query("key") string: String): Observable<ResponseBean<Any>>
+    fun search(@Query("key") string: String): Observable<ResponseBean<DataWrap<List<Book>>>>
 
     @GET("read/novel/other/ad/list")
     fun ad(@Query("location") string: String): Observable<ResponseBean<AdDataWrapper>>
@@ -76,4 +76,8 @@ interface ApiService {
 
     @GET("read/novel/open")
     fun openChap(@Query("bookUrl") bookUrl: String, @Query("chapterUrl") chapterUrl: String): Observable<ResponseBean<BookWrap>>
+
+
+    @GET("read/novel/open/name")
+    fun openName(@Query("name") name: String, @Query("author") author: String, @Query("title") title: String): Observable<ResponseBean<BookWrap>>
 }
