@@ -46,6 +46,10 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
             start(SearchActivity::class.java)
         }
         requestData()
+        http().mApiService.ad("2")
+            .get3 {
+
+            }
     }
 
     override fun getLoadingTargetView(): View? {

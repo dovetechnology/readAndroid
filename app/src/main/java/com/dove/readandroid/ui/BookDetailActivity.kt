@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.ext.load
 import com.appbaselib.ext.toast
@@ -12,7 +13,9 @@ import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.model.Book
+import com.dove.readandroid.ui.model.BookSectionItem
 import com.dove.readandroid.ui.model.Top
+import com.dove.readandroid.utils.runBackground
 import com.leaf.library.StatusBarUtil
 import com.safframework.ext.click
 import kotlinx.android.synthetic.main.activity_book_detail.*
@@ -62,11 +65,30 @@ class BookDetailActivity : BaseMvcActivity() {
             jianjie.text = it.description
             iv_cover.load(it.coverImage)
         }
+        //loaddata
+        //加载目录
+        var titles = arrayListOf<String>()
+
+        runBackground(it?.novelList!!,{
+            it?.forEachIndexed { index, book ->
+                if (index>10)
+                   return@forEachIndexed
+                titles.add(book.title)
+            }
+        },{
+            rv_mulu.layoutManager=LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false)
+            rv_mulu.adapter=MuluAdapter(R.layout.item_mulu,titles)
+        },{
+        })
+
+
+
     }
 
     override fun getContentViewLayoutID(): Int {
         return R.layout.activity_book_detail
     }
+
 
 
 }

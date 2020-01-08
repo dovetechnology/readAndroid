@@ -14,6 +14,7 @@ import com.appbaselib.app.CrashHandler
 import com.appbaselib.ext.toast
 import com.appbaselib.utils.LogUtils
 import com.appbaselib.utils.PreferenceUtils
+import com.dove.readandroid.AppDatabase
 import com.dove.readandroid.BuildConfig
 import com.tencent.bugly.Bugly
 import com.umeng.commonsdk.UMConfigure
@@ -38,6 +39,7 @@ import org.json.JSONObject
 class App : BaseApplication() {
     lateinit var mActivityLifecycle: ActivityLifecycle
 
+    lateinit var db: AppDatabase
 
     override fun onCreate() {
         super.onCreate()
@@ -96,6 +98,8 @@ class App : BaseApplication() {
 
         Bugly.init(applicationContext, "xxxxx", BuildConfig.DEBUG)
         //初始化数据库
+        db = Room.databaseBuilder(this, AppDatabase::class.java, "app_database.db").allowMainThreadQueries().build()
+
     }
 
     private fun initArouter() {

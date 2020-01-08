@@ -49,22 +49,13 @@ import q.rorbin.badgeview.DisplayUtil
 class ReadActivity : BaseMvcActivity() {
 
     lateinit var mbook: Book
-
-    //适配5.0 以下手机可以正常显示vector图片
-
-
     private val K_EXTRA_BOOK_TB = "book_tb"
-
-
     lateinit var mTopInAnim: Animation
     lateinit var mTopOutAnim: Animation
     lateinit var mBottomInAnim: Animation
     lateinit var mBottomOutAnim: Animation
 
     private var mReadSettingDialog: BottomSheetDialog? = null
-
-    private val canTouch = true
-    private val adapter: PageLoaderAdapter? = null
 
     //控制屏幕常亮
     private var mWakeLock: PowerManager.WakeLock? = null

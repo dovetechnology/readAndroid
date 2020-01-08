@@ -71,16 +71,16 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
             android:id="@+id/jianjie"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:ellipsize="end"
             android:lineSpacingExtra="3dp"
             android:maxLines="3"
-            tools:text="简介：十年后，他终于回到了江南，只想陪着他的爱人平平淡淡过日子，然鹅，冷艳的妍美剑圣找上门来，桃花纷纷……"
             android:textColor="#ff2f2f2f"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="简介：十年后，他终于回到了江南，只想陪着他的爱人平平淡淡过日子，然鹅，冷艳的妍美剑圣找上门来，桃花纷纷……" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,21 +103,15 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="12dp"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_marginTop="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="第一章  古村少年"
-                android:textColor="#ff262626"
-                android:textSize="15sp"
-                />
 
-        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_mulu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_mulu"
+            android:layout_marginTop="12dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
 

@@ -1,17 +1,16 @@
 package com.dove.readandroid.ui.model;
 
 import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.Ignore;
+import androidx.room.Index;
+import androidx.room.Insert;
 import androidx.room.PrimaryKey;
-import androidx.room.Relation;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.List;
+
+import static androidx.room.ForeignKey.CASCADE;
 
 /**
  * ===============================
@@ -20,9 +19,9 @@ import java.util.List;
  * 创建日期：2019/12/27 14:48
  * ===============================
  */
-
-@Entity
-public class Book implements Serializable {
+@Entity(foreignKeys = @ForeignKey(entity = Book.class, parentColumns = "id", childColumns = "book_id",onDelete = CASCADE)
+        , indices = @Index(value = {"book_name"}, unique = true))
+public class Chap implements Serializable {
 
 
     /**
@@ -39,12 +38,10 @@ public class Book implements Serializable {
      * description : null
      * novelList : null
      */
-    @PrimaryKey(autoGenerate = true)
-    public  int id;
-    public String category;
+
     public String author;
+    @ColumnInfo(name = "book_name")
     public String name;
-    public String stat;
     public String title;
     public String chapterUrl;
     public String coverImage;
@@ -52,8 +49,9 @@ public class Book implements Serializable {
     public String createTime;
     public String updateTime;
     public String description;
-    @Ignore
-    public List<Chap> novelList;
     public String content;
+    @PrimaryKey(autoGenerate = true)
+    public int id;
+    public  int book_id;
 
 }
