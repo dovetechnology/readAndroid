@@ -29,6 +29,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.leaf.library.StatusBarUtil
 import com.safframework.ext.click
 import com.safframework.ext.postDelayed
+import com.zchu.reader.OnPageChangeListener
 import com.zchu.reader.PageView
 import kotlinx.android.synthetic.main.activity_book_detail.*
 import kotlinx.android.synthetic.main.activity_read.*
@@ -55,12 +56,14 @@ class ReadActivity : BaseMvcActivity() {
 
     lateinit var sectionAdapter: BookSectionAdapter
     lateinit var readAdapter: ReadAdapter
+    lateinit var mSectionItem: BookSectionItem //当前章节
 
 
     @SuppressLint("InvalidWakeLockTag")
     override fun initView(mSavedInstanceState: Bundle?) {
         mbook = intent.getSerializableExtra("data") as Book
 
+        mbook.isRead = true
         //
         StatusBarUtil.setTransparentForWindow(this)
         ReaderSettingManager.init(this)
@@ -123,13 +126,7 @@ class ReadActivity : BaseMvcActivity() {
         read_rv_section.setLayoutManager(LinearLayoutManager(this))
         read_rv_section.adapter = sectionAdapter
 
-        sectionAdapter.setOnItemClickListener { adapter, view, position ->
 
-            read_drawer.closeDrawers()
-            postDelayed(time=300){
-                getContentByChap( mbook.novelList.get(position))
-            }
-        }
         pv_read.setOnThemeChangeListener(PageView.OnThemeChangeListener { textColor, backgroundColor, textSize ->
             read_rv_section.setBackgroundColor(backgroundColor)
             if (sectionAdapter != null) {
@@ -158,36 +155,81 @@ class ReadActivity : BaseMvcActivity() {
         tv_add.click {
 
             http().mApiService.addShujia(mbook.name, mbook.author, mbook.title)
-                .get3 (isShowDialog = true){
+                .get3(isShowDialog = true) {
                     toast("已加入书架")
                 }
         }
+
+        pv_read.setOnPageChangeListener(object : OnPageChangeListener {
+            override fun onPageChange(pos: Int) {
+                print("页面改变$pos")
+                mSectionItem.currentPage = pos
+            }
+
+            override fun onChapterChange(pos: Int) {
+                print("章节改变$pos")
+
+                mSectionItem = mbook.novelList.get(pos)
+                mbook.currentSetion = pos
+            }
+
+            override fun onPageCountChange(count: Int) {
+                print("页面页数改变$count")
+
+            }
+        })
+
+        //开始阅读
+        mSectionItem = mbook.novelList.get(mbook.currentSetion)
+        getContentByChap(mbook.currentSetion, mSectionItem)
+        //选中章节
+        sectionAdapter.setOnItemClickListener { adapter, view, position ->
+
+            read_drawer.closeDrawers()
+            mSectionItem = mbook.novelList.get(position)
+            postDelayed(time = 300) {
+                getContentByChap(position, mbook.novelList.get(position))
+            }
+        }
     }
 
-    fun getContentByChap(bookSectionItem: BookSectionItem) {
-        if (bookSectionItem.content.isNullOrEmpty())
-        {
+    override fun onDestroy() {
+        super.onDestroy()
+        //保存当前进度
+        App.instance.db.getBookDao().update(mbook)
+        App.instance.db.getChapDao().updata(mSectionItem) //记录当前章节进度
+    }
+
+    fun getContentByChap(position: Int, bookSectionItem: BookSectionItem) {
+
+        if (bookSectionItem.content.isNullOrEmpty()) {
             http().mApiService.openChap(mbook.novelUrl, bookSectionItem.chapterUrl)
-                .get3 {
+                .get3(isShowDialog = true, title = "", message = "加载章节中……") {
                     var content = it?.data?.content?.replace("<br>", "")
                     content = content?.replace("&nbsp;", "")
-                    bookSectionItem.content=content
+                    bookSectionItem.content = content
 
-                    App.instance.db.getChapDao().updata(bookSectionItem) //保存
-                    readAdapter.addData(1, BookSectionContent(1, it?.data?.title, content))
-                    pv_read.openSection(1, 1)
+                    App.instance.db.getChapDao().updata(bookSectionItem) //保存到数据库
+
+                    readAdapter.addData(
+                        position,
+                        BookSectionContent(position, it?.data?.title, content)
+                    )
+                    pv_read.openSection(position, 0) //从网络获取的就从第一页读
                 }
-        }
-        else
-        {
-            readAdapter.addData(1, BookSectionContent(1, bookSectionItem.title, bookSectionItem.content))
-            pv_read.openSection(1, 1)
+        } else {
+            readAdapter.addData(
+                position,
+                BookSectionContent(position, bookSectionItem.title, bookSectionItem.content)
+            )
+            pv_read.openSection(position, bookSectionItem.currentPage)//从本地获取的就接着读
         }
 
     }
+
     private fun openReadSetting(context: Context) {
         if (mReadSettingDialog == null) {
-            mReadSettingDialog = ReaderSettingDialog(context, pv_read,lin)
+            mReadSettingDialog = ReaderSettingDialog(context, pv_read, lin)
         }
         mReadSettingDialog?.show()
     }

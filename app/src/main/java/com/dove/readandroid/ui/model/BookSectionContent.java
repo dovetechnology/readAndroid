@@ -23,53 +23,16 @@ public class BookSectionContent implements Serializable {
      * CreateDateTime : 2017-03-28T23:30:43.01
      */
 
-    private int sectionIndex;
+    public int sectionIndex;
 
-    private String sectionName;
+    public String sectionName;
 
-    private String content;
+    public String content;
 
-    private String createDateTime;
+    public String createDateTime;
 
-    private String sectionId;
+    public String sectionId;
 
-    public int getSectionIndex() {
-        return sectionIndex;
-    }
 
-    public void setSectionIndex(int sectionIndex) {
-        this.sectionIndex = sectionIndex;
-    }
 
-    public String getSectionName() {
-        return sectionName;
-    }
-
-    public void setSectionName(String sectionName) {
-        this.sectionName = sectionName;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getCreateDateTime() {
-        return createDateTime;
-    }
-
-    public void setCreateDateTime(String createDateTime) {
-        this.createDateTime = createDateTime;
-    }
-
-    public String getSectionId() {
-        return sectionId;
-    }
-
-    public void setSectionId(String sectionId) {
-        this.sectionId = sectionId;
-    }
 }

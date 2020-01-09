@@ -50,4 +50,7 @@ public class Book implements Serializable {
     public List<BookSectionItem> novelList;
     public String content;
 
+    public boolean isRead=false;
+    public  int currentSetion=0;//看到第几章 默认0 第一章
+
 }

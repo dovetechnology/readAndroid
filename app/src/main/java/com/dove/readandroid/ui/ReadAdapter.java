@@ -31,7 +31,7 @@ public class ReadAdapter extends StringAdapter {
     @Override
     protected String getPageSource(int section) {
         BookSectionContent sectionContent = bookArray.get(section);
-        return sectionContent != null ? bookArray.get(section).getContent() : null;
+        return sectionContent != null ? bookArray.get(section).content : null;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ReadAdapter extends StringAdapter {
     @Override
     public String getSectionName(int section) {
         BookSectionContent sectionContent = bookArray.get(section);
-        return sectionContent != null ? bookArray.get(section).getSectionName() : null;
+        return sectionContent != null ? bookArray.get(section).sectionName : null;
     }
 
     @Override

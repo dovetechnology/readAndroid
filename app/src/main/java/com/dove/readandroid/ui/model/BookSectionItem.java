@@ -52,4 +52,7 @@ public class BookSectionItem implements Serializable {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
+    //本地储存
+    public int currentPage = 0;
+
 }

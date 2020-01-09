@@ -49,6 +49,7 @@ class BookDetailActivity : BaseMvcActivity() {
             start(ReadActivity::class.java, Bundle().apply {
                 putSerializable("data", book)
             })
+            finish()
         }
         var b = App.instance.db.getBookDao().find(book.name)
 
