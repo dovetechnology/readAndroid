@@ -38,7 +38,7 @@ class JingxuanFragment : BaseMvcFragment() {
         }
         adapter.setOnItemClickListener { a, view, position ->
             start(BookDetailActivity::class.java, Bundle().apply {
-                putSerializable("data", adapter.data.get(position).novelUrl)
+                putSerializable("data", adapter.data.get(position))
             })
         }
         rv_xinshu.layoutManager = GridLayoutManager(mContext, 3)
@@ -47,7 +47,7 @@ class JingxuanFragment : BaseMvcFragment() {
         }
         adapterx.setOnItemClickListener { a, view, position ->
             start(BookDetailActivity::class.java, Bundle().apply {
-                putSerializable("data", adapterx.data.get(position).novelUrl)
+                putSerializable("data", adapterx.data.get(position))
             })
         }
 

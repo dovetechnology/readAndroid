@@ -11,8 +11,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.dove.readandroid.R
 import com.dove.readandroid.ui.model.Book
-import com.dove.readandroid.ui.model.Fenlei
-import com.dove.readandroid.ui.model.Top
 
 /**
  * ===============================

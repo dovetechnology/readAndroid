@@ -1,14 +1,8 @@
 package com.dove.readandroid.ui.model;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import androidx.room.Relation;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.List;
@@ -53,7 +47,7 @@ public class Book implements Serializable {
     public String updateTime;
     public String description;
     @Ignore
-    public List<Chap> novelList;
+    public List<BookSectionItem> novelList;
     public String content;
 
 }

@@ -21,4 +21,7 @@ public interface BookDao {
 
     @Insert
     void add(Book m);
+
+    @Query("select * from book where name=:name")
+    Book find(String name);
 }

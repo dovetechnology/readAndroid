@@ -67,12 +67,12 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:cardCornerRadius="4dp"
         android:layout_marginLeft="3dp"
+        android:layout_marginTop="16dp"
         android:layout_marginRight="3dp"
-        android:layout_marginBottom="3dp"
-        app:cardElevation="3dp">
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="1dp">
 
         <com.appbaselib.view.RatioFramlayout
             android:id="@+id/ratiolayout"

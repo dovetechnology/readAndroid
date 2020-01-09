@@ -19,4 +19,8 @@ public interface BookWithChapDao {
     @Transaction
     @Query("select * from book")
     List<BookWithChap> getAllBook();
+
+    @Transaction
+    @Query("select * from book where name=:name")
+    BookWithChap find(String name);
 }

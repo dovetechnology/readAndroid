@@ -2,24 +2,15 @@ package com.dove.readandroid.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PowerManager
-import android.view.MotionEvent
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.LinearLayout
-import android.widget.SeekBar
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.ext.toast
 import com.appbaselib.utils.ScreenUtils
@@ -34,17 +25,16 @@ import com.dove.readandroid.utils.BrightnessUtils
 import com.dove.readandroid.utils.SystemBarUtils
 import com.dove.readandroid.view.page.ReadTheme
 import com.dove.readandroid.view.page.ReaderSettingManager
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.leaf.library.StatusBarUtil
 import com.safframework.ext.click
-import com.zchu.reader.PageLoaderAdapter
+import com.safframework.ext.postDelayed
 import com.zchu.reader.PageView
+import kotlinx.android.synthetic.main.activity_book_detail.*
 import kotlinx.android.synthetic.main.activity_read.*
 import kotlinx.android.synthetic.main.layout_read_bottom.*
-import kotlinx.android.synthetic.main.title_bar.*
 import kotlinx.android.synthetic.main.toolbar_read.*
-import q.rorbin.badgeview.DisplayUtil
+import kotlinx.android.synthetic.main.toolbar_read.tv_add
 
 class ReadActivity : BaseMvcActivity() {
 
@@ -127,11 +117,8 @@ class ReadActivity : BaseMvcActivity() {
         })
         //loaddata
         //加载目录
-        var titles = arrayListOf<BookSectionItem>()
-        mbook.novelList.forEach {
-            titles.add(BookSectionItem(it.title, it.chapterUrl))
-        }
-        sectionAdapter = BookSectionAdapter(R.layout.list_item_book_section, titles)
+
+        sectionAdapter = BookSectionAdapter(R.layout.list_item_book_section, mbook.novelList)
         sectionAdapter.setTextColor(pv_read.textColor)
         read_rv_section.setLayoutManager(LinearLayoutManager(this))
         read_rv_section.adapter = sectionAdapter
@@ -139,7 +126,9 @@ class ReadActivity : BaseMvcActivity() {
         sectionAdapter.setOnItemClickListener { adapter, view, position ->
 
             read_drawer.closeDrawers()
-            getContentByChap(titles.get(position).chapterUrl)
+            postDelayed(time=300){
+                getContentByChap( mbook.novelList.get(position))
+            }
         }
         pv_read.setOnThemeChangeListener(PageView.OnThemeChangeListener { textColor, backgroundColor, textSize ->
             read_rv_section.setBackgroundColor(backgroundColor)
@@ -175,16 +164,26 @@ class ReadActivity : BaseMvcActivity() {
         }
     }
 
-    fun getContentByChap(url: String) {
-        http().mApiService.openChap(mbook.novelUrl, url)
-            .get3 {
-                var content = it?.data?.content?.replace("<br>", "")
+    fun getContentByChap(bookSectionItem: BookSectionItem) {
+        if (bookSectionItem.content.isNullOrEmpty())
+        {
+            http().mApiService.openChap(mbook.novelUrl, bookSectionItem.chapterUrl)
+                .get3 {
+                    var content = it?.data?.content?.replace("<br>", "")
+                    content = content?.replace("&nbsp;", "")
+                    bookSectionItem.content=content
 
-                content = content?.replace("&nbsp;", "")
+                    App.instance.db.getChapDao().updata(bookSectionItem) //保存
+                    readAdapter.addData(1, BookSectionContent(1, it?.data?.title, content))
+                    pv_read.openSection(1, 1)
+                }
+        }
+        else
+        {
+            readAdapter.addData(1, BookSectionContent(1, bookSectionItem.title, bookSectionItem.content))
+            pv_read.openSection(1, 1)
+        }
 
-                readAdapter.addData(1, BookSectionContent(1, it?.data?.title, content))
-                pv_read.openSection(1, 1)
-            }
     }
     private fun openReadSetting(context: Context) {
         if (mReadSettingDialog == null) {

@@ -88,6 +88,19 @@ fun <T> Observable<ResponseBean<T>>.get3(context: Context = AppManager.getInstan
         }
     })
 }
+//不绑定生命周期 复写onFail
+fun <T> Observable<ResponseBean<T>>.get4(context: Context = AppManager.getInstance().currentActivity, isShowDialog: Boolean = false, message: String? = "请稍候", title: String? = "", next: (T?) -> Unit, err: (mS: String?) -> Unit) {
+
+    this.subscribe(object : MySubscriber2<T>(if (isShowDialog) context else null, message, title) {
+        override fun onSucess(t: T?) {
+            next(t)
+        }
+
+        override fun onFail(message: String?) {
+            err(message)
+        }
+    })
+}
 
 //-------------------------------------------------------------------------------------------------------------
 //简化网络库的调用

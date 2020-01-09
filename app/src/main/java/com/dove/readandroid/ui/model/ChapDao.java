@@ -3,6 +3,7 @@ package com.dove.readandroid.ui.model;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -16,9 +17,16 @@ import java.util.List;
 @Dao
 public interface ChapDao {
 
-    @Query("select * from chap where book_name= (:name)")
-    List<Chap> findChap(String name);
+    @Query("select * from BookSectionItem where book_name= (:name)")
+    List<BookSectionItem> findChap(String name);
 
     @Insert
-    void add(Chap m);
+    void add(BookSectionItem m);
+
+    @Update
+    void updata(BookSectionItem m);
+
+
+    @Insert
+    void addAll(List<BookSectionItem> chaps);
 }

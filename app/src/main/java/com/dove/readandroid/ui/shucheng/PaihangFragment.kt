@@ -10,6 +10,7 @@ import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.BookDetailActivity
+import com.dove.readandroid.ui.model.Book
 import com.dove.readandroid.ui.model.Top
 import com.dove.readandroid.ui.shucheng.PaihangContentAdapter
 import com.dove.readandroid.ui.shucheng.PaihangTitleAdapter
@@ -50,7 +51,10 @@ class PaihangFragment : BaseMvcFragment() {
         contentAdapter.setOnItemClickListener { adapter, view, position ->
 
             start(BookDetailActivity::class.java, Bundle().apply {
-                putSerializable("data", contentAdapter.data.get(position).novelUrl)
+                putSerializable("data", Book().apply {
+                    novelUrl=contentAdapter.data.get(position).novelUrl
+                    name=contentAdapter.data.get(position).novelName
+                })
             })
         }
         toggleShowLoading(true)

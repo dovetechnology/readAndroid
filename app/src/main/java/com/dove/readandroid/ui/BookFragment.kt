@@ -30,7 +30,7 @@ class BookFragment : BaseRefreshFragment<Book>() {
         )
         mAdapter.setOnItemClickListener { adapter, view, position ->
             start(BookDetailActivity::class.java, Bundle().apply {
-                putSerializable("data", mList.get(position).novelUrl)
+                putSerializable("data", mList.get(position))
             })
         }
     }

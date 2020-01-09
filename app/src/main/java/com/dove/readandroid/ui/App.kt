@@ -39,16 +39,22 @@ import org.json.JSONObject
 class App : BaseApplication() {
     lateinit var mActivityLifecycle: ActivityLifecycle
 
-    lateinit var db: AppDatabase
+  public  lateinit var db: AppDatabase
 
     override fun onCreate() {
         super.onCreate()
         //activity 生命周期监听
-       instance=this
+        instance = this
         mActivityLifecycle = ActivityLifecycle(this)
         registerActivityLifecycleCallbacks(mActivityLifecycle)
         initArouter()
-        UMConfigure.init(this, "xxxxx", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "0f53054413b6829bacde7587384cb0cf")
+        UMConfigure.init(
+            this,
+            "xxxxx",
+            "Umeng",
+            UMConfigure.DEVICE_TYPE_PHONE,
+            "0f53054413b6829bacde7587384cb0cf"
+        )
         //获取消息推送代理示例
         val mPushAgent = PushAgent.getInstance(this)
         //注册推送服务，每次调用register方法都会回调该接口
@@ -92,13 +98,17 @@ class App : BaseApplication() {
             CrashHandler.getInstance().init(this)
         }
         //友盟相关平台配置。注意友盟官方新文档中没有这项配置，但是如果不配置会吊不起来相关平台的授权界面
-        PlatformConfig.setWeixin("wxa0bbb8cdfe8c5b82", "AppSecret:a102e31c8341c37d8b4b65a752cbb759")//微信APPID和AppSecret
+        PlatformConfig.setWeixin(
+            "wxa0bbb8cdfe8c5b82",
+            "AppSecret:a102e31c8341c37d8b4b65a752cbb759"
+        )//微信APPID和AppSecret
         PlatformConfig.setQQZone("1108323392", "S9PENLfddHZJMQ2C")//QQAPPID和AppSecret
         PlatformConfig.setSinaWeibo("你的微博APPID", "你的微博APPSecret", "微博的后台配置回调地址")//微博
 
         Bugly.init(applicationContext, "xxxxx", BuildConfig.DEBUG)
         //初始化数据库
-        db = Room.databaseBuilder(this, AppDatabase::class.java, "app_database.db").allowMainThreadQueries().build()
+        db = Room.databaseBuilder(this, AppDatabase::class.java, "app_database.db")
+            .allowMainThreadQueries().build()
 
     }
 
@@ -111,7 +121,7 @@ class App : BaseApplication() {
     }
 
     companion object {
-        lateinit var instance: Context
+        lateinit var instance: App
     }
 
 }

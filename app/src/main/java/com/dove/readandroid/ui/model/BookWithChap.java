@@ -17,5 +17,5 @@ public class BookWithChap implements Serializable {
     @Embedded
     public Book book;
     @Relation(parentColumn = "name", entityColumn = "book_name")
-    public List<Chap> novelList;
+    public List<BookSectionItem> novelList;
 }

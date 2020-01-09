@@ -11,5 +11,5 @@ import java.io.Serializable;
  */
 public class ChapWrap implements Serializable {
     public  int type;
-    public  Chap data;
+    public  BookSectionItem data;
 }
