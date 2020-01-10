@@ -505,6 +505,7 @@ public class PageView extends View {
         this.canTouch = canTouch;
     }
 
-
-
+    public int getChapPosition() {
+        return mPageLoader.mCurChapterPos;
+    }
 }

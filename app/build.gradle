@@ -98,7 +98,7 @@ android {
         }
 
         release {
-            buildConfigField "String", "BASE_URL", "\"http://www.imuguang.com/\""
+            buildConfigField "String", "BASE_URL", "\"http://test.imuguang.com/\""
             buildConfigField "boolean", "SIGN_RELEASE", "true"
             resValue("string", "appName", "轻点读书")
             ndk {

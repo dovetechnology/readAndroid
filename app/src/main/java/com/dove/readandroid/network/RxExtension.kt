@@ -2,11 +2,9 @@ package com.dove.readandroid.network
 import androidx.lifecycle.LifecycleOwner
 import android.content.Context
 import com.appbaselib.app.AppManager
-import com.appbaselib.network.MySubscriber
-import com.appbaselib.network.MySubscriber2
-import com.appbaselib.network.ResponseBean
-import com.appbaselib.network.RxHttpUtil
+import com.appbaselib.network.*
 import com.dove.readandroid.ui.RetrofitHelper
+import io.reactivex.Flowable
 import io.reactivex.Observable
 
 //不带绑定生命周期 需要手动调用rxcompose.handleResult 方法

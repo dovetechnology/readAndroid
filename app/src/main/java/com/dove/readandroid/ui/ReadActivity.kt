@@ -63,7 +63,6 @@ class ReadActivity : BaseMvcActivity() {
     override fun initView(mSavedInstanceState: Bundle?) {
         mbook = intent.getSerializableExtra("data") as Book
 
-        mbook.isRead = true
         //
         StatusBarUtil.setTransparentForWindow(this)
         ReaderSettingManager.init(this)
@@ -164,11 +163,45 @@ class ReadActivity : BaseMvcActivity() {
             override fun onPageChange(pos: Int) {
                 print("页面改变$pos")
                 mSectionItem.currentPage = pos
+                //在这里判断 需不需要加载下一章 上一章
+                if (!readAdapter.hasNextSection(pv_read.chapPosition)) {
+                    //加载下一章
+                    var p = mbook.novelList.indexOf(mSectionItem) + 1
+                    if (p < mbook.novelList.size)
+
+                        getContentByChap(mbook.novelList.get(p), false) {
+                            readAdapter.addData(
+                                p,
+                                BookSectionContent(
+                                    p,
+                                    mbook.novelList.get(p).title,
+                                    mbook.novelList.get(p).content
+                                )
+                            )
+                        }
+                }
+                if (!readAdapter.hasPreviousSection(pv_read.chapPosition)) {
+                    //加载上一章
+                    var p = mbook.novelList.indexOf(mSectionItem) - 1
+                    if (p >= 0)
+
+                        getContentByChap(mbook.novelList.get(p), false) {
+                            readAdapter.addData(
+                                p,
+                                BookSectionContent(
+                                    p,
+                                    mbook.novelList.get(p).title,
+                                    mbook.novelList.get(p).content
+                                )
+                            )
+                        }
+                }
+
+
             }
 
             override fun onChapterChange(pos: Int) {
                 print("章节改变$pos")
-
                 mSectionItem = mbook.novelList.get(pos)
                 mbook.currentSetion = pos
             }
@@ -180,17 +213,46 @@ class ReadActivity : BaseMvcActivity() {
         })
 
         //开始阅读
-        mSectionItem = mbook.novelList.get(mbook.currentSetion)
-        getContentByChap(mbook.currentSetion, mSectionItem)
+        if (mbook.currentSetion != 0) {
+            //渡过
+        } else {
+            //没读过
+        }
+        startRead(mbook.currentSetion)
+
         //选中章节
         sectionAdapter.setOnItemClickListener { adapter, view, position ->
-
             read_drawer.closeDrawers()
             mSectionItem = mbook.novelList.get(position)
             postDelayed(time = 300) {
-                getContentByChap(position, mbook.novelList.get(position))
+                startRead(position)
             }
         }
+    }
+
+    fun startRead(p: Int) {
+
+        mSectionItem = mbook.novelList.get(p)
+
+        if (mSectionItem.content.isNullOrEmpty()) {
+            //从网络获取
+            getContentByChap(mSectionItem) {
+                readAdapter.addData(
+                    p,
+                    BookSectionContent(p, mSectionItem.title, mSectionItem.content)
+                )
+                pv_read.openSection(p, 0) //从网络获取的就从第一页读
+            }
+
+        } else {
+            //本地
+            readAdapter.addData(
+                p,
+                BookSectionContent(p, mSectionItem.title, mSectionItem.content)
+            )
+            pv_read.openSection(p, mSectionItem.currentPage)//从本地获取的就接着读
+        }
+
     }
 
     override fun onDestroy() {
@@ -200,30 +262,21 @@ class ReadActivity : BaseMvcActivity() {
         App.instance.db.getChapDao().updata(mSectionItem) //记录当前章节进度
     }
 
-    fun getContentByChap(position: Int, bookSectionItem: BookSectionItem) {
+    fun getContentByChap(
+        bookSectionItem: BookSectionItem,
+        isShowtitle: Boolean = true,
+        next: () -> Unit
+    ) {
 
-        if (bookSectionItem.content.isNullOrEmpty()) {
-            http().mApiService.openChap(mbook.novelUrl, bookSectionItem.chapterUrl)
-                .get3(isShowDialog = true, title = "", message = "加载章节中……") {
-                    var content = it?.data?.content?.replace("<br>", "")
-                    content = content?.replace("&nbsp;", "")
-                    bookSectionItem.content = content
+        http().mApiService.openChap(mbook.novelUrl, bookSectionItem.chapterUrl)
+            .get3(isShowDialog = isShowtitle, title = "", message = "加载章节中……") {
+                var content = it?.data?.content?.replace("<br>", "")
+                content = content?.replace("&nbsp;", "")
+                bookSectionItem.content = content//改变了mbook书里面的内容
+                App.instance.db.getChapDao().updata(bookSectionItem) //保存到数据库
+                next()
+            }
 
-                    App.instance.db.getChapDao().updata(bookSectionItem) //保存到数据库
-
-                    readAdapter.addData(
-                        position,
-                        BookSectionContent(position, it?.data?.title, content)
-                    )
-                    pv_read.openSection(position, 0) //从网络获取的就从第一页读
-                }
-        } else {
-            readAdapter.addData(
-                position,
-                BookSectionContent(position, bookSectionItem.title, bookSectionItem.content)
-            )
-            pv_read.openSection(position, bookSectionItem.currentPage)//从本地获取的就接着读
-        }
 
     }
 

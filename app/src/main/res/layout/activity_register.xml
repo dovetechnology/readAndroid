@@ -53,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
+            android:inputType="textPassword"
             android:hint="请输入密码"
             android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -66,6 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
+            android:inputType="textPassword"
             android:hint="确认密码"
             android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>

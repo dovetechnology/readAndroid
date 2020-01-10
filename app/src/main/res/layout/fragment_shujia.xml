@@ -53,6 +53,7 @@
     </FrameLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_marginTop="12dp"
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="0dp"

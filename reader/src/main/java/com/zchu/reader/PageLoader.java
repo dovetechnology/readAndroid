@@ -94,7 +94,7 @@ class PageLoader {
     //上一章的记录
     private int mLastChapter = 0;
     //当前章
-    protected int mCurChapterPos = 0;
+    public int mCurChapterPos = 0;
     //书本是否打开
     protected boolean isBookOpen = false;
 

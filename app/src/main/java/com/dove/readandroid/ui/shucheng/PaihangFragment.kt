@@ -59,6 +59,9 @@ class PaihangFragment : BaseMvcFragment() {
         }
         toggleShowLoading(true)
         getData()
+        swipe.setOnRefreshListener {
+            getData()
+        }
     }
 
     override fun getLoadingTargetView(): View {
@@ -71,6 +74,7 @@ class PaihangFragment : BaseMvcFragment() {
         http().mApiService.top()
             .get3(next = {
                 toggleShowLoading(false)
+                swipe.isRefreshing=false
                 list = it as ArrayList<Top>
                 var titles = mutableListOf<String>()
                 it?.forEach {
