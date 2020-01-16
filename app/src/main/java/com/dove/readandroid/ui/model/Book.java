@@ -53,4 +53,5 @@ public class Book implements Serializable {
     public boolean isRead=false;
     public  int currentSetion=0;//看到第几章 默认0 第一章
 
+    public int isAddShlef=0; //0 未加入 1加入书架
 }

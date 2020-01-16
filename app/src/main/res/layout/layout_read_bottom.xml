@@ -25,7 +25,7 @@
             android:id="@+id/read_tv_pre_chapter"
             style="@style/Read.BottomMenu.Button"
             android:layout_centerVertical="true"
-            android:text="@string/read_previous_chapter" />
+            android:drawableLeft="@drawable/icno_shangyizhang" />
 
         <SeekBar
             android:id="@+id/read_sb_chapter_progress"
@@ -48,7 +48,7 @@
             style="@style/Read.BottomMenu.Button"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="@string/read_next_chapter" />
+            android:drawableRight="@drawable/icon_xiayizhang" />
 
         <TextView
             android:id="@+id/tv_section_name"

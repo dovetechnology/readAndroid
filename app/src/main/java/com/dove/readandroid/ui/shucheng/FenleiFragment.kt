@@ -34,6 +34,7 @@ class FenleiFragment : BaseRefreshFragment<Fenlei>() {
 
             start(FenleiDetailActivity::class.java, Bundle().apply {
                 putString("data",mList.get(position).url)
+                putString("title",mList.get(position).name)
             })
         }
     }

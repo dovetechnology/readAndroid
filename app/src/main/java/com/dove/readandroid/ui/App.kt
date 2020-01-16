@@ -24,6 +24,8 @@ import com.umeng.message.UmengMessageHandler
 import com.umeng.message.UmengNotificationClickHandler
 import com.umeng.message.entity.UMessage
 import com.umeng.socialize.PlatformConfig
+import io.reactivex.functions.Consumer
+import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.json.JSONException
@@ -43,6 +45,11 @@ class App : BaseApplication() {
 
     override fun onCreate() {
         super.onCreate()
+
+        RxJavaPlugins.setErrorHandler {
+            LogUtils.e("rxjavPlugins----->http请求被取消")
+        }
+
         //activity 生命周期监听
         instance = this
         mActivityLifecycle = ActivityLifecycle(this)

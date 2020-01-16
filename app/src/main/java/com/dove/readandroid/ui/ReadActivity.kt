@@ -10,6 +10,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.ext.toast
@@ -98,8 +99,12 @@ class ReadActivity : BaseMvcActivity() {
                 .setPageBackground(ReadTheme.NIGHT.getPageBackground())
             ReaderSettingManager.getInstance().setTextColor(ReadTheme.NIGHT.getTextColor())
         }
+        //初始化各种背景图
         pv_read.setTextColor(ReaderSettingManager.getInstance().getTextColor())
         pv_read.setPageBackground(ReaderSettingManager.getInstance().getPageBackground())
+        lin.setBackgroundColor(ReaderSettingManager.getInstance().getPageBackground())
+        read_bottom.setBackgroundColor(ReaderSettingManager.getInstance().getPageBackground())
+        StatusBarUtil.setColor(this, ReaderSettingManager.getInstance().getPageBackground())
 
         pv_read.setTouchListener(object : PageView.TouchListener {
             override fun center() {
@@ -155,6 +160,9 @@ class ReadActivity : BaseMvcActivity() {
 
             http().mApiService.addShujia(mbook.name, mbook.author, mbook.title)
                 .get3(isShowDialog = true) {
+                    mbook.isAddShlef = 1
+                    App.instance.db.getBookDao().update(mbook)
+
                     toast("已加入书架")
                 }
         }
@@ -228,6 +236,42 @@ class ReadActivity : BaseMvcActivity() {
                 startRead(position)
             }
         }
+
+        read_tv_night_mode.click {
+            val nightModeSelected = !read_tv_night_mode.isSelected()
+            toggleNightMode(nightModeSelected)
+            ReaderSettingManager.getInstance().setNightMode(nightModeSelected)
+            AppConfig.setNightMode(nightModeSelected)
+            hideReadMenu()
+            hideSystemBar()
+        }
+        //上一章
+        read_tv_pre_chapter.click {
+
+        }
+        read_tv_next_chapter.click {
+
+        }
+    }
+
+    private fun toggleNightMode(isOpen: Boolean) {
+        if (isOpen) {
+            read_tv_night_mode.setText(getString(R.string.read_daytime))
+            read_tv_night_mode.setSelected(true)
+            pv_read.setPageBackground(ReadTheme.NIGHT.pageBackground)
+            pv_read.setTextColor(ReadTheme.NIGHT.textColor)
+            pv_read.refreshPage()
+            ReaderSettingManager.getInstance().pageBackground = pv_read.getPageBackground()
+            ReaderSettingManager.getInstance().textColor = pv_read.getTextColor()
+        } else {
+            read_tv_night_mode.setText(getString(R.string.read_night))
+            read_tv_night_mode.setSelected(false)
+            pv_read.setPageBackground(ReadTheme.DEFAULT.pageBackground)
+            pv_read.setTextColor(ReadTheme.DEFAULT.textColor)
+            pv_read.refreshPage()
+            ReaderSettingManager.getInstance().pageBackground = pv_read.getPageBackground()
+            ReaderSettingManager.getInstance().textColor = pv_read.getTextColor()
+        }
     }
 
     fun startRead(p: Int) {
@@ -282,7 +326,7 @@ class ReadActivity : BaseMvcActivity() {
 
     private fun openReadSetting(context: Context) {
         if (mReadSettingDialog == null) {
-            mReadSettingDialog = ReaderSettingDialog(context, pv_read, lin)
+            mReadSettingDialog = ReaderSettingDialog(context, this, pv_read, lin, read_bottom)
         }
         mReadSettingDialog?.show()
     }

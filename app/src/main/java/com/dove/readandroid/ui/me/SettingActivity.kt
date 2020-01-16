@@ -7,6 +7,7 @@ import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.utils.PreferenceUtils
 import com.dove.readandroid.R
 import com.dove.readandroid.ui.common.Constants
+import com.dove.readandroid.utils.AppConfig
 import com.dove.readandroid.utils.CleanDataUtils
 import com.safframework.ext.click
 import kotlinx.android.synthetic.main.activity_setting.*
@@ -34,9 +35,10 @@ class SettingActivity : BaseMvcActivity() {
                 }).show()
 
         }
-        sc.isChecked = PreferenceUtils.getPrefBoolean(mContext, Constants.IS_BLACK, false)
+        sc.isChecked = AppConfig.isNightMode()
         sc.setOnCheckedChangeListener { buttonView, isChecked ->
             PreferenceUtils.setPrefBoolean(mContext, Constants.IS_BLACK, isChecked)
+            AppConfig.setNightMode(isChecked)
         }
     }
 

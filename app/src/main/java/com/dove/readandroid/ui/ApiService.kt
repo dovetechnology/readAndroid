@@ -41,7 +41,7 @@ interface ApiService {
     fun tag(): Observable<ResponseBean<List<Fenlei>>>
 
     @GET("read/novel/classify/detail")
-    fun jingxuan(@Query("url") string: String): Observable<ResponseBean<List<Top>>>
+    fun jingxuan(@Query("url") string: String): Observable<ResponseBean<DetailDataWrap>>
 
     @GET("read/novel/top")
     fun top(): Observable<ResponseBean<List<Top>>>
@@ -64,6 +64,12 @@ interface ApiService {
         @Query("size") size: Int
     ): Observable<ResponseBean<PagingBean<Huodong>>>
 
+
+
+    @FormUrlEncoded
+    @POST("read/novel/open/name")
+    fun openName(@Field("name") name: String, @Field("author") author: String, @Field("title") title: String): Observable<ResponseBean<BookWrap>>
+
     @FormUrlEncoded
     @POST("read/novel/user/collect")
     fun addShujia(
@@ -78,6 +84,4 @@ interface ApiService {
     fun openChap(@Query("bookUrl") bookUrl: String, @Query("chapterUrl") chapterUrl: String): Observable<ResponseBean<ChapWrap>>
 
 
-    @GET("read/novel/open/name")
-    fun openName(@Query("name") name: String, @Query("author") author: String, @Query("title") title: String): Observable<ResponseBean<BookWrap>>
 }

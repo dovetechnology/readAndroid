@@ -31,9 +31,46 @@ public class RetrofitHelper {
 
     private RetrofitHelper() {
 
-        provideRetrofit(provideRetrofitBuilder(), provideOkHttpClient(provideOkHttpClientBuilder()));
-        mApiService = mRetrofit.create(ApiService.class);
 
+        //创建OkHttpClient
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.addInterceptor(new CommonParamsInterceptor());//添加参数拦截器
+
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+                @Override
+                public void log(String message) {
+                    Log.e("HttpReponse:", message);
+                }
+            });
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            builder.addInterceptor(loggingInterceptor);
+        }
+        //设置超时
+        builder.connectTimeout(20, TimeUnit.SECONDS);
+        builder.readTimeout(20, TimeUnit.SECONDS);
+        builder.writeTimeout(20, TimeUnit.SECONDS);
+        builder.callTimeout(20, TimeUnit.SECONDS);
+        //错误重连
+        builder.retryOnConnectionFailure(true);
+        File httpCacheDirectory = new File(App.instance.getCacheDir(), "responses");
+        int cacheSize = 10 * 1024 * 1024; // 10 MiB
+        Cache cache = new Cache(httpCacheDirectory, cacheSize);
+        builder.cache(cache);
+        OkHttpClient okHttpClient = builder.build();
+
+        String url = PreferenceUtils.getPrefString(App.Companion.getInstance(), Constants.URL, "");
+        if (TextUtils.isEmpty(url)) {
+            url = BuildConfig.BASE_URL; //用默认的
+        }
+        mRetrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .client(okHttpClient)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        mApiService = mRetrofit.create(ApiService.class);
 
     }
 
@@ -52,7 +89,7 @@ public class RetrofitHelper {
         return new OkHttpClient.Builder();
     }
 
-    private OkHttpClient provideOkHttpClient(OkHttpClient.Builder builder) {
+    public OkHttpClient provideOkHttpClient(OkHttpClient.Builder builder) {
         return OkHttpClientConfig(builder);
     }
 
@@ -70,13 +107,13 @@ public class RetrofitHelper {
         return mRetrofit;
     }
 
-    private OkHttpClient OkHttpClientConfig(OkHttpClient.Builder builder) {
+    public OkHttpClient OkHttpClientConfig(OkHttpClient.Builder builder) {
         builder.addInterceptor(new CommonParamsInterceptor());//添加参数拦截器
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
                 @Override
                 public void log(String message) {
-                    Log.d("HttpReponse:", message);
+                    Log.e("HttpReponse:", message);
                 }
             });
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

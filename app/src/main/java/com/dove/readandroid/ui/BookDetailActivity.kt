@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.activity_book_detail.*
 import kotlinx.android.synthetic.main.content_scrolling.*
 
 class BookDetailActivity : BaseMvcActivity() {
-    lateinit var book: Book
+    lateinit var book: Book //传过来的书 可能信息不完整
     var progressDialog: ProgressDialog? = null
     override fun initView(mSavedInstanceState: Bundle?) {
         StatusBarUtil.setTransparentForWindow(this)
@@ -43,6 +43,8 @@ class BookDetailActivity : BaseMvcActivity() {
             http().mApiService.addShujia(book.name, book.author, book.title)
                 .get3(isShowDialog = true) {
                     toast("已加入书架")
+                    book.isAddShlef=1
+                    App.instance.db.getBookDao().update(book)
                 }
         }
         tv_start.click {
@@ -51,6 +53,7 @@ class BookDetailActivity : BaseMvcActivity() {
             })
             finish()
         }
+
         var b = App.instance.db.getBookDao().find(book.name)
 
         if (b == null) {
@@ -61,7 +64,7 @@ class BookDetailActivity : BaseMvcActivity() {
                 .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
                 .map {
                     it.data.data.novelList?.forEach {
-                        it.name=book.name
+                        it.name = book.name //保存数据库 用书名来关联
                     }
                     it
                 }
@@ -70,6 +73,10 @@ class BookDetailActivity : BaseMvcActivity() {
                     App.instance.db.getBookDao().add(it?.data)
                     App.instance.db.getChapDao().addAll(it?.data?.novelList) //sb room数据库
 
+                    if (it?.data?.novelList == null || it.data.novelList.size == 0) {
+                        toast("没找到该书本章节")
+                        finish()
+                    }
                     setValue(it?.data)
                 }, err = {
                     progressDialog?.dismiss()
@@ -111,6 +118,7 @@ class BookDetailActivity : BaseMvcActivity() {
                 LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
             rv_mulu.adapter = MuluAdapter(R.layout.item_mulu, titles)
         }
+
 
     }
 

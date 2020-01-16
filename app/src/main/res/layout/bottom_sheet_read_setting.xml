@@ -114,46 +114,6 @@
 
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="翻页"
-            android:textColor="#ff462e0b"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/read_tv_flip_over_none"
-            style="@style/Read.Setting.Button"
-            android:layout_marginLeft="12dp"
-            android:background="@drawable/read_bg_setting_button"
-            android:paddingLeft="32dp"
-            android:paddingTop="6dp"
-
-            android:paddingRight="32dp"
-            android:paddingBottom="6dp"
-            android:text="默认" />
-
-        <TextView
-            android:id="@+id/read_tv_flip_over_simulation"
-            style="@style/Read.Setting.Button"
-            android:layout_marginLeft="40dp"
-            android:background="@drawable/read_bg_setting_button"
-            android:paddingLeft="32dp"
-            android:paddingTop="6dp"
-            android:paddingRight="32dp"
-            android:paddingBottom="6dp"
-            android:text="@string/read_setting_flip_over_simulation" />
-
-
-    </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -236,5 +196,45 @@
 
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="翻页"
+            android:textColor="#ff462e0b"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/read_tv_flip_over_none"
+            style="@style/Read.Setting.Button"
+            android:layout_marginLeft="12dp"
+            android:background="@drawable/read_bg_setting_button"
+            android:paddingLeft="32dp"
+            android:paddingTop="6dp"
+
+            android:paddingRight="32dp"
+            android:paddingBottom="6dp"
+            android:text="默认" />
+
+        <TextView
+            android:id="@+id/read_tv_flip_over_simulation"
+            style="@style/Read.Setting.Button"
+            android:layout_marginLeft="40dp"
+            android:background="@drawable/read_bg_setting_button"
+            android:paddingLeft="32dp"
+            android:paddingTop="6dp"
+            android:paddingRight="32dp"
+            android:paddingBottom="6dp"
+            android:text="@string/read_setting_flip_over_simulation" />
+
+
+    </LinearLayout>
+
 
 </LinearLayout>

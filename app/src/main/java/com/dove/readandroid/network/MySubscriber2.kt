@@ -12,6 +12,7 @@ import com.dove.readandroid.ui.App
 import com.dove.readandroid.ui.common.UserShell
 import com.dove.readandroid.ui.shujia.LoginActivity
 import com.google.gson.JsonSyntaxException
+import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 
@@ -63,11 +64,16 @@ abstract class MySubscriber2<T>(context: Context? = null, mMessage: String? = "�
     }
 
     override fun onNext(mBaseModel: ResponseBean<T>) {
-        if (mContext != null)
+        try {
+
+            if (mContext != null)
             mProgressDialog?.dismiss()
 
         onSucess(mBaseModel.data)
-
+        }catch (e:Exception )
+        {
+            return error("加载失败");
+        }
     }
 
     override fun onError(e: Throwable) {

@@ -8,7 +8,8 @@
     android:orientation="vertical">
 
     <com.appbaselib.view.RatioImageView
-        android:src="@drawable/defalut_img_bg"
+        android:scaleType="centerCrop"
+        android:background="@drawable/paihang"
         android:id="@+id/iv_shu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

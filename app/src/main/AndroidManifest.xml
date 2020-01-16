@@ -29,7 +29,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup,android:label">
-        <activity android:name=".ui.ReadActivity"></activity>
+        <activity android:name=".ui.me.ReadHsitoryActivity"></activity>
+        <activity android:name=".ui.ReadActivity" />
         <activity android:name=".ui.shucheng.FenleiDetailActivity" />
         <activity android:name=".ui.SearchActivity" />
         <activity android:name=".ui.BookDetailActivity" />

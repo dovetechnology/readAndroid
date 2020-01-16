@@ -58,6 +58,7 @@
             android:id="@+id/read_rv_section"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="26dp"
             app:fastScrollEnabled="true"
             app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"
             app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"

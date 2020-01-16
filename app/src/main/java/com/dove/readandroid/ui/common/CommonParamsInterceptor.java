@@ -24,29 +24,16 @@ public class CommonParamsInterceptor implements Interceptor {
     @Override
     public synchronized Response intercept(Chain chain) throws IOException {
         Request oldRequest = chain.request();
-//        if (TextUtils.equals(oldRequest.method(), "GET") || TextUtils.equals(oldRequest.method(), "get")) {
-//            //get请求参数未处理
-//            return chain.proceed(oldRequest);
-//        }
-        //获取url对象
-        HttpUrl httpUrl = oldRequest.url();
-//        //创建新的请求HttpUrl
-//        HttpUrl.Builder newBuilder = httpUrl.newBuilder()
-//                .scheme(httpUrl.scheme())
-//                .host(httpUrl.host());
-        // 新的请求
+
         Request newRequest = oldRequest.newBuilder()
-                .method(oldRequest.method(), oldRequest.body())
-                .url(httpUrl)
-                .tag(oldRequest.tag())
-                .cacheControl(oldRequest.cacheControl())
-                .addHeader("Connection", "close")
                 .addHeader("Accept", "application/json")
                 .addHeader("Content-Type", "application/json; charset=utf-8")
                 .addHeader("token", UserShell.getInstance().getToken())
                 .addHeader("user_agent", CommonParamUtil.userAgent())//设备信息
                 .addHeader("channel", "android")////大渠道
                 .addHeader("channel_package", "")//小渠道
+               // .addHeader("Connection","keep-alive")
+                .addHeader("Connection","close")
                 .build();
         return chain.proceed(newRequest);
     }

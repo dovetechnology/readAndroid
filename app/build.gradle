@@ -279,4 +279,6 @@ dependencies {
     implementation project(path: ':flowlayout_lib')
     implementation 'com.github.Ye-Miao:StatusBarUtil:1.7.5'
     implementation project(path: ':reader')
+    implementation 'com.dhh:rxLife2:1.2.0'
+
 }

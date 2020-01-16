@@ -32,7 +32,6 @@ class ActivityLifecycle(private val mApplication: Application) :
         if (!isNotAdd) {
             mAppManager.addActivity(activity)
         }
-        mAppManager.currentActivity = activity //在Activity里面很多时候 需要立马获取当前context
 
     }
 

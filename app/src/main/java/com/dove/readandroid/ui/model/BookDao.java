@@ -25,6 +25,9 @@ public interface BookDao {
 
     @Query("select * from book where name=:name")
     Book find(String name);
+    @Query("select * from book where isAddShlef=1")
+    List<Book> shujia( );
+
 
     @Update
     void update(Book m);

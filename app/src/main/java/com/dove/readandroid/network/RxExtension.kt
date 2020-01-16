@@ -6,6 +6,9 @@ import com.appbaselib.network.*
 import com.dove.readandroid.ui.RetrofitHelper
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.ObservableSource
+import io.reactivex.functions.Function
+import java.lang.Exception
 
 //不带绑定生命周期 需要手动调用rxcompose.handleResult 方法
 fun <T> Observable<T>.get2(context: Context? = null, message: String? = "请稍候", title: String? = "", next: (T) -> Unit, err: (mS: String?) -> Unit) {

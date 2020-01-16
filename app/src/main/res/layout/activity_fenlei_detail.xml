@@ -12,29 +12,30 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#F6F6F6">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            android:padding="24dp"
+            android:background="@color/white"
             tools:context=".ui.ScrollingActivity">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/app_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fitsSystemWindows="true">
+                android:padding="24dp"
+                app:elevation="0dp">
 
                 <LinearLayout
                     android:id="@+id/toolbar_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:fitsSystemWindows="true"
                     android:orientation="vertical"
                     app:contentScrim="?attr/colorPrimary"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                    app:layout_scrollFlags="scroll|snap"
                     app:toolbarId="@+id/toolbar">
 
                     <TextView
@@ -93,7 +94,10 @@
                 android:id="@+id/recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                android:clipToPadding="false"
+                android:padding="24dp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:listitem="@layout/item_shu" />
 
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

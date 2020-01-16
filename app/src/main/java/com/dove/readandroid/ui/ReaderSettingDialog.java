@@ -17,6 +17,7 @@ import com.dove.readandroid.view.ShapeView;
 import com.dove.readandroid.view.page.ReadTheme;
 import com.dove.readandroid.view.page.ReaderSettingManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.leaf.library.StatusBarUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.zchu.reader.PageView;
 
@@ -52,14 +53,17 @@ public class ReaderSettingDialog extends BottomSheetDialog implements View.OnCli
     private ShapeView readThemeBlack;
     private View[] themeViews;
     private View mTitlebar;
+    private View mviewBottom;
+    private  Activity mAc;
 
-
-    public ReaderSettingDialog(@NonNull Context context, @NonNull PageView pageView,View mview) {
+    public ReaderSettingDialog(@NonNull Context context,Activity m, @NonNull PageView pageView, View mview,View mb) {
         super(context, R.style.Read_Setting_Dialog);
         setOwnerActivity((Activity) context);
+        mAc=m;
         super.setContentView(R.layout.bottom_sheet_read_setting);
         this.mPageView = pageView;
-        this.mTitlebar=mTitlebar;
+        this.mTitlebar = mview;
+        this.mviewBottom=mb;
         initView();
         initListener();
         initDisplay();
@@ -212,26 +216,37 @@ public class ReaderSettingDialog extends BottomSheetDialog implements View.OnCli
         switch (readTheme) {
             case WHITE:
                 selectedThemeView(readThemeWhite);
-                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.read_theme_white_page_background));
+                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.read_theme_white_page_background));
+                StatusBarUtil.setColor(mAc, ContextCompat.getColor(getContext(), R.color.read_theme_white_page_background));
+                mviewBottom.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.read_theme_white_page_background));
+
                 break;
             case AMBER:
                 selectedThemeView(readThemeAmber);
-                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.read_theme_amber_page_background));
+                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.read_theme_amber_page_background));
+                StatusBarUtil.setColor(mAc, ContextCompat.getColor(getContext(), R.color.read_theme_amber_page_background));
+                mviewBottom.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.read_theme_amber_page_background));
 
                 break;
             case GREEN:
                 selectedThemeView(readThemeGreen);
-                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.read_theme_green_page_background));
+                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.read_theme_green_page_background));
+                StatusBarUtil.setColor(mAc, ContextCompat.getColor(getContext(), R.color.read_theme_green_page_background));
+                mviewBottom.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.read_theme_green_page_background));
 
                 break;
             case BROWN:
                 selectedThemeView(readThemeBrown);
-                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.read_theme_brown_page_background));
+                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.read_theme_brown_page_background));
+                StatusBarUtil.setColor(mAc, ContextCompat.getColor(getContext(), R.color.read_theme_brown_page_background));
+                mviewBottom.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.read_theme_brown_page_background));
 
                 break;
             case BLACK:
                 selectedThemeView(readThemeBlack);
-                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(),R.color.read_theme_black_page_background));
+                mTitlebar.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.read_theme_black_page_background));
+                StatusBarUtil.setColor(mAc, ContextCompat.getColor(getContext(), R.color.read_theme_black_page_background));
+                mviewBottom.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.read_theme_black_page_background));
 
                 break;
         }
@@ -304,13 +319,13 @@ public class ReaderSettingDialog extends BottomSheetDialog implements View.OnCli
     @Override
     public void show() {
         super.show();
-        MobclickAgent.onPageEnd(getClass().getPackage().getName()+".ReaderSettingDialog");
+        MobclickAgent.onPageEnd(getClass().getPackage().getName() + ".ReaderSettingDialog");
 
     }
 
     @Override
     public void dismiss() {
         super.dismiss();
-        MobclickAgent.onPageStart(getClass().getPackage().getName()+".ReaderSettingDialog");
+        MobclickAgent.onPageStart(getClass().getPackage().getName() + ".ReaderSettingDialog");
     }
 }

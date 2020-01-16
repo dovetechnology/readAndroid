@@ -52,6 +52,9 @@ class MeFragment : BaseMvcFragment() {
         ll_setting.click {
             start(SettingActivity::class.java)
         }
+        ll_lishi.click {
+            start(ReadHsitoryActivity::class.java)
+        }
     }
 
     private fun setValue(userBean: UserBean) {

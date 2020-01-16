@@ -4,8 +4,8 @@ import android.os.Bundle
 import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.base.Navigator
 import com.appbaselib.ext.toast
-import com.appbaselib.rxlife.RxLife
 import com.appbaselib.utils.PreferenceUtils
+import com.dhh.rxlife2.RxLife
 import com.dove.rea.ShuchengFragment
 import com.dove.readandroid.BuildConfig
 import com.dove.readandroid.R
@@ -78,7 +78,7 @@ class MainActivity : BaseMvcActivity() {
 //        }
 
         http().mApiService.getUrl(url)
-            .compose(RxLife.with(this).bindToLifecycle())
+            .compose(RxLife.with(this).bindOnDestroy())
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .get2(next = {
                 var url = AESUtilFinal.decrypt("abce0123456789ef", it.string().trim())
