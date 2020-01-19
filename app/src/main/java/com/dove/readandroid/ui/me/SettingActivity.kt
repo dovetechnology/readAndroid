@@ -2,11 +2,15 @@ package com.dove.readandroid.ui.me
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.utils.PreferenceUtils
 import com.dove.readandroid.R
 import com.dove.readandroid.ui.common.Constants
+import com.dove.readandroid.ui.common.UserShell
+import com.dove.readandroid.ui.shujia.LoginActivity
 import com.dove.readandroid.utils.AppConfig
 import com.dove.readandroid.utils.CleanDataUtils
 import com.safframework.ext.click
@@ -39,6 +43,32 @@ class SettingActivity : BaseMvcActivity() {
         sc.setOnCheckedChangeListener { buttonView, isChecked ->
             PreferenceUtils.setPrefBoolean(mContext, Constants.IS_BLACK, isChecked)
             AppConfig.setNightMode(isChecked)
+        }
+        if (UserShell.getInstance().isLogin) {
+            tvExitLogin.visibility=View.VISIBLE
+        } else {
+            tvExitLogin.visibility=View.GONE
+        }
+        tvExitLogin.click {
+
+            AlertDialog.Builder(mContext).setMessage("确定退出登录吗？")
+                .setNegativeButton("取消", object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        dialog?.dismiss()
+                    }
+
+                })
+                .setPositiveButton("确定", object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        UserShell.getInstance().exitLogin()
+                        val intent = Intent(mContext, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                    }
+
+                }).show()
+
+
         }
     }
 

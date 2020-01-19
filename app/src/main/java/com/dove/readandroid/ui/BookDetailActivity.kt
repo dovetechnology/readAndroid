@@ -7,24 +7,22 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appbaselib.base.BaseMvcActivity
-import com.appbaselib.ext.load
+import com.appbaselib.common.load
 import com.appbaselib.ext.toast
-import com.appbaselib.network.MySubscriber2
 import com.appbaselib.network.RxHttpUtil
-import com.appbaselib.utils.DialogUtils
 import com.dove.readandroid.R
-import com.dove.readandroid.network.get2
+import com.dove.readandroid.event.ShujiaEvent
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.get4
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.model.Book
-import com.dove.readandroid.ui.model.BookSectionItem
-import com.dove.readandroid.ui.model.Top
-import com.dove.readandroid.utils.runBackground
 import com.leaf.library.StatusBarUtil
 import com.safframework.ext.click
+import com.safframework.ext.postDelayed
 import kotlinx.android.synthetic.main.activity_book_detail.*
 import kotlinx.android.synthetic.main.content_scrolling.*
+import kotlinx.coroutines.delay
+import org.greenrobot.eventbus.EventBus
 
 class BookDetailActivity : BaseMvcActivity() {
     lateinit var book: Book //传过来的书 可能信息不完整
@@ -43,8 +41,10 @@ class BookDetailActivity : BaseMvcActivity() {
             http().mApiService.addShujia(book.name, book.author, book.title)
                 .get3(isShowDialog = true) {
                     toast("已加入书架")
-                    book.isAddShlef=1
+                    book.isAddShlef = 1
                     App.instance.db.getBookDao().update(book)
+                    EventBus.getDefault().post(ShujiaEvent())
+
                 }
         }
         tv_start.click {
@@ -53,7 +53,10 @@ class BookDetailActivity : BaseMvcActivity() {
             })
             finish()
         }
-
+        iv_close.click {
+            cd.visibility = View.GONE
+        }
+//查看数据库有没有浏览过改书
         var b = App.instance.db.getBookDao().find(book.name)
 
         if (b == null) {
@@ -70,16 +73,19 @@ class BookDetailActivity : BaseMvcActivity() {
                 }
                 .get4(next = {
                     progressDialog?.dismiss()
-                    App.instance.db.getBookDao().add(it?.data)
-                    App.instance.db.getChapDao().addAll(it?.data?.novelList) //sb room数据库
+                    setValue(it?.data)
+                    App.instance.db.getBookDao().add(book)
+                    App.instance.db.getChapDao().addAll(book.novelList) //sb room数据库
 
                     if (it?.data?.novelList == null || it.data.novelList.size == 0) {
                         toast("没找到该书本章节")
                         finish()
                     }
-                    setValue(it?.data)
                 }, err = {
                     progressDialog?.dismiss()
+                    postDelayed(time = 300) {
+                        finish()
+                    }
                     toast(it)
                 })
 
@@ -88,7 +94,13 @@ class BookDetailActivity : BaseMvcActivity() {
             book = b
             book.novelList = App.instance.db.getChapDao().findChap(book.name)
         }
-
+        //广告2
+        http().mApiService.ad("5")
+            .get3 {
+                if (it != null && it.list != null && it.list.size > 0) {
+                    iv_ad_one.load(it?.list?.get(0)?.imgUrl)
+                }
+            }
         setValue(book)
     }
 

@@ -10,6 +10,7 @@ import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.common.Constants
 import com.dove.readandroid.ui.common.UserShell
+import com.dove.readandroid.ui.me.WangjiPassActivity
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.safframework.ext.click
 import io.reactivex.Observable
@@ -50,6 +51,9 @@ class LoginActivity : BaseMvcActivity() {
                     start(MainActivity::class.java)
                     finish()
                 }
+        }
+        tv_wangji.click {
+            start(WangjiPassActivity::class.java)
         }
     }
 

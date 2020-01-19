@@ -65,7 +65,6 @@ interface ApiService {
     ): Observable<ResponseBean<PagingBean<Huodong>>>
 
 
-
     @FormUrlEncoded
     @POST("read/novel/open/name")
     fun openName(@Field("name") name: String, @Field("author") author: String, @Field("title") title: String): Observable<ResponseBean<BookWrap>>
@@ -83,5 +82,8 @@ interface ApiService {
     @GET("read/novel/open")
     fun openChap(@Query("bookUrl") bookUrl: String, @Query("chapterUrl") chapterUrl: String): Observable<ResponseBean<ChapWrap>>
 
+    @FormUrlEncoded
+    @POST("read/novel/user/find/password")
+    fun findpass(@Field("username") name: String): Observable<ResponseBean<Any>>
 
 }

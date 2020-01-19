@@ -144,6 +144,7 @@
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -153,7 +154,6 @@
             app:cardElevation="1dp">
 
             <com.appbaselib.view.RatioFramlayout
-                android:id="@+id/ratiolayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:ratio="4">
@@ -165,14 +165,22 @@
                     app:round_corner="8dp">
 
                     <ImageView
-                        android:id="@+id/detail_player"
+                        android:id="@+id/iv_ad_one"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="fitXY" />
 
                 </com.gcssloop.widget.RCRelativeLayout>
 
-
+                <ImageView
+                    android:id="@+id/iv_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/chacha_bg"
+                    android:padding="6dp"
+                    android:src="@drawable/icon_chacha" />
             </com.appbaselib.view.RatioFramlayout>
 
 

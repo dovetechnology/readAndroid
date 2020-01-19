@@ -1,5 +1,7 @@
 package com.dove.readandroid.ui.common;
 
+import com.dove.readandroid.BuildConfig;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Constants {
 
-    public static final String URL = "url";
+    public static final String URL = BuildConfig.BASE_URL;
     public static final String USER = "user";
     public static final String TOKEN = "token";
     public static final String IMAGE="";

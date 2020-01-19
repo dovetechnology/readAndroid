@@ -263,11 +263,11 @@ dependencies {
     implementation project(path: ':baselibrary')
     implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.15"
     //net
-    //   implementation "io.reactivex.rxjava2:rxjava:2.1.0"
+    implementation "io.reactivex.rxjava2:rxjava:2.1.0"
     implementation "com.jakewharton.rxbinding2:rxbinding:2.0.0"
     implementation "com.squareup.retrofit2:retrofit:${rootProject.ext.version["VRetrofitSdk"]}"
     implementation "com.squareup.retrofit2:converter-gson:${rootProject.ext.version["VRetrofitSdk"]}"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${rootProject.ext.version["VRetrofitSdk"]}"
     implementation "com.squareup.okhttp3:okhttp:${rootProject.ext.version["VOkhttp"]}"
     implementation "com.squareup.okhttp3:logging-interceptor:${rootProject.ext.version["VOkhttp"]}"
     implementation "com.google.code.gson:gson:2.8.2"

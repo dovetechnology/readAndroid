@@ -2,6 +2,7 @@ package com.dove.readandroid.ui.shujia
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dove.imuguang.base.BaseRefreshFragment
 import com.dove.readandroid.network.get3
@@ -10,10 +11,18 @@ import com.dove.readandroid.ui.model.Book
 import com.dove.readandroid.ui.shucheng.HomeBookAdapter
 import com.safframework.ext.click
 import kotlinx.android.synthetic.main.fragment_shujia.*
-import android.R
+import com.appbaselib.common.load
+import com.appbaselib.network.RxHttpUtil
 import com.appbaselib.utils.LogUtils
+import com.dove.readandroid.R
+import com.dove.readandroid.event.ShujiaEvent
+import com.dove.readandroid.event.UserEvent
 import com.dove.readandroid.ui.*
+import com.dove.readandroid.ui.common.Constants
+import com.dove.readandroid.ui.common.UserShell
 import okhttp3.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.io.IOException
 import kotlin.concurrent.thread
 
@@ -33,30 +42,42 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
             var book = mList.get(position)
 
 
-//            http().mApiService.openName(book.name, book.author, "")
-//                .get3(isShowDialog = true) {
-//                    start(ReadActivity::class.java, Bundle().apply {
-//                        putSerializable("data", it?.data)
-//                    })
-//                }
+            http().mApiService.openName(book.name, book.author, "")
+                .get3(isShowDialog = true) {
+                    start(ReadActivity::class.java, Bundle().apply {
+                        putSerializable("data", it?.data)
+                    })
+                }
             //改为本地获取
-            book.novelList = App.instance.db.getChapDao().findChap(book.name)
-            if (book.novelList == null || book.novelList.size == 0) {
-                //获取 book
-                http().mApiService.openName(book.name, book.author, "")
-                    .get3(isShowDialog = true) {
-                        start(BookDetailActivity::class.java, Bundle().apply {
-                            putSerializable("data", it?.data)
-                        })
-                    }
-//                start(BookDetailActivity::class.java, Bundle().apply {
+//            book.novelList = App.instance.db.getChapDao().findChap(book.name)
+//            if (book.novelList != null && book.novelList.size != 0 && !book.novelUrl.isNullOrEmpty()) {
+//
+//                start(ReadActivity::class.java, Bundle().apply {
 //                    putSerializable("data", book)
 //                })
-            } else {
-                start(ReadActivity::class.java, Bundle().apply {
-                    putSerializable("data", book)
-                })
-            }
+////                start(BookDetailActivity::class.java, Bundle().apply {
+////                    putSerializable("data", book)
+////                })
+//            } else {
+//                //获取 book
+//                http().mApiService.openName(book.name, book.author, "")
+////                    .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
+////                    .map {
+////
+////                    }
+//                    .get3(isShowDialog = true) {
+//                        //补充书的信息
+//                        var oldBook = App.instance.db.getBookDao().find(book.name)
+//                        oldBook.novelUrl = it?.data?.novelUrl
+//                        oldBook.novelList = it?.data?.novelList
+//                        mList.set(position, oldBook)
+//                        App.instance.db.getBookDao().update(oldBook)
+//                        onRefresh(null)
+//                        start(ReadActivity::class.java, Bundle().apply {
+//                            putSerializable("data", it?.data)
+//                        })
+//                    }
+//            }
             //测试 Socket closed 的原因
             //           val url =
 //                "http://test.imuguang.com/read/novel/open/name?name=${book.name}&author=${book.author}"
@@ -83,34 +104,30 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
         }
     }
 
-    override fun onUserVisible() {
-        super.onUserVisible()
-        //可能信息更新了
-        mList.clear()
-        mList.addAll(App.instance.db.getBookDao().shujia())
-        mAdapter.notifyDataSetChanged()
-    }
 
-    override fun onResume() {
-        super.onResume()
-        //可能信息更新了
-        mList.clear()
-        mList.addAll(App.instance.db.getBookDao().shujia())
-        mAdapter.notifyDataSetChanged()
-
-    }
     override fun initView() {
         super.initView()
         // toggleShowLoading(true)
         etSearch.click {
             start(SearchActivity::class.java)
         }
-        mList.addAll(App.instance.db.getBookDao().shujia())
-        refreshData(false)
+//        var datas = App.instance.db.getBookDao().shujia()
+//        if (datas == null || datas.size == 0) {
+//            requestData()
+//        } else {
+//            mList.addAll(App.instance.db.getBookDao().shujia())
+//        }
+        requestData()
 
+        iv_close.click {
+            ratiolayout.visibility = View.GONE
+        }
+        //广告
         http().mApiService.ad("2")
             .get3 {
-
+                it?.list?.get(0)?.let {
+                    iv_ad_one.load(it.imgUrl)
+                }
             }
     }
 
@@ -121,17 +138,27 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
     override fun requestData() {
         http().mApiService.shujiaList()
             .get3 {
-                if (it?.size != mList.size) {
-                    loadComplete(it)
-                } else {
-                    mSwipeRefreshLayout?.isRefreshing = false
-                }
+               // App.instance.db.getBookDao().addAll(it)
+                loadComplete(it)
             }
+
     }
 
 
     override fun getContentViewLayoutID(): Int {
-        return com.dove.readandroid.R.layout.fragment_shujia
+        return R.layout.fragment_shujia
+    }
+
+    override fun registerEventBus(): Boolean {
+        return true
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onRefresh(muservent: ShujiaEvent?) {
+        //信息更新了
+        mList.clear()
+        mList.addAll(App.instance.db.getBookDao().shujia())
+        mAdapter.notifyDataSetChanged()
     }
 
 }

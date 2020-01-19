@@ -30,7 +30,7 @@ public class Huodong implements Serializable {
     public String createTime;
     public int days;
     public String detail;
-    public String endTime;
+    public long endTime;
     public int id;
     public String img;
     public String openType;

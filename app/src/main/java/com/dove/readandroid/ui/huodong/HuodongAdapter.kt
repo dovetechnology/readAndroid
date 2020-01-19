@@ -15,12 +15,18 @@ import com.dove.readandroid.ui.model.Huodong
  * 创建日期：2019/7/30 14:27
  * ===============================
  */
-class HuodongAdapter(item: Int, mlist: MutableList<Huodong>) : BaseRecyclerViewAdapter<Huodong>(item, mlist) {
+class HuodongAdapter(item: Int, mlist: MutableList<Huodong>) :
+    BaseRecyclerViewAdapter<Huodong>(item, mlist) {
     override fun convert(helper: BaseViewHolder, item: Huodong?) {
         item?.let {
             ImageLoader.load(context, item.img, helper.getView<RatioImageView>(R.id.iv_bg))
             helper.setText(R.id.tvTitle, item.title)
-            helper.setText(R.id.state,item.stat)
+            if (System.currentTimeMillis() > (item.endTime))
+                helper.setText(R.id.state, "进行中")
+            else {
+                helper.setText(R.id.state, "已结束")
+
+            }
         }
 
     }

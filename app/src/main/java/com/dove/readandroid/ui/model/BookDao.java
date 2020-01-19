@@ -21,6 +21,9 @@ public interface BookDao {
     List<Book> getAllBook();
 
     @Insert
+    void addAll(List<Book> m);
+
+    @Insert
     void add(Book m);
 
     @Query("select * from book where name=:name")

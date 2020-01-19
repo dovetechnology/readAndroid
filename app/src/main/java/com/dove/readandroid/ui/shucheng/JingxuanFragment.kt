@@ -10,6 +10,7 @@ import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.BookDetailActivity
 import com.dove.readandroid.ui.shucheng.HomeBookAdapter
+import com.safframework.ext.click
 import kotlinx.android.synthetic.main.fragment_jingxuan.*
 
 /**
@@ -51,16 +52,15 @@ class JingxuanFragment : BaseMvcFragment() {
             })
         }
 
+        iv_close.click {
+            cd_ad.visibility=View.GONE
+        }
+        iv_close_two.click {
+            cd_ad_two.visibility=View.GONE
+        }
+
         toggleShowLoading(true)
         getData()
-        //广告
-        http().mApiService.ad("2")
-            .get3 {
-                if (it != null && it.list != null && it.list.size > 0) {
-                    iv_ad_one.load(it?.list?.get(0)?.imgUrl)
-                }
-            }
-
     }
 
     fun getData() {
@@ -70,6 +70,21 @@ class JingxuanFragment : BaseMvcFragment() {
                 it?.hot?.let { it1 -> adapter.addData(it1) }
                 it?.newin?.let { it1 -> adapterx.addData(it1) }
             }
+        //广告1
+        http().mApiService.ad("3")
+            .get3 {
+                if (it != null && it.list != null && it.list.size > 0) {
+                    iv_ad_one.load(it?.list?.get(0)?.imgUrl)
+                }
+            }
+        //广告2
+        http().mApiService.ad("4")
+            .get3 {
+                if (it != null && it.list != null && it.list.size > 0) {
+                    iv_ad_two.load(it?.list?.get(0)?.imgUrl)
+                }
+            }
+
     }
 
 }

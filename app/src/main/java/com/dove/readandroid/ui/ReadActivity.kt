@@ -16,6 +16,7 @@ import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.ext.toast
 import com.appbaselib.utils.ScreenUtils
 import com.dove.readandroid.R
+import com.dove.readandroid.event.ShujiaEvent
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.model.Book
@@ -37,6 +38,7 @@ import kotlinx.android.synthetic.main.activity_read.*
 import kotlinx.android.synthetic.main.layout_read_bottom.*
 import kotlinx.android.synthetic.main.toolbar_read.*
 import kotlinx.android.synthetic.main.toolbar_read.tv_add
+import org.greenrobot.eventbus.EventBus
 
 class ReadActivity : BaseMvcActivity() {
 
@@ -162,7 +164,7 @@ class ReadActivity : BaseMvcActivity() {
                 .get3(isShowDialog = true) {
                     mbook.isAddShlef = 1
                     App.instance.db.getBookDao().update(mbook)
-
+                    EventBus.getDefault().post(ShujiaEvent())
                     toast("已加入书架")
                 }
         }
@@ -247,10 +249,12 @@ class ReadActivity : BaseMvcActivity() {
         }
         //上一章
         read_tv_pre_chapter.click {
-
         }
         read_tv_next_chapter.click {
 
+        }
+        iv_close_ac.click {
+            finish()
         }
     }
 
@@ -263,6 +267,8 @@ class ReadActivity : BaseMvcActivity() {
             pv_read.refreshPage()
             ReaderSettingManager.getInstance().pageBackground = pv_read.getPageBackground()
             ReaderSettingManager.getInstance().textColor = pv_read.getTextColor()
+
+
         } else {
             read_tv_night_mode.setText(getString(R.string.read_night))
             read_tv_night_mode.setSelected(false)
@@ -272,6 +278,10 @@ class ReadActivity : BaseMvcActivity() {
             ReaderSettingManager.getInstance().pageBackground = pv_read.getPageBackground()
             ReaderSettingManager.getInstance().textColor = pv_read.getTextColor()
         }
+        //还原面板颜色
+        lin.setBackgroundColor(ReaderSettingManager.getInstance().getPageBackground())
+        read_bottom.setBackgroundColor(ReaderSettingManager.getInstance().getPageBackground())
+        StatusBarUtil.setColor(this, ReaderSettingManager.getInstance().getPageBackground())
     }
 
     fun startRead(p: Int) {

@@ -42,7 +42,7 @@ class MeFragment : BaseMvcFragment() {
             setValue(UserShell.getInstance().userBean)
 
         }
-        tvName.click {
+        ly_person.click {
             if (UserShell.getInstance().isLogin) {
                 start(EditUserActivity::class.java)
             } else {

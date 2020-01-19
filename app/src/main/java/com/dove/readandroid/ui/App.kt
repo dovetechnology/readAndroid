@@ -45,10 +45,10 @@ class App : BaseApplication() {
 
     override fun onCreate() {
         super.onCreate()
-
-        RxJavaPlugins.setErrorHandler {
-            LogUtils.e("rxjavPlugins----->http请求被取消")
-        }
+//
+//        RxJavaPlugins.setErrorHandler {
+//            LogUtils.e("rxjavPlugins----->http请求被取消")
+//        }
 
         //activity 生命周期监听
         instance = this
