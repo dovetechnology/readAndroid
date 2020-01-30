@@ -47,10 +47,10 @@ public class RetrofitHelper {
             builder.addInterceptor(loggingInterceptor);
         }
         //设置超时
-        builder.connectTimeout(20, TimeUnit.SECONDS);
-        builder.readTimeout(20, TimeUnit.SECONDS);
-        builder.writeTimeout(20, TimeUnit.SECONDS);
-        builder.callTimeout(20, TimeUnit.SECONDS);
+        builder.connectTimeout(10, TimeUnit.SECONDS);
+        builder.readTimeout(10, TimeUnit.SECONDS);
+        builder.writeTimeout(10, TimeUnit.SECONDS);
+        builder.callTimeout(10, TimeUnit.SECONDS);
         //错误重连
         builder.retryOnConnectionFailure(true);
         File httpCacheDirectory = new File(App.instance.getCacheDir(), "responses");
