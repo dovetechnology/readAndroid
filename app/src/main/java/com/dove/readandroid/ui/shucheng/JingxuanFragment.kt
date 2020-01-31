@@ -84,7 +84,7 @@ class JingxuanFragment : BaseMvcFragment() {
                 it?.hot?.let { it1 -> adapter.addData(it1) }
                 it?.newin?.let { it1 -> adapterx.addData(it1) }
             }, err = {
-                toggleShowError(true, it, {
+                toggleNetworkError(true, {
                     toggleShowLoading(true)
                     getData()
                 })
