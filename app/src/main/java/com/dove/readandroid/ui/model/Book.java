@@ -34,7 +34,7 @@ public class Book implements Serializable {
      * novelList : null
      */
     @PrimaryKey(autoGenerate = true)
-    public  int id;
+    public int id;
     public String category;
     public String author;
     public String name;
@@ -50,8 +50,8 @@ public class Book implements Serializable {
     public List<BookSectionItem> novelList;
     public String content;
 
-    public boolean isRead=false;
-    public  int currentSetion=0;//看到第几章 默认0 第一章
+    public boolean isRead = false;
+    public int currentSetion = 0;//看到第几章 默认0 第一章
 
-    public int isAddShlef=0; //0 未加入 1加入书架
+    public int isAddShlef = 0; //0 未加入 1加入书架
 }

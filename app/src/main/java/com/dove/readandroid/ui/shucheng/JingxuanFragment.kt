@@ -53,23 +53,14 @@ class JingxuanFragment : BaseMvcFragment() {
         }
 
         iv_close.click {
-            cd_ad.visibility=View.GONE
+            cd_ad.visibility = View.GONE
         }
         iv_close_two.click {
-            cd_ad_two.visibility=View.GONE
+            cd_ad_two.visibility = View.GONE
         }
 
         toggleShowLoading(true)
         getData()
-    }
-
-    fun getData() {
-        http().mApiService.home()
-            .get3 {
-                toggleShowLoading(false)
-                it?.hot?.let { it1 -> adapter.addData(it1) }
-                it?.newin?.let { it1 -> adapterx.addData(it1) }
-            }
         //广告1
         http().mApiService.ad("3")
             .get3 {
@@ -84,6 +75,20 @@ class JingxuanFragment : BaseMvcFragment() {
                     iv_ad_two.load(it?.list?.get(0)?.imgUrl)
                 }
             }
+    }
+
+    fun getData() {
+        http().mApiService.home()
+            .get3(next = {
+                toggleShowLoading(false)
+                it?.hot?.let { it1 -> adapter.addData(it1) }
+                it?.newin?.let { it1 -> adapterx.addData(it1) }
+            }, err = {
+                toggleShowError(true, it, {
+                    toggleShowLoading(true)
+                    getData()
+                })
+            })
 
     }
 

@@ -17,6 +17,7 @@ import com.appbaselib.utils.LogUtils
 import com.dove.readandroid.R
 import com.dove.readandroid.event.ShujiaEvent
 import com.dove.readandroid.event.UserEvent
+import com.dove.readandroid.network.get4
 import com.dove.readandroid.ui.*
 import com.dove.readandroid.ui.common.Constants
 import com.dove.readandroid.ui.common.UserShell
@@ -111,17 +112,17 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
         etSearch.click {
             start(SearchActivity::class.java)
         }
-//        var datas = App.instance.db.getBookDao().shujia()
-//        if (datas == null || datas.size == 0) {
-//            requestData()
-//        } else {
-//            mList.addAll(App.instance.db.getBookDao().shujia())
-//        }
-        requestData()
-
         iv_close.click {
             ratiolayout.visibility = View.GONE
         }
+
+//        //优先展示本地的书架书本信息
+//        var datas = App.instance.db.getBookDao().shujia()
+//        if (datas != null && datas.size != 0) {
+//            mAdapter.addData(App.instance.db.getBookDao().shujia())
+//        }
+        //获取网络书架信息
+        requestData()
         //广告
         http().mApiService.ad("2")
             .get3 {
@@ -137,10 +138,28 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
 
     override fun requestData() {
         http().mApiService.shujiaList()
-            .get3 {
-               // App.instance.db.getBookDao().addAll(it)
-                loadComplete(it)
+            .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
+            .map {
+                var datas = arrayListOf<Book>()
+                datas.addAll(it.data)
+
+                it.data?.forEachIndexed { index, book ->
+                    var title = book.name
+                    var book = App.instance.db.getBookDao().find(title)
+                    book?.apply {
+                        datas.set(index, book)
+                    }
+                }
+                it.data = datas
+                it
             }
+            .get4(next = {
+                // App.instance.db.getBookDao().addAll(it)
+                mList.clear()
+                loadComplete(it)
+            }, err = {
+                loadError(it)
+            })
 
     }
 
@@ -156,9 +175,7 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRefresh(muservent: ShujiaEvent?) {
         //信息更新了
-        mList.clear()
-        mList.addAll(App.instance.db.getBookDao().shujia())
-        mAdapter.notifyDataSetChanged()
+        requestData()
     }
 
 }

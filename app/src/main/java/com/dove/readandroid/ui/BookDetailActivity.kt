@@ -43,6 +43,7 @@ class BookDetailActivity : BaseMvcActivity() {
                     toast("已加入书架")
                     book.isAddShlef = 1
                     App.instance.db.getBookDao().update(book)
+                    //更新主页书架的信息
                     EventBus.getDefault().post(ShujiaEvent())
 
                 }
@@ -67,7 +68,7 @@ class BookDetailActivity : BaseMvcActivity() {
                 .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
                 .map {
                     it.data.data.novelList?.forEach {
-                        it.name = book.name //保存数据库 用书名来关联
+                        it.name = book.name //保存数据库 用书名来关联章节
                     }
                     it
                 }
