@@ -7,7 +7,9 @@ import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.App
+import com.dove.readandroid.ui.WebViewActivity
 import com.dove.readandroid.ui.model.Huodong
+import kotlinx.android.synthetic.main.fragment_shujia.*
 
 /**
  * ===============================
@@ -29,7 +31,7 @@ class HuodongFragment : BaseRefreshFragment<Huodong>() {
     override fun initAdapter() {
         mAdapter = HuodongAdapter(R.layout.item_huodong, mList)
         mAdapter.setOnItemClickListener { adapter, view, position ->
-
+            WebViewActivity.instance(mList.get(position).path, mContext)
         }
     }
 

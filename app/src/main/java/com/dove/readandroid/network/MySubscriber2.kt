@@ -116,6 +116,7 @@ abstract class MySubscriber2<T>(context: Context? = null, mMessage: String? = "�
                     onFail(e.message)
             }
         }
+        onComplete()
     }
 
     protected abstract fun onSucess(t: T?)
@@ -124,6 +125,7 @@ abstract class MySubscriber2<T>(context: Context? = null, mMessage: String? = "�
     protected open fun onFail(message: String?) {
         toast(message)
     }
+
 
     /**
      * 重新登陆

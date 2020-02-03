@@ -116,6 +116,18 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
             ratiolayout.visibility = View.GONE
         }
 
+        //广告 有没有登陆都加载广告
+        http().mApiService.ad("2")
+            .get3 {
+                it?.list?.get(0)?.let {
+                    iv_ad_one.load(it.imgUrl)
+                }
+            }
+
+        if (!UserShell.getInstance().isLogin)
+        {
+            return
+        }
 //        //优先展示本地的书架书本信息
 //        var datas = App.instance.db.getBookDao().shujia()
 //        if (datas != null && datas.size != 0) {
@@ -123,13 +135,7 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
 //        }
         //获取网络书架信息
         requestData()
-        //广告
-        http().mApiService.ad("2")
-            .get3 {
-                it?.list?.get(0)?.let {
-                    iv_ad_one.load(it.imgUrl)
-                }
-            }
+
     }
 
     override fun getLoadingTargetView(): View? {
@@ -137,6 +143,15 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
     }
 
     override fun requestData() {
+
+        //广告
+        http().mApiService.ad("2")
+            .get3 {
+                it?.list?.get(0)?.let {
+                    iv_ad_one.load(it.imgUrl)
+                }
+            }
+
         http().mApiService.shujiaList()
             .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
             .map {
@@ -159,6 +174,8 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
                 loadComplete(it)
             }, err = {
                 loadError(it)
+            },complete = {
+                swipe.isRefreshing=false
             })
 
     }

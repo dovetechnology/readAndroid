@@ -5,6 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import com.appbaselib.base.BaseMvcFragment
 import com.appbaselib.common.load
+import com.appbaselib.ext.toast
 import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
@@ -59,8 +60,16 @@ class JingxuanFragment : BaseMvcFragment() {
             cd_ad_two.visibility = View.GONE
         }
 
-        toggleShowLoading(true)
+        swipe.isRefreshing=true
         getData()
+
+        swipe.setOnRefreshListener {
+            getData()
+        }
+    }
+
+    fun getData() {
+
         //广告1
         http().mApiService.ad("3")
             .get3 {
@@ -75,19 +84,20 @@ class JingxuanFragment : BaseMvcFragment() {
                     iv_ad_two.load(it?.list?.get(0)?.imgUrl)
                 }
             }
-    }
 
-    fun getData() {
         http().mApiService.home()
             .get3(next = {
-                toggleShowLoading(false)
-                it?.hot?.let { it1 -> adapter.addData(it1) }
-                it?.newin?.let { it1 -> adapterx.addData(it1) }
+                swipe.isRefreshing=false
+
+                it?.hot?.let { it1 ->
+                    adapter.setNewData(it1)
+                }
+                it?.newin?.let { it1 ->
+                    adapterx.addData(it1)
+                }
             }, err = {
-                toggleNetworkError(true, {
-                    toggleShowLoading(true)
-                    getData()
-                })
+                swipe.isRefreshing=true
+                toast(it)
             })
 
     }

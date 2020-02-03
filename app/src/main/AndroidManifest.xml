@@ -29,7 +29,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup,android:label">
-        <activity android:name=".ui.me.WangjiPassActivity"></activity>
+        <activity android:name=".ui.WebViewActivity"></activity>
+        <activity android:name=".ui.me.WangjiPassActivity" />
         <activity android:name=".ui.me.ReadHsitoryActivity" />
         <activity android:name=".ui.ReadActivity" />
         <activity android:name=".ui.shucheng.FenleiDetailActivity" />

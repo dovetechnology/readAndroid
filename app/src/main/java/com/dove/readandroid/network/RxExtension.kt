@@ -77,7 +77,7 @@ fun <T> Observable<ResponseBean<T>>.get3(context: Context = AppManager.getInstan
 }
 
 //绑定生命周期 复写onFail
-fun <T> Observable<ResponseBean<T>>.get3(context: Context = AppManager.getInstance().currentActivity, isShowDialog: Boolean = false, message: String? = "请稍候", title: String? = "", next: (T?) -> Unit, err: (mS: String?) -> Unit) {
+fun <T> Observable<ResponseBean<T>>.get3(context: Context = AppManager.getInstance().currentActivity, isShowDialog: Boolean = false, message: String? = "请稍候", title: String? = "", next: (T?) -> Unit, err: (mS: String?) -> Unit,complete: (() -> Unit)?=null) {
 
     this.compose(RxHttpUtil.handleResult2<T>(context as LifecycleOwner)).subscribe(object : MySubscriber2<T>(if (isShowDialog) context else null, message, title) {
         override fun onSucess(t: T?) {
@@ -87,10 +87,16 @@ fun <T> Observable<ResponseBean<T>>.get3(context: Context = AppManager.getInstan
         override fun onFail(message: String?) {
             err(message)
         }
+
+        override fun onComplete() {
+            complete?.let {
+                it()
+            }
+        }
     })
 }
 //不绑定生命周期 复写onFail
-fun <T> Observable<ResponseBean<T>>.get4(context: Context = AppManager.getInstance().currentActivity, isShowDialog: Boolean = false, message: String? = "请稍候", title: String? = "", next: (T?) -> Unit, err: (mS: String?) -> Unit) {
+fun <T> Observable<ResponseBean<T>>.get4(context: Context = AppManager.getInstance().currentActivity, isShowDialog: Boolean = false, message: String? = "请稍候", title: String? = "", next: (T?) -> Unit, err: (mS: String?) -> Unit,complete: (() -> Unit)?=null) {
 
     this.subscribe(object : MySubscriber2<T>(if (isShowDialog) context else null, message, title) {
         override fun onSucess(t: T?) {
@@ -99,6 +105,11 @@ fun <T> Observable<ResponseBean<T>>.get4(context: Context = AppManager.getInstan
 
         override fun onFail(message: String?) {
             err(message)
+        }
+        override fun onComplete() {
+            complete?.let {
+                it()
+            }
         }
     })
 }
