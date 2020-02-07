@@ -24,45 +24,30 @@
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cd_ad"
+                    android:id="@+id/card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="4dp"
                     app:cardCornerRadius="4dp"
-                    app:cardElevation="3dp">
+                    app:cardElevation="2dp">
 
                     <com.appbaselib.view.RatioFramlayout
-                        android:id="@+id/ratiolayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:ratio="3">
+                        app:ratio="4">
 
 
-                        <com.gcssloop.widget.RCRelativeLayout
+                        <com.youth.banner.Banner
+                            android:id="@+id/banner"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:round_corner="8dp">
+                            android:layout_height="match_parent">
 
-                            <ImageView
-                                android:id="@+id/iv_ad_one"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scaleType="fitXY" />
-
-                        </com.gcssloop.widget.RCRelativeLayout>
-
+                        </com.youth.banner.Banner>
 
                     </com.appbaselib.view.RatioFramlayout>
-
-                    <ImageView
-                        android:id="@+id/iv_close"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|bottom"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/chacha_bg"
-                        android:padding="6dp"
-                        android:src="@drawable/icon_chacha" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -70,6 +55,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginRight="16dp"
                     android:background="@color/white"
                     app:cardCornerRadius="4dp"
@@ -115,53 +101,24 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cd_ad_two"
+                <com.dove.readandroid.view.AdView
+                    android:id="@+id/ad_two"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:background="@color/white"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="3dp">
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:visibility="gone">
 
-                    <com.appbaselib.view.RatioFramlayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        app:ratio="3">
+                </com.dove.readandroid.view.AdView>
 
-
-                        <com.gcssloop.widget.RCRelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:round_corner="4dp">
-
-                            <ImageView
-                                android:id="@+id/iv_ad_two"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scaleType="fitXY" />
-
-                        </com.gcssloop.widget.RCRelativeLayout>
-
-                        <ImageView
-                            android:id="@+id/iv_close_two"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|bottom"
-                            android:layout_margin="4dp"
-                            android:background="@drawable/chacha_bg"
-                            android:padding="6dp"
-                            android:src="@drawable/icon_chacha" />
-                    </com.appbaselib.view.RatioFramlayout>
-
-
-                </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="16dp"
                     android:background="@color/white"

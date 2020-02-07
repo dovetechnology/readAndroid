@@ -21,6 +21,7 @@ import com.dove.readandroid.network.get4
 import com.dove.readandroid.ui.*
 import com.dove.readandroid.ui.common.Constants
 import com.dove.readandroid.ui.common.UserShell
+import kotlinx.android.synthetic.main.view_ad.*
 import okhttp3.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -112,20 +113,21 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
         etSearch.click {
             start(SearchActivity::class.java)
         }
-        iv_close.click {
-            ratiolayout.visibility = View.GONE
-        }
 
         //广告 有没有登陆都加载广告
         http().mApiService.ad("2")
             .get3 {
-                it?.list?.get(0)?.let {
-                    iv_ad_one.load(it.imgUrl)
+                if (it!=null&&!it.list.isNullOrEmpty())
+                {
+                    it.list.get(0).let {
+                        ad.setData(it)
+                        ad.getImageView().load(it.imgUrl)
+                    }
                 }
+
             }
 
-        if (!UserShell.getInstance().isLogin)
-        {
+        if (!UserShell.getInstance().isLogin) {
             return
         }
 //        //优先展示本地的书架书本信息
@@ -134,6 +136,7 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
 //            mAdapter.addData(App.instance.db.getBookDao().shujia())
 //        }
         //获取网络书架信息
+        swipe.isRefreshing=true
         requestData()
 
     }
@@ -148,7 +151,7 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
         http().mApiService.ad("2")
             .get3 {
                 it?.list?.get(0)?.let {
-                    iv_ad_one.load(it.imgUrl)
+                    iv_ad.load(it.imgUrl)
                 }
             }
 
@@ -174,8 +177,8 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
                 loadComplete(it)
             }, err = {
                 loadError(it)
-            },complete = {
-                swipe.isRefreshing=false
+            }, complete = {
+                swipe.isRefreshing = false
             })
 
     }

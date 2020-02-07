@@ -6,10 +6,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.appbaselib.base.BaseMvcFragment
 import com.appbaselib.common.load
 import com.appbaselib.ext.toast
+import com.dove.readandroid.BannerImageloadr
 import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.BookDetailActivity
+import com.dove.readandroid.ui.OpenTypeHandler
+import com.dove.readandroid.ui.model.AdData
 import com.dove.readandroid.ui.shucheng.HomeBookAdapter
 import com.safframework.ext.click
 import kotlinx.android.synthetic.main.fragment_jingxuan.*
@@ -52,15 +55,9 @@ class JingxuanFragment : BaseMvcFragment() {
                 putSerializable("data", adapterx.data.get(position))
             })
         }
+        banner.setImageLoader(BannerImageloadr())
 
-        iv_close.click {
-            cd_ad.visibility = View.GONE
-        }
-        iv_close_two.click {
-            cd_ad_two.visibility = View.GONE
-        }
-
-        swipe.isRefreshing=true
+        swipe.isRefreshing = true
         getData()
 
         swipe.setOnRefreshListener {
@@ -68,26 +65,43 @@ class JingxuanFragment : BaseMvcFragment() {
         }
     }
 
+    lateinit var  adDatas:List<AdData>
     fun getData() {
 
         //广告1
         http().mApiService.ad("3")
             .get3 {
-                if (it != null && it.list != null && it.list.size > 0) {
-                    iv_ad_one.load(it?.list?.get(0)?.imgUrl)
+                it?.list?.let {
+
+                     adDatas = it
+                    var list = arrayListOf<String>()
+                    it.forEach {
+                        list.add(it.imgUrl)
+                    }
+                    banner.setImages(list)
+                    banner.setOnBannerListener {
+                        OpenTypeHandler(
+                            adDatas?.get(it).openType,
+                            mContext,
+                            adDatas.get(it).forwardUrl
+                        ).handle()
+                    }
+                    banner.start()
+
                 }
             }
         //广告2
-        http().mApiService.ad("4")
-            .get3 {
-                if (it != null && it.list != null && it.list.size > 0) {
-                    iv_ad_two.load(it?.list?.get(0)?.imgUrl)
-                }
-            }
+//        http().mApiService.ad("4")
+//            .get3 {
+//                it?.list?.get(0)?.let {
+//                    ad_two.setData(it)
+//                    ad_two.getImageView().load(it.imgUrl)
+//                }
+//            }
 
         http().mApiService.home()
             .get3(next = {
-                swipe.isRefreshing=false
+                swipe.isRefreshing = false
 
                 it?.hot?.let { it1 ->
                     adapter.setNewData(it1)
@@ -96,7 +110,7 @@ class JingxuanFragment : BaseMvcFragment() {
                     adapterx.addData(it1)
                 }
             }, err = {
-                swipe.isRefreshing=true
+                swipe.isRefreshing = false
                 toast(it)
             })
 

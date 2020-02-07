@@ -143,8 +143,8 @@
         android:layout_gravity="bottom"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cd"
+        <com.dove.readandroid.view.AdView
+            android:id="@+id/ad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -153,38 +153,10 @@
             app:cardCornerRadius="4dp"
             app:cardElevation="1dp">
 
-            <com.appbaselib.view.RatioFramlayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:ratio="4">
 
 
-                <com.gcssloop.widget.RCRelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:round_corner="8dp">
 
-                    <ImageView
-                        android:id="@+id/iv_ad_one"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="fitXY" />
-
-                </com.gcssloop.widget.RCRelativeLayout>
-
-                <ImageView
-                    android:id="@+id/iv_close"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|bottom"
-                    android:layout_margin="4dp"
-                    android:background="@drawable/chacha_bg"
-                    android:padding="6dp"
-                    android:src="@drawable/icon_chacha" />
-            </com.appbaselib.view.RatioFramlayout>
-
-
-        </androidx.cardview.widget.CardView>
+        </com.dove.readandroid.view.AdView>
 
         <View
             android:layout_width="match_parent"

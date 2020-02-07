@@ -54,9 +54,7 @@ class BookDetailActivity : BaseMvcActivity() {
             })
             finish()
         }
-        iv_close.click {
-            cd.visibility = View.GONE
-        }
+
 //查看数据库有没有浏览过改书
         var b = App.instance.db.getBookDao().find(book.name)
 
@@ -95,12 +93,27 @@ class BookDetailActivity : BaseMvcActivity() {
             book = b
             book.novelList = App.instance.db.getChapDao().findChap(book.name)
         }
-        //广告2
+        //广告1/2
         http().mApiService.ad("5")
             .get3 {
-                if (it != null && it.list != null && it.list.size > 0) {
-                    iv_ad_one.load(it?.list?.get(0)?.imgUrl)
+                if (it!=null&&!it.list.isNullOrEmpty())
+                {
+                    it.list.get(0).let {
+                        ad_c.setData(it)
+                        ad_c.getImageView().load(it.imgUrl)
+                    }
                 }
+            }
+        http().mApiService.ad("6")
+            .get3 {
+                if (it!=null&&!it.list.isNullOrEmpty())
+                {
+                    it.list.get(0).let {
+                        ad.setData(it)
+                        ad.getImageView().load(it.imgUrl)
+                    }
+                }
+
             }
         setValue(book)
     }
@@ -122,9 +135,9 @@ class BookDetailActivity : BaseMvcActivity() {
 
         it?.novelList?.let {
             it?.forEachIndexed { index, book ->
-                if (index > 10) {
-                    return@forEachIndexed
-                }
+//                if (index > 10) {
+//                    return@forEachIndexed
+//                }
                 titles.add(book.title)
             }
             rv_mulu.layoutManager =

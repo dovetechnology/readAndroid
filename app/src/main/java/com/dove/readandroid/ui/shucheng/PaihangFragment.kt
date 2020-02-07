@@ -57,7 +57,7 @@ class PaihangFragment : BaseMvcFragment() {
                 })
             })
         }
-        toggleShowLoading(true)
+      toggleShowLoading(true)
         getData()
         swipe.setOnRefreshListener {
             getData()
@@ -73,18 +73,24 @@ class PaihangFragment : BaseMvcFragment() {
 
         http().mApiService.top()
             .get3(next = {
-                toggleShowLoading(false)
+
                 swipe.isRefreshing=false
-                list = it as ArrayList<Top>
+                toggleShowLoading(false)
+
                 var titles = mutableListOf<String>()
-                it?.forEach {
-                    titles.add(it.topName)
+                if (it!=null&&it.size!=0)
+                {
+                    it.forEach {
+                        list.add(it)
+                        titles.add(it.topName)
+                    }
+                    (rv_title.adapter as PaihangTitleAdapter).addData(titles)
+                    contentAdapter.setNewData(list.get(0).totalList)
                 }
-                (rv_title.adapter as PaihangTitleAdapter).addData(titles)
-                contentAdapter.setNewData(list.get(0).totalList)
 
             }, err = {
                 toggleShowLoading(false)
+                swipe.isRefreshing=false
                 toast(it)
             })
     }
