@@ -10,12 +10,14 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 /** json相关 **/
 fun Any.toJson() = Gson().toJson(this)
 
-fun <I:Any,T : Any>Any.runBackground(param: I , work: (b: I) -> T, next: (b: T) -> Unit, error: (b: Any?) -> Unit) {
+fun <I:Any,T : Any>Any.runBackground(param: I , work: (b: I) -> T, next: (b: T) -> Unit, error: (b: Any?) -> Unit,time:Long=300) {
     Observable.just(param)
+        .delay(time,TimeUnit.MILLISECONDS)
             .map {
                 work(param)
             }.subscribeOn(Schedulers.newThread())

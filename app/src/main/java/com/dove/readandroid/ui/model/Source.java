@@ -11,27 +11,23 @@ import java.io.Serializable;
  */
 public class Source implements Serializable {
 
-    /**
-     * charCode : string
-     * createTime : string
-     * id : 0
-     * name : string
-     * novDir : string
-     * searchUrl : string
-     * stat : string
-     * topUrl : string
-     * updateTime : string
-     * url : string
-     */
-
+    public String besthotSelector;
     public String charCode;
+    public String classifySelector;
+    public String contentSelector;
     public String createTime;
+    public String detailSelector;
+    public String hotSelector;
     public String id;
     public String name;
+    public String newinSelector;
     public String novDir;
+    public String searchListSelector;
     public String searchUrl;
     public String stat;
+    public String topSelector;
     public String topUrl;
+    public String updateSelector;
     public String updateTime;
     public String url;
 }

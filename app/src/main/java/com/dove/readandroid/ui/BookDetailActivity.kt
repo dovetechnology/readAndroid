@@ -16,6 +16,7 @@ import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.get4
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.model.Book
+import com.dove.readandroid.utils.runBackground
 import com.leaf.library.StatusBarUtil
 import com.safframework.ext.click
 import com.safframework.ext.postDelayed
@@ -23,6 +24,7 @@ import kotlinx.android.synthetic.main.activity_book_detail.*
 import kotlinx.android.synthetic.main.content_scrolling.*
 import kotlinx.coroutines.delay
 import org.greenrobot.eventbus.EventBus
+import kotlin.concurrent.thread
 
 class BookDetailActivity : BaseMvcActivity() {
     lateinit var book: Book //传过来的书 可能信息不完整
@@ -96,8 +98,7 @@ class BookDetailActivity : BaseMvcActivity() {
         //广告1/2
         http().mApiService.ad("5")
             .get3 {
-                if (it!=null&&!it.list.isNullOrEmpty())
-                {
+                if (it != null && !it.list.isNullOrEmpty()) {
                     it.list.get(0).let {
                         ad_c.setData(it)
                         ad_c.getImageView().load(it.imgUrl)
@@ -106,8 +107,7 @@ class BookDetailActivity : BaseMvcActivity() {
             }
         http().mApiService.ad("6")
             .get3 {
-                if (it!=null&&!it.list.isNullOrEmpty())
-                {
+                if (it != null && !it.list.isNullOrEmpty()) {
                     it.list.get(0).let {
                         ad.setData(it)
                         ad.getImageView().load(it.imgUrl)
@@ -118,8 +118,8 @@ class BookDetailActivity : BaseMvcActivity() {
         setValue(book)
     }
 
-    private fun setValue(it: Book?) {
-        it?.let {
+    private fun setValue(mb: Book?) {
+        mb?.let {
             book = it
             name.text = it.name
             type.text = it.stat
@@ -133,18 +133,54 @@ class BookDetailActivity : BaseMvcActivity() {
         //加载目录
         var titles = arrayListOf<String>()
 
-        it?.novelList?.let {
-            it?.forEachIndexed { index, book ->
-//                if (index > 10) {
-//                    return@forEachIndexed
+        mb?.novelList?.let {
+//
+//                thread {
+//                    mb.novelList.forEachIndexed { index, book ->
+//                        //                    if (index > 10) {
+////                        return@forEachIndexed
+////                    }
+//                        titles.add(book.title)
+//                    }
+//                    rv_mulu.layoutManager =
+//                        LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+//                    rv_mulu.adapter = MuluAdapter(R.layout.item_mulu, titles).apply {
+//                        setOnItemClickListener { adapter, view, position ->
+//
+//                            start(ReadActivity::class.java, Bundle().apply {
+//                                putSerializable("data", book)
+//                                putInt("pos", position)
+//                            })
+//                        }
+//                    }
 //                }
-                titles.add(book.title)
-            }
-            rv_mulu.layoutManager =
-                LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-            rv_mulu.adapter = MuluAdapter(R.layout.item_mulu, titles)
-        }
 
+
+            runBackground(it, {
+                mb.novelList?.forEachIndexed { index, book ->
+//                    if (index > 10) {
+//                        return@forEachIndexed
+//                    }
+                    titles.add(book.title)
+                }
+                titles
+            }, {
+                rv_mulu.layoutManager =
+                    LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+                rv_mulu.adapter = MuluAdapter(R.layout.item_mulu, it).apply {
+                    setOnItemClickListener { adapter, view, position ->
+
+                        start(ReadActivity::class.java, Bundle().apply {
+                            putSerializable("data", book)
+                            putInt("pos", position)
+                        })
+                    }
+                }
+            }, {
+
+            })
+
+        }
 
     }
 

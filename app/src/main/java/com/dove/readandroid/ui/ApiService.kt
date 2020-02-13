@@ -82,8 +82,16 @@ interface ApiService {
     @GET("read/novel/open")
     fun openChap(@Query("bookUrl") bookUrl: String, @Query("chapterUrl") chapterUrl: String): Observable<ResponseBean<ChapWrap>>
 
-    @FormUrlEncoded
     @POST("read/novel/user/find/password")
     fun findpass(@Field("username") name: String): Observable<ResponseBean<Any>>
+
+    @GET("read/novel/source/list")
+    fun source(): Observable<ResponseBean<List<Source>>>
+
+    @FormUrlEncoded
+    @POST("read/novel/change/source")
+    fun sourceChange(@Field("name") name: String, @Field("author") author: String,
+                     @Field("title") title: String,  @Field("id") id: String): Observable<ResponseBean<Any>>
+
 
 }

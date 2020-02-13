@@ -43,6 +43,7 @@ import org.greenrobot.eventbus.EventBus
 class ReadActivity : BaseMvcActivity() {
 
     lateinit var mbook: Book
+    var postion = 0; //章节
     private val K_EXTRA_BOOK_TB = "book_tb"
     lateinit var mTopInAnim: Animation
     lateinit var mTopOutAnim: Animation
@@ -65,7 +66,8 @@ class ReadActivity : BaseMvcActivity() {
     @SuppressLint("InvalidWakeLockTag")
     override fun initView(mSavedInstanceState: Bundle?) {
         mbook = intent.getSerializableExtra("data") as Book
-
+        postion = intent.getIntExtra("pos", 0)//默認第一章
+        mbook.currentSetion = postion
         //
         StatusBarUtil.setTransparentForWindow(this)
         ReaderSettingManager.init(this)
@@ -222,13 +224,6 @@ class ReadActivity : BaseMvcActivity() {
             }
         })
 
-        //开始阅读
-        if (mbook.currentSetion != 0) {
-            //渡过
-        } else {
-            //没读过
-        }
-        startRead(mbook.currentSetion)
 
         //选中章节
         sectionAdapter.setOnItemClickListener { adapter, view, position ->
@@ -256,6 +251,19 @@ class ReadActivity : BaseMvcActivity() {
         iv_close_ac.click {
             finish()
         }
+        iv_setting.click {
+
+            start(SourceActivity::class.java,Bundle().apply {
+                putSerializable("data",mbook)
+            })
+        }
+        //开始阅读
+        if (mbook.currentSetion != 0) {
+            //渡过
+        } else {
+            //没读过
+        }
+        startRead(mbook.currentSetion)
     }
 
     private fun toggleNightMode(isOpen: Boolean) {
