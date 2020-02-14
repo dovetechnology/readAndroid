@@ -20,7 +20,11 @@ import io.reactivex.disposables.Disposable
  * 2019 5.6 tangming  获取全部结果
  * 通用订阅者,用于统一处理回调
  */
-abstract class MySubscriber2<T>(context: Context? = null, mMessage: String? = "请稍后……", title: String? = null) : Observer<ResponseBean<T>> {
+abstract class MySubscriber2<T>(
+    context: Context? = null,
+    mMessage: String? = "请稍后……",
+    title: String? = null
+) : Observer<ResponseBean<T>> {
     constructor(mContextm: Context) : this() {
         mContext = mContextm
     }
@@ -64,16 +68,12 @@ abstract class MySubscriber2<T>(context: Context? = null, mMessage: String? = "�
     }
 
     override fun onNext(mBaseModel: ResponseBean<T>) {
-        try {
 
-            if (mContext != null)
+        if (mContext != null) {
             mProgressDialog?.dismiss()
-
-        onSucess(mBaseModel.data)
-        }catch (e:Exception )
-        {
-            return error("加载失败");
         }
+        onSucess(mBaseModel.data)
+
     }
 
     override fun onError(e: Throwable) {
@@ -87,7 +87,7 @@ abstract class MySubscriber2<T>(context: Context? = null, mMessage: String? = "�
             onFail("网络不可用")
         } else if (e is JsonSyntaxException) {  //其余不知名错误
             onFail("数据解析异常")
-        }else{
+        } else {
             onFail(e.message) //其他异常
         }
 
@@ -134,7 +134,8 @@ abstract class MySubscriber2<T>(context: Context? = null, mMessage: String? = "�
         UserShell.getInstance().exitLoginButSavePre()//清除用户信息
         //关闭当前页并跳转到登录
         AppManager.getInstance().currentActivity.startActivity(
-                Intent(AppManager.getInstance().currentActivity, LoginActivity::class.java))
+            Intent(AppManager.getInstance().currentActivity, LoginActivity::class.java)
+        )
     }
 
 }

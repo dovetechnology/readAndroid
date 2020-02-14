@@ -150,8 +150,10 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
         //广告
         http().mApiService.ad("2")
             .get3 {
-                it?.list?.get(0)?.let {
-                    iv_ad.load(it.imgUrl)
+                if (it != null && !it.list.isNullOrEmpty()) {
+                    it.list.get(0).let {
+                        iv_ad.load(it.imgUrl)
+                    }
                 }
             }
 

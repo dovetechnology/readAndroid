@@ -131,6 +131,7 @@ public class PageView extends View {
         super(context, attrs, defStyleAttr);
         scaledTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
         init();
+        mPageLoader = new PageLoader(this);
 
     }
 

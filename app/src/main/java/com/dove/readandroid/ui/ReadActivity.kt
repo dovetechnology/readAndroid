@@ -71,14 +71,6 @@ class ReadActivity : BaseMvcActivity() {
         //
         StatusBarUtil.setTransparentForWindow(this)
         ReaderSettingManager.init(this)
-//        bindOnClickLister(
-//            this,
-//            readTvPreChapter,
-//            readTvNextChapter,
-//            readTvCategory,
-//            readTvNightMode,
-//            readTvSetting
-//        )
 
         if (Build.VERSION.SDK_INT >= 19) {
             appbar.setPadding(0, ScreenUtils.getStatusHeight(this), 0, 0)
@@ -175,41 +167,9 @@ class ReadActivity : BaseMvcActivity() {
             override fun onPageChange(pos: Int) {
                 print("页面改变$pos")
                 mSectionItem.currentPage = pos
-                //在这里判断 需不需要加载下一章 上一章
-                if (!readAdapter.hasNextSection(pv_read.chapPosition)) {
-                    //加载下一章
-                    var p = mbook.novelList.indexOf(mSectionItem) + 1
-                    if (p < mbook.novelList.size)
-
-                        getContentByChap(mbook.novelList.get(p), false) {
-                            readAdapter.addData(
-                                p,
-                                BookSectionContent(
-                                    p,
-                                    mbook.novelList.get(p).title,
-                                    mbook.novelList.get(p).content
-                                )
-                            )
-                        }
-                }
-                if (!readAdapter.hasPreviousSection(pv_read.chapPosition)) {
-                    //加载上一章
-                    var p = mbook.novelList.indexOf(mSectionItem) - 1
-                    if (p >= 0)
-
-                        getContentByChap(mbook.novelList.get(p), false) {
-                            readAdapter.addData(
-                                p,
-                                BookSectionContent(
-                                    p,
-                                    mbook.novelList.get(p).title,
-                                    mbook.novelList.get(p).content
-                                )
-                            )
-                        }
-                }
-
-
+                //在这里预加载下一章 上一章
+                addPreZhangjie()
+                addNextZhangjie()
             }
 
             override fun onChapterChange(pos: Int) {
@@ -253,8 +213,8 @@ class ReadActivity : BaseMvcActivity() {
         }
         iv_setting.click {
 
-            start(SourceActivity::class.java,Bundle().apply {
-                putSerializable("data",mbook)
+            start(SourceActivity::class.java, Bundle().apply {
+                putSerializable("data", mbook)
             })
         }
         //开始阅读
@@ -264,6 +224,33 @@ class ReadActivity : BaseMvcActivity() {
             //没读过
         }
         startRead(mbook.currentSetion)
+        //预加载前一张和下一章
+        addPreZhangjie()
+        addNextZhangjie()
+    }
+
+    fun addPreZhangjie() {
+        if (!readAdapter.hasPreviousSection(pv_read.chapPosition)) {
+            //加载上一章
+            var p = mbook.novelList.indexOf(mSectionItem) - 1
+            if (p >= 0)
+
+                getContentByChap(mbook.novelList.get(p), p, false) {
+                }
+        }
+
+    }
+
+    fun addNextZhangjie() {
+        if (!readAdapter.hasNextSection(pv_read.chapPosition)) {
+            //加载下一章
+            var p = mbook.novelList.indexOf(mSectionItem) + 1
+            if (p < mbook.novelList.size)
+
+                getContentByChap(mbook.novelList.get(p), p, false) {
+
+                }
+        }
     }
 
     private fun toggleNightMode(isOpen: Boolean) {
@@ -298,11 +285,7 @@ class ReadActivity : BaseMvcActivity() {
 
         if (mSectionItem.content.isNullOrEmpty()) {
             //从网络获取
-            getContentByChap(mSectionItem) {
-                readAdapter.addData(
-                    p,
-                    BookSectionContent(p, mSectionItem.title, mSectionItem.content)
-                )
+            getContentByChap(mSectionItem, p) {
                 pv_read.openSection(p, 0) //从网络获取的就从第一页读
             }
 
@@ -326,6 +309,7 @@ class ReadActivity : BaseMvcActivity() {
 
     fun getContentByChap(
         bookSectionItem: BookSectionItem,
+        p: Int,
         isShowtitle: Boolean = true,
         next: () -> Unit
     ) {
@@ -336,6 +320,13 @@ class ReadActivity : BaseMvcActivity() {
                 content = content?.replace("&nbsp;", "")
                 bookSectionItem.content = content//改变了mbook书里面的内容
                 App.instance.db.getChapDao().updata(bookSectionItem) //保存到数据库
+
+                //添加章节
+                readAdapter.addData(
+                    p,
+                    BookSectionContent(p, mSectionItem.title, mSectionItem.content)
+                )
+                //自定义的操作
                 next()
             }
 
