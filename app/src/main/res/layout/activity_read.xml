@@ -17,7 +17,46 @@
 
         <include layout="@layout/toolbar_read" />
 
-        <include layout="@layout/layout_read_bottom" />
+
+        <FrameLayout
+            android:id="@+id/flzhangjie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/layoutbottom"
+            android:background="@android:color/transparent"
+            android:visibility="gone">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="12dp"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="2dp">
+
+                <TextView
+                    android:id="@+id/tv_zhangjie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="12dp"
+                    android:paddingTop="6dp"
+                    android:paddingRight="12dp"
+                    android:paddingBottom="6dp"
+                    android:text="第五章"
+                    android:textSize="16sp" />
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:id="@+id/layoutbottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/layout_read_bottom" />
+        </FrameLayout>
+
 
         <LinearLayout
             android:id="@+id/ll_section_progress"
@@ -54,10 +93,10 @@
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:background="#DDD8C5"
             android:id="@+id/read_rv_section"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#DDD8C5"
             android:paddingTop="26dp"
             app:fastScrollEnabled="true"
             app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"

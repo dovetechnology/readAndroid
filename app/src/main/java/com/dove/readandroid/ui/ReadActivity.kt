@@ -10,10 +10,12 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.ext.toast
+import com.appbaselib.utils.LogUtils
 import com.appbaselib.utils.ScreenUtils
 import com.dove.readandroid.R
 import com.dove.readandroid.event.ShujiaEvent
@@ -33,7 +35,6 @@ import com.safframework.ext.click
 import com.safframework.ext.postDelayed
 import com.zchu.reader.OnPageChangeListener
 import com.zchu.reader.PageView
-import kotlinx.android.synthetic.main.activity_book_detail.*
 import kotlinx.android.synthetic.main.activity_read.*
 import kotlinx.android.synthetic.main.layout_read_bottom.*
 import kotlinx.android.synthetic.main.toolbar_read.*
@@ -99,7 +100,8 @@ class ReadActivity : BaseMvcActivity() {
         pv_read.setTextColor(ReaderSettingManager.getInstance().getTextColor())
         pv_read.setPageBackground(ReaderSettingManager.getInstance().getPageBackground())
         lin.setBackgroundColor(ReaderSettingManager.getInstance().getPageBackground())
-        read_bottom.setBackgroundColor(ReaderSettingManager.getInstance().getPageBackground())
+       // read_bottom.setBackgroundColor(ReaderSettingManager.getInstance().getPageBackground())
+        read_bottom.setBackgroundColor(ReaderSettingManager.getInstance().pageBackground)
         StatusBarUtil.setColor(this, ReaderSettingManager.getInstance().getPageBackground())
 
         pv_read.setTouchListener(object : PageView.TouchListener {
@@ -217,12 +219,36 @@ class ReadActivity : BaseMvcActivity() {
                 putSerializable("data", mbook)
             })
         }
+        read_sb_chapter_progress.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                var currentPosition = mbook.novelList.size * progress / 100
+                mbook.currentSetion = currentPosition
+                tv_zhangjie.setText("第"+currentPosition+"章")
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                flzhangjie.visibility = View.VISIBLE
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                flzhangjie.visibility = View.GONE
+                read()
+
+            }
+
+        })
         //开始阅读
         if (mbook.currentSetion != 0) {
             //渡过
         } else {
             //没读过
         }
+        read()
+
+    }
+
+    private fun read() {
         startRead(mbook.currentSetion)
         //预加载前一张和下一章
         addPreZhangjie()
