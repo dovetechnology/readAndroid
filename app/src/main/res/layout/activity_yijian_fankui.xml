@@ -16,18 +16,31 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="80dp">
 
-        <TextView
-            android:id="@+id/tv_denglu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+        <EditText
+            android:background="@drawable/commen_range"
+            android:backgroundTint="#F4F4F4"
+            android:id="@+id/et_yijian"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:gravity="left|top"
+            android:layout_margin="16dp"
             android:drawablePadding="8dp"
+            android:hint="输入你的留言"
             android:padding="16dp"
-            android:text="请登录www.baidu.com找回密码"
             android:textColor="#2C2C2C"
             android:textSize="14sp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_gravity="bottom"
+
+            android:id="@+id/tv_sure"
+            style="@style/default_btn"
+            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_margin="40dp"
+            android:text="提交留言" />
 
     </FrameLayout>
+
 
 
 </LinearLayout>

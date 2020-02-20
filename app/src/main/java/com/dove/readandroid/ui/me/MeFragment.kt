@@ -55,6 +55,15 @@ class MeFragment : BaseMvcFragment() {
         ll_lishi.click {
             start(ReadHsitoryActivity::class.java)
         }
+        ll_fankui.click {
+            start(YijianFankuiActivity::class.java)
+        }
+        ll_share.click {
+
+        }
+        ll_update.click {
+
+        }
     }
 
     private fun setValue(userBean: UserBean) {

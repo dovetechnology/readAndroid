@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.dove.readandroid.R
+import com.dove.readandroid.ui.model.Book
 import com.dove.readandroid.ui.model.Fenlei
 import com.dove.readandroid.ui.model.Top
 
@@ -19,11 +20,11 @@ import com.dove.readandroid.ui.model.Top
  * 创建日期：2019/5/7 10:03
  * ===============================
  */
-class PaihangContentAdapter(layout: Int, data: MutableList<Top>?) : BaseQuickAdapter<Top, BaseViewHolder>(layout, data) {
-    override fun convert(helper: BaseViewHolder, item: Top?) {
+class PaihangContentAdapter(layout: Int, data: MutableList<Book>?) : BaseQuickAdapter<Book, BaseViewHolder>(layout, data) {
+    override fun convert(helper: BaseViewHolder, item: Book?) {
         item?.let {
-            helper.setText(R.id.tvName, item.novelName)
-            helper.setText(R.id.name, item.novelName)
+            helper.setText(R.id.tvName, item.name)
+            helper.setText(R.id.name, item.name)
         }
     }
 

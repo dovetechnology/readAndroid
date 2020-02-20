@@ -5,14 +5,17 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appbaselib.base.BaseMvcFragment
+import com.appbaselib.base.Navigator
 import com.appbaselib.ext.toast
 import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.BookDetailActivity
 import com.dove.readandroid.ui.model.Book
+import com.dove.readandroid.ui.model.Fenlei
 import com.dove.readandroid.ui.model.Top
 import com.dove.readandroid.ui.shucheng.PaihangContentAdapter
+import com.dove.readandroid.ui.shucheng.PaihangContentFragment
 import com.dove.readandroid.ui.shucheng.PaihangTitleAdapter
 import kotlinx.android.synthetic.main.fragment_paihang.*
 
@@ -25,7 +28,10 @@ import kotlinx.android.synthetic.main.fragment_paihang.*
  */
 class PaihangFragment : BaseMvcFragment() {
 
-
+    var titles = mutableListOf<Fenlei>()
+    var contents = mutableListOf<Book>()
+    var map = hashMapOf<Int, PaihangContentFragment>()
+    lateinit var navigator: Navigator
     override fun getContentViewLayoutID(): Int {
         return R.layout.fragment_paihang
     }
@@ -35,29 +41,25 @@ class PaihangFragment : BaseMvcFragment() {
 
     override fun initView() {
 
+        navigator = Navigator(childFragmentManager, R.id.content)
         rv_title.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-        rv_title.adapter = PaihangTitleAdapter(R.layout.item_paihang_title, mutableListOf()).apply {
+        rv_title.adapter = PaihangTitleAdapter(R.layout.item_paihang_title, titles).apply {
             titleAdapter = this
         }
         titleAdapter.setOnItemClickListener { adapter, view, position ->
-            contentAdapter.setNewData(list.get(position).totalList)
-        }
 
-        rv_content.layoutManager = GridLayoutManager(mContext, 3)
-        rv_content.adapter =
-            PaihangContentAdapter(R.layout.item_paihang_content, mutableListOf()).apply {
-                contentAdapter = this
-            }
-        contentAdapter.setOnItemClickListener { adapter, view, position ->
-
-            start(BookDetailActivity::class.java, Bundle().apply {
-                putSerializable("data", Book().apply {
-                    novelUrl=contentAdapter.data.get(position).novelUrl
-                    name=contentAdapter.data.get(position).novelName
+            if (!map.containsKey(position)) {
+                map.put(position, PaihangContentFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("data", titles.get(position).id)
+                    }
                 })
-            })
+            }
+            navigator.showFragment(map.get(position))
+
         }
-      toggleShowLoading(true)
+
+
         getData()
         swipe.setOnRefreshListener {
             getData()
@@ -68,31 +70,28 @@ class PaihangFragment : BaseMvcFragment() {
         return swipe
     }
 
-    var list = arrayListOf<Top>()
     private fun getData() {
 
-        http().mApiService.top()
+        http().mApiService.tag()
             .get3(next = {
-
-                swipe.isRefreshing=false
-                toggleShowLoading(false)
-
-                var titles = mutableListOf<String>()
-                if (it!=null&&it.size!=0)
-                {
-                    it.forEach {
-                        list.add(it)
-                        titles.add(it.topName)
+                swipe.isRefreshing = false
+                it?.let { it1 -> titles.addAll(it1) }
+                titleAdapter.notifyDataSetChanged()
+                //默认第一个排行
+                map.put(0, PaihangContentFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("data", titles.get(0).id)
                     }
-                    (rv_title.adapter as PaihangTitleAdapter).addData(titles)
-                    contentAdapter.setNewData(list.get(0).totalList)
-                }
+                })
+                navigator.showFragment(map.get(0))
 
             }, err = {
-                toggleShowLoading(false)
-                swipe.isRefreshing=false
                 toast(it)
+                swipe.isRefreshing = false
             })
+
+
     }
+
 
 }

@@ -16,4 +16,6 @@ public class Fenlei implements Serializable {
 
     public  String name;
     public String url;
+    @Nullable
+    public String id;
 }

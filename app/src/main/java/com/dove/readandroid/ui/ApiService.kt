@@ -41,10 +41,16 @@ interface ApiService {
     fun tag(): Observable<ResponseBean<List<Fenlei>>>
 
     @GET("read/novel/classify/detail")
-    fun jingxuan(@Query("url") string: String): Observable<ResponseBean<DetailDataWrap>>
+    fun jingxuan(
+        @Query("id") id: String, @Query("edition") edition: String, @Query("page") page: Int, //页码号
+        @Query("size") size: Int
+    ): Observable<ResponseBean<DetailDataWrap>>
 
     @GET("read/novel/top")
-    fun top(): Observable<ResponseBean<List<Top>>>
+    fun top(
+        @Query("id") id: String, @Query("edition") edition: String, @Query("page") page: Int, //页码号
+        @Query("size") size: Int
+    ): Observable<ResponseBean<List<Book>>>
 
     @GET("read/novel/home")
     fun home(): Observable<ResponseBean<HomeData>>
@@ -90,8 +96,10 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("read/novel/change/source")
-    fun sourceChange(@Field("name") name: String, @Field("author") author: String,
-                     @Field("title") title: String,  @Field("id") id: String): Observable<ResponseBean<Any>>
+    fun sourceChange(
+        @Field("name") name: String, @Field("author") author: String,
+        @Field("title") title: String, @Field("id") id: String
+    ): Observable<ResponseBean<Any>>
 
 
 }

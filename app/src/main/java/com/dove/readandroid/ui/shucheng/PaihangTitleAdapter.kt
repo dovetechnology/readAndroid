@@ -18,10 +18,10 @@ import com.dove.readandroid.ui.model.Fenlei
  * 创建日期：2019/5/7 10:03
  * ===============================
  */
-class PaihangTitleAdapter(layout: Int, data: MutableList<String>?) : BaseQuickAdapter<String, BaseViewHolder>(layout, data) {
-    override fun convert(helper: BaseViewHolder, item: String?) {
+class PaihangTitleAdapter(layout: Int, data: MutableList<Fenlei>?) : BaseQuickAdapter<Fenlei, BaseViewHolder>(layout, data) {
+    override fun convert(helper: BaseViewHolder, item: Fenlei?) {
         
-       helper.setText(R.id.tvName, item)
+       helper.setText(R.id.tvName, item?.name)
 
     }
 

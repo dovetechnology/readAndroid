@@ -54,7 +54,9 @@ class RegisterActivity : BaseMvcActivity() {
                     http().mApiService.login(tv_name.text.toString(), tv_mima.text.toString())
                         .get3 {
                             PreferenceUtils.saveObjectAsGson(mContext, Constants.USER, it)
+                            PreferenceUtils.setPrefString(mContext, Constants.TOKEN, it?.token)
                             UserShell.getInstance().userBean = it?.user
+                            UserShell.getInstance().token = it?.token
                             EventBus.getDefault().post(UserEvent())
                             start(MainActivity::class.java)
                             finish()

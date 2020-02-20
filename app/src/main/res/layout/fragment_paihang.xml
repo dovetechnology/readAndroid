@@ -3,29 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    android:id="@+id/swipe"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    </LinearLayout>
+            <FrameLayout
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

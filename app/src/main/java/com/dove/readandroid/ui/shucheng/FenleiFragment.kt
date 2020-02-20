@@ -33,7 +33,7 @@ class FenleiFragment : BaseRefreshFragment<Fenlei>() {
         mAdapter.setOnItemClickListener { adapter, view, position ->
 
             start(FenleiDetailActivity::class.java, Bundle().apply {
-                putString("data",mList.get(position).url)
+                putString("data",mList.get(position).id)
                 putString("title",mList.get(position).name)
             })
         }

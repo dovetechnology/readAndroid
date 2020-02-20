@@ -15,14 +15,14 @@ import kotlinx.android.synthetic.main.title_bar.*
 class WangjiPassActivity : BaseMvcActivity() {
     override fun initView(mSavedInstanceState: Bundle?) {
 
-        titleBar.setTitle("忘记密码")
-        tv_denglu.click {
-            http().mApiService.findpass(et_count.text.toString())
-                .get3(isShowDialog = true) {
-                    toast("密码已发送")
-                    finish()
-                }
-        }
+        titleBar.setTitle("找回密码")
+//        tv_denglu.click {
+//            http().mApiService.findpass(et_count.text.toString())
+//                .get3(isShowDialog = true) {
+//                    toast("密码已发送")
+//                    finish()
+//                }
+//        }
     }
 
     override fun getContentViewLayoutID(): Int {

@@ -152,6 +152,90 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_share"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0.5dp"
+                    android:background="@color/white"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="8dp"
+                        android:text="分享轻读"
+                        android:textColor="#212121"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableRight="@drawable/icon_right"
+                        android:drawablePadding="16dp"
+                        android:gravity="right"
+                        android:textColor="#ffababab"
+                        android:textSize="14sp"
+                        tools:text="" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ll_update"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0.5dp"
+                    android:background="@color/white"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="8dp"
+                        android:text="软件更新"
+                        android:textColor="#212121"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableRight="@drawable/icon_right"
+                        android:drawablePadding="16dp"
+                        android:gravity="right"
+                        android:textColor="#ffababab"
+                        android:textSize="14sp"
+                        tools:text="" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ll_fankui"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0.5dp"
+                    android:background="@color/white"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="8dp"
+                        android:text="意见反馈"
+                        android:textColor="#212121"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableRight="@drawable/icon_right"
+                        android:drawablePadding="16dp"
+                        android:gravity="right"
+                        android:textColor="#ffababab"
+                        android:textSize="14sp"
+                        tools:text="" />
+                </LinearLayout>
+                <LinearLayout
                     android:id="@+id/ll_setting"
 
                     android:layout_width="match_parent"
