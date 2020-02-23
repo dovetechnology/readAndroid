@@ -50,7 +50,7 @@ interface ApiService {
     fun top(
         @Query("id") id: String, @Query("edition") edition: String, @Query("page") page: Int, //页码号
         @Query("size") size: Int
-    ): Observable<ResponseBean<List<Book>>>
+    ): Observable<ResponseBean<PagingBean<Book>>>
 
     @GET("read/novel/home")
     fun home(): Observable<ResponseBean<HomeData>>

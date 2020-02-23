@@ -29,7 +29,6 @@ import kotlinx.android.synthetic.main.fragment_paihang.*
 class PaihangFragment : BaseMvcFragment() {
 
     var titles = mutableListOf<Fenlei>()
-    var contents = mutableListOf<Book>()
     var map = hashMapOf<Int, PaihangContentFragment>()
     lateinit var navigator: Navigator
     override fun getContentViewLayoutID(): Int {
@@ -37,7 +36,6 @@ class PaihangFragment : BaseMvcFragment() {
     }
 
     lateinit var titleAdapter: PaihangTitleAdapter
-    lateinit var contentAdapter: PaihangContentAdapter
 
     override fun initView() {
 

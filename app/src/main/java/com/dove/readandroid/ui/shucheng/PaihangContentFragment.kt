@@ -41,7 +41,7 @@ class PaihangContentFragment : BaseRefreshFragment<Book>() {
 
         http().mApiService.top(arguments!!.getString("data"), "2", pageNo, pageSize)
             .get3(next = {
-                loadComplete(it)
+                loadComplete(it?.list)
 
             }, err = {
                 loadError(it)
