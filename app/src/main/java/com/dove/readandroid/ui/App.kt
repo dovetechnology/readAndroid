@@ -16,6 +16,10 @@ import com.appbaselib.utils.LogUtils
 import com.appbaselib.utils.PreferenceUtils
 import com.dove.readandroid.AppDatabase
 import com.dove.readandroid.BuildConfig
+import com.dove.readandroid.network.get3
+import com.dove.readandroid.network.http
+import com.safframework.ext.getAppVersionCode
+import com.safframework.ext.getDeviceId
 import com.tencent.bugly.Bugly
 import com.umeng.commonsdk.UMConfigure
 import com.umeng.message.IUmengRegisterCallback

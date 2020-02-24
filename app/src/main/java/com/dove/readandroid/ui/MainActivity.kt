@@ -10,11 +10,13 @@ import com.dove.rea.ShuchengFragment
 import com.dove.readandroid.BuildConfig
 import com.dove.readandroid.R
 import com.dove.readandroid.network.get2
+import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.common.AESUtilFinal
 import com.dove.readandroid.ui.common.Constants
 import com.dove.readandroid.ui.huodong.HuodongFragment
 import com.dove.readandroid.ui.me.MeFragment
+import com.safframework.ext.getDeviceId
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -60,7 +62,10 @@ class MainActivity : BaseMvcActivity() {
         //   navigation.enableAnimation(true)
         navigation.enableItemShiftingMode(false)
         navigation.enableShiftingMode(false)
+//埋点
+        http().mApiService.start("2", this.getDeviceId()).get3 {
 
+        }
         getUrl()
     }
 
@@ -84,7 +89,7 @@ class MainActivity : BaseMvcActivity() {
                 var url = AESUtilFinal.decrypt("abce0123456789ef", it.string().trim())
                 PreferenceUtils.setPrefString(mContext, Constants.URL, url)
             }, err = {
-    
+
             })
 
     }

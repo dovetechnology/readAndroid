@@ -101,5 +101,8 @@ interface ApiService {
         @Field("title") title: String, @Field("id") id: String
     ): Observable<ResponseBean<Any>>
 
+    @FormUrlEncoded
+    @POST("read/novel/other/visit/bury")
+    fun start(  @Field("userAgent") userAgent: String, @Field("deviceId") deviceId: String):Observable<ResponseBean<Any>>
 
 }
