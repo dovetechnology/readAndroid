@@ -53,6 +53,7 @@ class PaihangFragment : BaseMvcFragment() {
                     }
                 })
             }
+            titleAdapter.setSingleChoosed(position)
             navigator.showFragment(map.get(position))
 
         }
@@ -73,6 +74,7 @@ class PaihangFragment : BaseMvcFragment() {
         http().mApiService.tag()
             .get3(next = {
                 swipe.isRefreshing = false
+                swipe.isEnabled=false
                 it?.let { it1 -> titles.addAll(it1) }
                 titleAdapter.notifyDataSetChanged()
                 //默认第一个排行
@@ -81,11 +83,14 @@ class PaihangFragment : BaseMvcFragment() {
                         putString("data", titles.get(0).id)
                     }
                 })
+                titleAdapter.setSingleChoosed(0)
                 navigator.showFragment(map.get(0))
 
             }, err = {
                 toast(it)
                 swipe.isRefreshing = false
+                swipe.isEnabled=false
+
             })
 
 
