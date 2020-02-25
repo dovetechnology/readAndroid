@@ -22,13 +22,13 @@
 
     <application
         android:name=".ui.App"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/appName"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:allowBackup,android:label">
+        tools:replace="android:allowBackup,android:label,android:icon,android:roundIcon">
         <activity android:name=".ui.me.YijianFankuiActivity"></activity>
         <activity android:name=".ui.SourceActivity" />
         <activity android:name=".ui.WebViewActivity" />

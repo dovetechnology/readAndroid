@@ -16,8 +16,10 @@ import com.appbaselib.utils.LogUtils
 import com.appbaselib.utils.PreferenceUtils
 import com.dove.readandroid.AppDatabase
 import com.dove.readandroid.BuildConfig
+import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
+import com.iflytek.cloud.SpeechUtility
 import com.safframework.ext.getAppVersionCode
 import com.safframework.ext.getDeviceId
 import com.tencent.bugly.Bugly
@@ -48,6 +50,7 @@ class App : BaseApplication() {
   public  lateinit var db: AppDatabase
 
     override fun onCreate() {
+        SpeechUtility.createUtility(this, "appid=5e54b50f" )
         super.onCreate()
 //
 //        RxJavaPlugins.setErrorHandler {

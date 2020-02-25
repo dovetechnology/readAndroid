@@ -103,6 +103,10 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("read/novel/other/visit/bury")
-    fun start(  @Field("userAgent") userAgent: String, @Field("deviceId") deviceId: String):Observable<ResponseBean<Any>>
+    fun start(@Field("userAgent") userAgent: String, @Field("deviceId") deviceId: String): Observable<ResponseBean<Any>>
+
+    @FormUrlEncoded
+    @POST("read/novel/other/message")
+    fun fankui(@Field("content") content: String): Observable<ResponseBean<Any>>
 
 }
