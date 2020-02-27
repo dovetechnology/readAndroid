@@ -51,8 +51,9 @@ public class BookSectionItem implements Serializable {
     public String content;
     @PrimaryKey(autoGenerate = true)
     public int id;
-
+    public String chapterId;
     //本地储存
     public int currentPage = 0;
+    public boolean isLoading=false;
 
 }

@@ -1,27 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_section_name"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48.0dp"
-        android:background="@drawable/bg_list_item_book_section"
-        android:gravity="center_vertical"
-        tools:text="fds"
-        android:textColor="@color/black"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:textSize="15sp" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-<View
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_width="match_parent"
-    android:background="#ABABAB"
-    android:layout_height="1px"/>
+        <TextView
+            android:id="@+id/tv_section_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_list_item_book_section"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:textStyle="bold"
+            android:paddingRight="16dp"
+            android:textColor="#ff452e0b"
+            android:textSize="15sp"
+            tools:text="fds" />
+
+        <ImageView
+            android:id="@+id/iv_download"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingLeft="16dp"
+            android:paddingTop="9dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="8dp"
+            android:src="@drawable/icon_download" />
+
+        <TextView
+            android:id="@+id/tv_yihuancun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingRight="16dp"
+            android:text="已缓存"
+            android:textColor="#ff452e0b"
+            android:textSize="14sp" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_view"
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="16dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/loading_animate" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="#ABABAB" />
 
 </LinearLayout>

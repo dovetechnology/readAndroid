@@ -13,6 +13,7 @@
         android:id="@+id/iv_shu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:transitionName="book"
         app:radius="4dp"
         app:ratio="0.65" />
 

@@ -38,7 +38,7 @@ class BookFragment : BaseRefreshFragment<Book>() {
     override fun requestData() {
         http().mApiService.search(ms)
             .get3(next = {
-                loadComplete(it?.data)
+                loadComplete(it)
             }, err = {
                 loadError(it)
             })

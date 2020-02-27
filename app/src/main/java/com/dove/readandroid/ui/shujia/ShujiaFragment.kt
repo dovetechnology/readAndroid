@@ -44,8 +44,13 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
             var book = mList.get(position)
 
 
-            http().mApiService.openName(book.name, book.author, "")
+            http().mApiService.open(book.articleId)
                 .get3(isShowDialog = true) {
+                    var list = App.instance.db.getChapDao().findChap(book.name)
+                    if (list != null) {
+                        it?.data?.novelList = list  //本地可能缓存过一些章节
+                    }
+
                     start(ReadActivity::class.java, Bundle().apply {
                         putSerializable("data", it?.data)
                     })
@@ -117,8 +122,7 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
         //广告 有没有登陆都加载广告
         http().mApiService.ad("2")
             .get3 {
-                if (it!=null&&!it.list.isNullOrEmpty())
-                {
+                if (it != null && !it.list.isNullOrEmpty()) {
                     it.list.get(0).let {
                         ad.setData(it)
                         ad.getImageView().load(it.imgUrl)
@@ -136,7 +140,7 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
 //            mAdapter.addData(App.instance.db.getBookDao().shujia())
 //        }
         //获取网络书架信息
-        swipe.isRefreshing=true
+        swipe.isRefreshing = true
         requestData()
 
     }

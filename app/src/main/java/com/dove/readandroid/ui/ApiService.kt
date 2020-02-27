@@ -56,7 +56,7 @@ interface ApiService {
     fun home(): Observable<ResponseBean<HomeData>>
 
     @GET("read/novel/search")
-    fun search(@Query("key") string: String): Observable<ResponseBean<DataWrap<List<Book>>>>
+    fun search(@Query("key") string: String): Observable<ResponseBean<List<Book>>>
 
     @GET("read/novel/other/ad/list")
     fun ad(@Query("location") string: String): Observable<ResponseBean<AdDataWrapper>>
@@ -78,8 +78,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("read/novel/user/collect")
     fun addShujia(
-        @Field("name") name: String, @Field("author") author: String,
-        @Field("title") title: String
+        @Field("articleId") name: String, @Field("chapterId") author: String
     ): Observable<ResponseBean<Any>>
 
     @GET("read/novel/open")
@@ -109,4 +108,11 @@ interface ApiService {
     @POST("read/novel/other/message")
     fun fankui(@Field("content") content: String): Observable<ResponseBean<Any>>
 
+
+    @GET("read/novel/other/app/config")
+    fun appData(@Query("edition") edition: String, @Query("version") version: Int): Observable<ResponseBean<AppData>>
+
+    @Streaming
+    @GET
+    fun download(@Url url: String): Observable<ResponseBody>
 }

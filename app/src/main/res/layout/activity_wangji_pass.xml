@@ -17,7 +17,7 @@
         android:layout_marginBottom="80dp">
 
         <TextView
-            android:id="@+id/tv_denglu"
+            android:id="@+id/tvmima"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -25,7 +25,7 @@
             android:padding="16dp"
             android:text="请登录www.baidu.com找回密码"
             android:textColor="#2C2C2C"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
     </FrameLayout>
 

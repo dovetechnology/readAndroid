@@ -100,7 +100,7 @@ class ReadActivity : BaseMvcActivity() {
         pv_read.setTextColor(ReaderSettingManager.getInstance().getTextColor())
         pv_read.setPageBackground(ReaderSettingManager.getInstance().getPageBackground())
         lin.setBackgroundColor(ReaderSettingManager.getInstance().getPageBackground())
-       // read_bottom.setBackgroundColor(ReaderSettingManager.getInstance().getPageBackground())
+        // read_bottom.setBackgroundColor(ReaderSettingManager.getInstance().getPageBackground())
         read_bottom.setBackgroundColor(ReaderSettingManager.getInstance().pageBackground)
         StatusBarUtil.setColor(this, ReaderSettingManager.getInstance().getPageBackground())
 
@@ -113,21 +113,46 @@ class ReadActivity : BaseMvcActivity() {
 
             }
         })
-        pv_read.setOnTouchListener(View.OnTouchListener { v, event ->
-            if (appbar.getVisibility() === View.VISIBLE) {
-                hideReadMenu()
-                return@OnTouchListener true
-            }
-            false
-        })
+//        pv_read.setOnTouchListener(View.OnTouchListener { v, event ->
+//            if (appbar.getVisibility() === View.VISIBLE) {
+//                hideReadMenu()
+//                return@OnTouchListener true
+//            }
+//            false
+//        })
         //loaddata
         //加载目录
 
         sectionAdapter = BookSectionAdapter(R.layout.list_item_book_section, mbook.novelList)
+        //选中章节
+        sectionAdapter.setOnItemClickListener { adapter, view, position ->
+            read_drawer.closeDrawers()
+            sectionAdapter.setSingleChoosed(position)
+            mSectionItem = mbook.novelList.get(position)
+            hideSystemBar()
+            postDelayed(time = 300) {
+                startRead(position)
+            }
+        }
+        sectionAdapter.setOnItemChildClickListener { adapter, view, position ->
+            if (view.id == R.id.iv_download) {
+                //缓存选中章节
+                mbook.novelList.get(position).isLoading = true
+                sectionAdapter.notifyItemChanged(position)
+
+                getContentByChap(mbook.novelList.get(position), position, false)
+                {
+                    //刷新章节列表
+                    mbook.novelList.get(position).isLoading = false
+
+                    sectionAdapter.notifyItemChanged(position)
+                }
+            }
+        }
         sectionAdapter.setTextColor(pv_read.textColor)
         read_rv_section.setLayoutManager(LinearLayoutManager(this))
         read_rv_section.adapter = sectionAdapter
-
+        tv_title.text = mbook.name
 
         pv_read.setOnThemeChangeListener(PageView.OnThemeChangeListener { textColor, backgroundColor, textSize ->
             read_rv_section.setBackgroundColor(backgroundColor)
@@ -141,8 +166,8 @@ class ReadActivity : BaseMvcActivity() {
         mBottomInAnim = AnimationUtils.loadAnimation(this, R.anim.slide_bottom_in)
         mBottomOutAnim = AnimationUtils.loadAnimation(this, R.anim.slide_bottom_out)
         //退出的速度要快
-        mTopOutAnim.setDuration(200)
-        mBottomOutAnim.setDuration(200)
+        mTopOutAnim.setDuration(300)
+        mBottomOutAnim.setDuration(300)
 
         readAdapter = ReadAdapter()
         pv_read.setAdapter(readAdapter)
@@ -156,7 +181,7 @@ class ReadActivity : BaseMvcActivity() {
         }
         tv_add.click {
 
-            http().mApiService.addShujia(mbook.name, mbook.author, mbook.title)
+            http().mApiService.addShujia(mbook.articleId, mbook.chapterId)
                 .get3(isShowDialog = true) {
                     mbook.isAddShlef = 1
                     App.instance.db.getBookDao().update(mbook)
@@ -187,14 +212,7 @@ class ReadActivity : BaseMvcActivity() {
         })
 
 
-        //选中章节
-        sectionAdapter.setOnItemClickListener { adapter, view, position ->
-            read_drawer.closeDrawers()
-            mSectionItem = mbook.novelList.get(position)
-            postDelayed(time = 300) {
-                startRead(position)
-            }
-        }
+
 
         read_tv_night_mode.click {
             val nightModeSelected = !read_tv_night_mode.isSelected()
@@ -224,7 +242,7 @@ class ReadActivity : BaseMvcActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 var currentPosition = mbook.novelList.size * progress / 100
                 mbook.currentSetion = currentPosition
-                tv_zhangjie.setText("第"+currentPosition+"章")
+                tv_zhangjie.setText("第" + currentPosition + "章")
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -340,7 +358,7 @@ class ReadActivity : BaseMvcActivity() {
         next: () -> Unit
     ) {
 
-        http().mApiService.openChap(mbook.novelUrl, bookSectionItem.chapterUrl)
+        http().mApiService.openChap(mbook.articleId, bookSectionItem.chapterId)
             .get3(isShowDialog = isShowtitle, title = "", message = "加载章节中……") {
                 var content = it?.data?.content?.replace("<br>", "")
                 content = content?.replace("&nbsp;", "")
@@ -379,7 +397,7 @@ class ReadActivity : BaseMvcActivity() {
 
         mBottomInAnim?.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation) {
-                pv_read.setCanTouch(false)
+              //  pv_read.setCanTouch(false)
             }
 
             override fun onAnimationEnd(animation: Animation) {
@@ -397,7 +415,7 @@ class ReadActivity : BaseMvcActivity() {
             }
 
             override fun onAnimationEnd(animation: Animation) {
-                pv_read.setCanTouch(true)
+             //   pv_read.setCanTouch(true)
 
             }
 

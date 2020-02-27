@@ -48,11 +48,11 @@
         </FrameLayout>
 
         <FrameLayout
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom"
             android:id="@+id/layoutbottom"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom">
 
             <include layout="@layout/layout_read_bottom" />
         </FrameLayout>
@@ -84,25 +84,34 @@
 
     <!--侧滑栏-->
     <LinearLayout
+        android:background="#DDD8C5"
         android:id="@+id/read_side"
+        android:paddingTop="24dp"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/colorForeground"
         android:clickable="true"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textColor="#ff442c09"
+            android:textSize="17sp"
+            tools:text="超级兵王" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/read_rv_section"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#DDD8C5"
-            android:paddingTop="26dp"
             app:fastScrollEnabled="true"
             app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"
-            app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"
+            app:fastScrollHorizontalTrackDrawable="@drawable/thumb_read_section_fast_scroll"
             app:fastScrollVerticalThumbDrawable="@drawable/thumb_drawable"
-            app:fastScrollVerticalTrackDrawable="@drawable/line_drawable" />
+            app:fastScrollVerticalTrackDrawable="@drawable/thumb_read_section_fast_scroll" />
 
 
     </LinearLayout>

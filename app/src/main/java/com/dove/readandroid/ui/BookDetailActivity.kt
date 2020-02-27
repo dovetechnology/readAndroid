@@ -40,7 +40,7 @@ class BookDetailActivity : BaseMvcActivity() {
 
         tv_add.click {
 
-            http().mApiService.addShujia(book.name, book.author, book.title)
+            http().mApiService.addShujia(book.articleId, book.chapterId)
                 .get3(isShowDialog = true) {
                     toast("已加入书架")
                     book.isAddShlef = 1
@@ -64,7 +64,7 @@ class BookDetailActivity : BaseMvcActivity() {
             //如果本地没有就从网络获取
             progressDialog = ProgressDialog.show(mContext, "", "加载中", false, true)
 
-            http().mApiService.open(book.novelUrl)
+            http().mApiService.open(book.articleId)
                 .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
                 .map {
                     it.data.data.novelList?.forEach {

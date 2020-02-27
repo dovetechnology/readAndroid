@@ -4,6 +4,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -54,4 +56,7 @@ public class Book implements Serializable {
     public int currentSetion = 0;//看到第几章 默认0 第一章
 
     public int isAddShlef = 0; //0 未加入 1加入书架
+    @NotNull
+    public String articleId;
+    public String chapterId;
 }

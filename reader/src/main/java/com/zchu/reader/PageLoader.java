@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.text.TextPaint;
 
 import com.zchu.reader.utils.ScreenUtils;
@@ -32,7 +33,7 @@ class PageLoader {
     public static final int STATUS_PARSE = 5;    //正在解析 (一般用于本地数据加载)
     public static final int STATUS_PARSE_ERROR = 6; //本地文件解析错误(暂未被使用)
 
-    static final int DEFAULT_MARGIN_HEIGHT = 30;
+    static final int DEFAULT_MARGIN_HEIGHT = 50;
     static final int DEFAULT_MARGIN_WIDTH = 16;
 
     //默认的显示参数配置
@@ -40,6 +41,7 @@ class PageLoader {
     private static final int DEFAULT_PARAGRAPH_INTERVAL = 10;
 
     private static final int DEFAULT_TIP_SIZE = 12;
+    private static final int DEFAULT_TITLE_SIZE = 22;
 
     //监听器
     protected OnPageChangeListener mPageChangeListener;
@@ -52,6 +54,7 @@ class PageLoader {
     private Paint mBatteryPaint;
     //绘制提示的画笔
     private Paint mTipPaint;
+    private Paint mTitlePaint;
     //绘制背景颜色的画笔(用来擦除需要重绘的部分)
     private Paint mBgPaint;
     //绘制小说内容的画笔
@@ -136,6 +139,15 @@ class PageLoader {
         mTipPaint.setTextSize(ScreenUtils.spToPx(mContext, DEFAULT_TIP_SIZE));//Tip默认的字体大小
         mTipPaint.setAntiAlias(true);
         mTipPaint.setSubpixelText(true);
+
+        //标题画笔
+        mTitlePaint = new Paint();
+        mTitlePaint.setColor(mPageView.getTextColor());
+        mTitlePaint.setTextAlign(Paint.Align.LEFT);//绘制的起始点
+        mTitlePaint.setTextSize(ScreenUtils.spToPx(mContext, DEFAULT_TITLE_SIZE));//Tip默认的字体大小
+        mTitlePaint.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        mTitlePaint.setAntiAlias(true);
+        mTitlePaint.setSubpixelText(true);
 
         //绘制页面内容的画笔
         mTextPaint = new TextPaint();
@@ -418,7 +430,7 @@ class PageLoader {
 
     void drawBackground(Bitmap bitmap, boolean isUpdate) {
         Canvas canvas = new Canvas(bitmap);
-        int tipMarginHeight = ScreenUtils.dpToPx(mContext, 3);
+        int tipMarginHeight = ScreenUtils.dpToPx(mContext, 16);
         if (!isUpdate) {
             /****绘制背景****/
             canvas.drawColor(mPageView.getPageBackground());
@@ -430,10 +442,10 @@ class PageLoader {
             if (mStatus != STATUS_FINISH) {
                 if (mAdapter != null && mAdapter.getSectionCount() != 0) {
                     canvas.drawText(mAdapter.getSectionName(mCurChapterPos)
-                            , mMarginWidth, tipTop, mTipPaint);
+                            , mMarginWidth, tipTop, mTitlePaint);
                 }
             } else {
-                canvas.drawText(mAdapter.getSectionName(mCurChapterPos), mMarginWidth, tipTop, mTipPaint);
+                canvas.drawText(mAdapter.getSectionName(mCurChapterPos), mMarginWidth, tipTop, mTitlePaint);
             }
 
             /******绘制页码********/
@@ -441,7 +453,7 @@ class PageLoader {
             float y = mDisplayHeight - mTipPaint.getFontMetrics().bottom - tipMarginHeight;
             //只有finish的时候采用页码
             if (mStatus == STATUS_FINISH) {
-                String percent = (mCurPage.position + 1) + "/" + mCurPageList.size();
+                String percent = "第"+(mCurPage.position + 1) + "/" + mCurPageList.size()+"页";
                 canvas.drawText(percent, mMarginWidth, y, mTipPaint);
             }
         } else {

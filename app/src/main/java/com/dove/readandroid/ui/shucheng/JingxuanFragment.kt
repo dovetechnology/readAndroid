@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.appbaselib.base.BaseMvcFragment
 import com.appbaselib.common.load
 import com.appbaselib.ext.toast
+import com.appbaselib.view.RatioImageView
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.dove.readandroid.BannerImageloadr
 import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
@@ -42,18 +44,26 @@ class JingxuanFragment : BaseMvcFragment() {
             adapter = this
         }
         adapter.setOnItemClickListener { a, view, position ->
+
+            var viewHolder = adapter.weakRecyclerView.get()?.findViewHolderForLayoutPosition(position) as BaseViewHolder
+            var image = viewHolder.getView<RatioImageView>(R.id.iv_shu)
+
             start(BookDetailActivity::class.java, Bundle().apply {
                 putSerializable("data", adapter.data.get(position))
-            })
+            }, image, "book")
         }
         rv_xinshu.layoutManager = GridLayoutManager(mContext, 3)
         rv_xinshu.adapter = HomeBookAdapter(R.layout.item_shu, arrayListOf()).apply {
             adapterx = this
         }
         adapterx.setOnItemClickListener { a, view, position ->
+
+            var viewHolder = adapterx.weakRecyclerView.get()?.findViewHolderForLayoutPosition(position) as BaseViewHolder
+            var image = viewHolder.getView<RatioImageView>(R.id.iv_shu)
+
             start(BookDetailActivity::class.java, Bundle().apply {
                 putSerializable("data", adapterx.data.get(position))
-            })
+            }, image, "book")
         }
         banner.setImageLoader(BannerImageloadr())
 
@@ -65,7 +75,7 @@ class JingxuanFragment : BaseMvcFragment() {
         }
     }
 
-    lateinit var  adDatas:List<AdData>
+    lateinit var adDatas: List<AdData>
     fun getData() {
 
         //广告1
@@ -73,7 +83,7 @@ class JingxuanFragment : BaseMvcFragment() {
             .get3 {
                 it?.list?.let {
 
-                     adDatas = it
+                    adDatas = it
                     var list = arrayListOf<String>()
                     it.forEach {
                         list.add(it.imgUrl)

@@ -12,7 +12,7 @@ public class BookSectionContent implements Serializable {
 
     public BookSectionContent(int sectionIndex, String sectionName, String content) {
         this.sectionIndex = sectionIndex;
-        this.sectionName = sectionName;
+        this.sectionName = sectionName.replace("章","章  ");
         this.content = content;
     }
 

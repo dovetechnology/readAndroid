@@ -16,6 +16,8 @@ import com.dove.readandroid.ui.common.AESUtilFinal
 import com.dove.readandroid.ui.common.Constants
 import com.dove.readandroid.ui.huodong.HuodongFragment
 import com.dove.readandroid.ui.me.MeFragment
+import com.safframework.ext.getAppVersion
+import com.safframework.ext.getAppVersionCode
 import com.safframework.ext.getDeviceId
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -67,6 +69,13 @@ class MainActivity : BaseMvcActivity() {
 
         }
         getUrl()
+        getAppData()
+    }
+
+    private fun getAppData() {
+        http().mApiService.appData("2",getAppVersionCode()).get3 {
+            PreferenceUtils.saveObjectAsGson(mContext,Constants.APPDATA,it)
+        }
     }
 
     private fun getUrl() {
