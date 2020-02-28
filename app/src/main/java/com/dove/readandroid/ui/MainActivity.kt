@@ -19,6 +19,7 @@ import com.dove.readandroid.ui.me.MeFragment
 import com.safframework.ext.getAppVersion
 import com.safframework.ext.getAppVersionCode
 import com.safframework.ext.getDeviceId
+import com.shuyu.gsyvideoplayer.GSYVideoManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -65,9 +66,9 @@ class MainActivity : BaseMvcActivity() {
         navigation.enableItemShiftingMode(false)
         navigation.enableShiftingMode(false)
 //埋点
-        http().mApiService.start("2", this.getDeviceId()).get3 {
-
-        }
+//        http().mApiService.start("2", this.getDeviceId()).get3 {
+//
+//        }
         getUrl()
         getAppData()
     }

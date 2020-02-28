@@ -101,7 +101,6 @@ class BookDetailActivity : BaseMvcActivity() {
                 if (it != null && !it.list.isNullOrEmpty()) {
                     it.list.get(0).let {
                         ad_c.setData(it)
-                        ad_c.getImageView().load(it.imgUrl)
                     }
                 }
             }
@@ -110,7 +109,6 @@ class BookDetailActivity : BaseMvcActivity() {
                 if (it != null && !it.list.isNullOrEmpty()) {
                     it.list.get(0).let {
                         ad.setData(it)
-                        ad.getImageView().load(it.imgUrl)
                     }
                 }
 

@@ -86,7 +86,7 @@ public class PageView extends View {
     private OnThemeChangeListener onThemeChangeListener;
 
     //内容加载器
-    private PageLoader mPageLoader;
+    public PageLoader mPageLoader;
     private PageLoaderAdapter mAdapter;
     private int mTextSize = 40;
     private int mTextColor = 0xFF212121;
@@ -95,6 +95,9 @@ public class PageView extends View {
     private int mStartSection = -1;
     private int scaledTouchSlop = 0;
 
+    public PageLoader getmPageLoader() {
+        return mPageLoader;
+    }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override

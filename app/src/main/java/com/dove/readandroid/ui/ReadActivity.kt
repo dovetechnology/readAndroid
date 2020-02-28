@@ -39,6 +39,7 @@ import kotlinx.android.synthetic.main.activity_read.*
 import kotlinx.android.synthetic.main.layout_read_bottom.*
 import kotlinx.android.synthetic.main.toolbar_read.*
 import kotlinx.android.synthetic.main.toolbar_read.tv_add
+import kotlinx.coroutines.delay
 import org.greenrobot.eventbus.EventBus
 
 class ReadActivity : BaseMvcActivity() {
@@ -52,6 +53,7 @@ class ReadActivity : BaseMvcActivity() {
     lateinit var mBottomOutAnim: Animation
 
     private var mReadSettingDialog: BottomSheetDialog? = null
+    private var mSpeakDialog: SpeakDialog? = null
 
     //控制屏幕常亮
     private var mWakeLock: PowerManager.WakeLock? = null
@@ -195,6 +197,10 @@ class ReadActivity : BaseMvcActivity() {
                 print("页面改变$pos")
                 mSectionItem.currentPage = pos
                 //在这里预加载下一章 上一章
+                postDelayed(300) {
+                    speakByhand()//判断是否语音播报
+
+                }
                 addPreZhangjie()
                 addNextZhangjie()
             }
@@ -224,8 +230,12 @@ class ReadActivity : BaseMvcActivity() {
         }
         //上一章
         read_tv_pre_chapter.click {
+            pv_read.getmPageLoader().skipPreChapter()
+            speakByhand()
         }
         read_tv_next_chapter.click {
+            pv_read.getmPageLoader().skipNextChapter()
+            speakByhand()
 
         }
         iv_close_ac.click {
@@ -256,6 +266,29 @@ class ReadActivity : BaseMvcActivity() {
             }
 
         })
+        read_tv_speak.click {
+
+            hideReadMenu()
+            hideSystemBar()
+            //内容分页
+            var content = getPageText()
+            if (mSpeakDialog == null) {
+                mSpeakDialog = SpeakDialog(mContext, content) {
+                    //回调
+                    pv_read.autoNextPage()
+                    mSpeakDialog?.setText(getPageText())
+                    mSpeakDialog?.speak()
+                }
+            } else {
+                //
+                if (!(mSpeakDialog?.isReading ?: true)) {
+                    mSpeakDialog?.mTts?.resumeSpeaking()
+                }
+            }
+
+            mSpeakDialog?.show()
+
+        }
         //开始阅读
         if (mbook.currentSetion != 0) {
             //渡过
@@ -264,6 +297,22 @@ class ReadActivity : BaseMvcActivity() {
         }
         read()
 
+    }
+
+    //手动翻页的时候 播放语音
+    fun speakByhand() {
+        if (mSpeakDialog?.isReading ?: false) {
+            mSpeakDialog?.setText(getPageText())
+            mSpeakDialog?.speak()
+        }
+    }
+
+    fun getPageText(): String {
+        var content = ""
+        pv_read.getmPageLoader().getmCurPage().lines.forEach {
+            content = content + it
+        }
+        return content
     }
 
     private fun read() {
@@ -349,6 +398,7 @@ class ReadActivity : BaseMvcActivity() {
         //保存当前进度
         App.instance.db.getBookDao().update(mbook)
         App.instance.db.getChapDao().updata(mSectionItem) //记录当前章节进度
+        mSpeakDialog?.stopTTs()
     }
 
     fun getContentByChap(
@@ -397,7 +447,7 @@ class ReadActivity : BaseMvcActivity() {
 
         mBottomInAnim?.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation) {
-              //  pv_read.setCanTouch(false)
+                //  pv_read.setCanTouch(false)
             }
 
             override fun onAnimationEnd(animation: Animation) {
@@ -415,7 +465,7 @@ class ReadActivity : BaseMvcActivity() {
             }
 
             override fun onAnimationEnd(animation: Animation) {
-             //   pv_read.setCanTouch(true)
+                //   pv_read.setCanTouch(true)
 
             }
 

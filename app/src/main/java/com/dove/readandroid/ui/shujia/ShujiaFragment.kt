@@ -47,7 +47,7 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
             http().mApiService.open(book.articleId)
                 .get3(isShowDialog = true) {
                     var list = App.instance.db.getChapDao().findChap(book.name)
-                    if (list != null) {
+                    if (list != null&&list.size!=0) {
                         it?.data?.novelList = list  //本地可能缓存过一些章节
                     }
 
@@ -125,7 +125,6 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
                 if (it != null && !it.list.isNullOrEmpty()) {
                     it.list.get(0).let {
                         ad.setData(it)
-                        ad.getImageView().load(it.imgUrl)
                     }
                 }
 
@@ -156,7 +155,7 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
             .get3 {
                 if (it != null && !it.list.isNullOrEmpty()) {
                     it.list.get(0).let {
-                        iv_ad.load(it.imgUrl)
+                        ad.setData(it)
                     }
                 }
             }

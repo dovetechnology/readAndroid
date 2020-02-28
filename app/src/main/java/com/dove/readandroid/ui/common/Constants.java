@@ -26,4 +26,9 @@ public class Constants {
     public static final String HISTORY = "history";
     public final static String K_NIGHT_MODE = "night_mode";
     public static String APPDATA="app_ata";
+    public static final String SPEECH_SPEED="speed_preference";
+    public static final String PITCH_SPEED="pitch_preference";
+    public static final String VOLUME_SPEED="volume_preference";
+    public static final String STREAM_SPEED="stream_preference";
+
 }

@@ -19,6 +19,7 @@ import com.dove.readandroid.BuildConfig
 import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
+import com.iflytek.cloud.SpeechConstant
 import com.iflytek.cloud.SpeechUtility
 import com.safframework.ext.getAppVersionCode
 import com.safframework.ext.getDeviceId
@@ -50,7 +51,7 @@ class App : BaseApplication() {
   public  lateinit var db: AppDatabase
 
     override fun onCreate() {
-        SpeechUtility.createUtility(this, "appid=5e54b50f" )
+        SpeechUtility.createUtility(this, SpeechConstant.APPID+"=5e54b50f" )
         super.onCreate()
 //
 //        RxJavaPlugins.setErrorHandler {

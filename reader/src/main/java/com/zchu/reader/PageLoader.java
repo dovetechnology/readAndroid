@@ -22,7 +22,7 @@ import java.util.List;
  * Created by newbiechen on 17-7-1.
  */
 
-class PageLoader {
+public class PageLoader {
     private static final String TAG = "PageLoader";
 
     //当前页面的状态
@@ -101,6 +101,9 @@ class PageLoader {
     //书本是否打开
     protected boolean isBookOpen = false;
 
+    public TxtPage getmCurPage() {
+        return mCurPage;
+    }
 
     public PageLoader(PageView pageView) {
         mPageView = pageView;
@@ -375,7 +378,7 @@ class PageLoader {
     }
 
     public void openChapter(int section) {
-        openChapter(section,0);
+        openChapter(section, 0);
     }
 
     public void openChapter(int section, int page) {
@@ -453,7 +456,7 @@ class PageLoader {
             float y = mDisplayHeight - mTipPaint.getFontMetrics().bottom - tipMarginHeight;
             //只有finish的时候采用页码
             if (mStatus == STATUS_FINISH) {
-                String percent = "第"+(mCurPage.position + 1) + "/" + mCurPageList.size()+"页";
+                String percent = "第" + (mCurPage.position + 1) + "/" + mCurPageList.size() + "页";
                 canvas.drawText(percent, mMarginWidth, y, mTipPaint);
             }
         } else {
@@ -557,7 +560,7 @@ class PageLoader {
             for (int i = 0; i < mCurPage.lines.size(); ++i) {
                 String str = mCurPage.lines.get(i);
                 canvas.drawText(str, mMarginWidth, top, mTextPaint);
-                if (str.endsWith("\n")||str.endsWith("\r\n")) {
+                if (str.endsWith("\n") || str.endsWith("\r\n")) {
                     top += (interval + mParagraphSize);
                 } else {
                     top += interval;
@@ -773,7 +776,7 @@ class PageLoader {
     /**
      * @return:获取初始显示的页面
      */
-    TxtPage getCurPage(int pos) {
+    public TxtPage getCurPage(int pos) {
         if (mPageChangeListener != null) {
             mPageChangeListener.onPageChange(pos);
         }

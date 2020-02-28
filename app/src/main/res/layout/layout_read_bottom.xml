@@ -81,7 +81,12 @@
             style="@style/Read.BottomMenu.IconButton"
             android:drawableTop="@drawable/ic_read_catalog"
             android:text="@string/read_catalog" />
-
+        <TextView
+            android:id="@+id/read_tv_speak"
+            style="@style/Read.BottomMenu.IconButton"
+            android:layout_centerInParent="true"
+            android:drawableTop="@drawable/ic_read_mode"
+            android:text="听书" />
         <TextView
             android:id="@+id/read_tv_night_mode"
             style="@style/Read.BottomMenu.IconButton"

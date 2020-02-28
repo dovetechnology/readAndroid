@@ -281,4 +281,6 @@ dependencies {
     implementation project(path: ':reader')
     implementation 'com.dhh:rxLife2:1.2.0'
     implementation 'com.airbnb.android:lottie:3.4.0'
+    implementation 'com.shuyu:GSYVideoPlayer:7.1.0'
+
 }
