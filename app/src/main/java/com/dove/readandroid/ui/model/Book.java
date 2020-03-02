@@ -22,7 +22,7 @@ public class Book implements Serializable {
 
 
     /**
-     * category : [都市]
+     * category : [dushi]
      * author : 鸿蒙树
      * name : 大国基建
      * stat : null

@@ -26,6 +26,7 @@
         <com.appbaselib.view.RatioImageView
             android:id="@+id/iv_shu"
             android:layout_width="0dp"
+            android:scaleType="fitXY"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             app:ratio="0.65" />

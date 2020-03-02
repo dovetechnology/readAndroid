@@ -56,11 +56,11 @@ public class CommonParamUtil {
         String mac = "android";
         try {
             //获取imei号
-            TelephonyManager TelephonyMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-
-                imei = TelephonyMgr.getDeviceId();
-            }
+//            TelephonyManager TelephonyMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+//            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+//
+//                imei = TelephonyMgr.getDeviceId();
+//            }
             //获取mac地址
             WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
             mac = wm.getConnectionInfo().getMacAddress();

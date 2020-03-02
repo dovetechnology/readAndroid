@@ -98,7 +98,7 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
             //    stopTTs()
             //暂停
             isReading = false
-            mTts.pauseSpeaking()
+            mTts.stopSpeaking()
             dismiss()
         }
 
@@ -222,17 +222,17 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
     private val mTtsListener = object : SynthesizerListener {
 
         override fun onSpeakBegin() {
-            toast("开始播放")
+         //   toast("开始播放")
             isReading = true
         }
 
         override fun onSpeakPaused() {
-            toast("暂停播放")
+         //   toast("暂停播放")
             isReading = false
         }
 
         override fun onSpeakResumed() {
-            toast("继续播放")
+         //   toast("继续播放")
             isReading = true
         }
 
@@ -260,6 +260,7 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
             } else if (error != null) {
                 //    toast(error.getPlainDescription(true))
             }
+            isReading=false
             complete() //播放完成回调下一章
         }
 

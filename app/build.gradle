@@ -272,7 +272,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:${rootProject.ext.version["VOkhttp"]}"
     implementation "com.google.code.gson:gson:2.8.2"
     implementation 'de.hdodenhof:circleimageview:3.0.0'
-    implementation project(path: ':photopicker')
+   // implementation project(path: ':photopicker')
     implementation "org.greenrobot:eventbus:3.0.0"
     implementation 'com.github.ittianyu:BottomNavigationViewEx:2.0.4'
     implementation project(path: ':FlycoTabLayout_Lib')

@@ -72,7 +72,7 @@ class ReadActivity : BaseMvcActivity() {
         postion = intent.getIntExtra("pos", 0)//默認第一章
         mbook.currentSetion = postion
         //
-        StatusBarUtil.setTransparentForWindow(this)
+       // StatusBarUtil.setTransparentForWindow(this)
         ReaderSettingManager.init(this)
 
         if (Build.VERSION.SDK_INT >= 19) {
@@ -109,6 +109,13 @@ class ReadActivity : BaseMvcActivity() {
         pv_read.setTouchListener(object : PageView.TouchListener {
             override fun center() {
                 toggleMenu(true)
+                if (mSpeakDialog?.isReading?:false)
+                {
+                    mSpeakDialog?.mTts?.pauseSpeaking()
+                }
+                else{
+                    mSpeakDialog?.mTts?.resumeSpeaking()
+                }
             }
 
             override fun cancel() {
@@ -436,10 +443,10 @@ class ReadActivity : BaseMvcActivity() {
 
     private fun hideSystemBar() {
         //隐藏
-        SystemBarUtils.hideStableStatusBar(this)
-        if (isFullScreen) {
-            SystemBarUtils.hideStableNavBar(this)
-        }
+//        SystemBarUtils.hideStableStatusBar(this)
+//        if (isFullScreen) {
+//            SystemBarUtils.hideStableNavBar(this)
+//        }
     }
 
     //初始化菜单动画
@@ -529,10 +536,10 @@ class ReadActivity : BaseMvcActivity() {
 
     private fun showSystemBar() {
         //显示
-        SystemBarUtils.showUnStableStatusBar(this)
-        if (isFullScreen) {
-            SystemBarUtils.showUnStableNavBar(this)
-        }
+//        SystemBarUtils.showUnStableStatusBar(this)
+//        if (isFullScreen) {
+//            SystemBarUtils.showUnStableNavBar(this)
+//        }
     }
 
     override fun getContentViewLayoutID(): Int {

@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class Fenlei implements Serializable {
 
     public  String name;
-    public String url;
+    public int url;
     @Nullable
     public String id;
 }
