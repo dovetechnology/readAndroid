@@ -103,7 +103,7 @@ class MeFragment : BaseMvcFragment() {
         }
         appData?.let {
             if (!it.refreshWebsite.isNullOrEmpty()) {
-                iv_tishi.visibility = View.VISIBLE
+             //   iv_tishi.visibility = View.VISIBLE
             }
         }
     }

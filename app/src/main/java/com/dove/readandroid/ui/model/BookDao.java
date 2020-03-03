@@ -20,6 +20,8 @@ public interface BookDao {
     @Query("SELECT * FROM Book")
     List<Book> getAllBook();
 
+
+
     @Insert
     void addAll(List<Book> m);
 

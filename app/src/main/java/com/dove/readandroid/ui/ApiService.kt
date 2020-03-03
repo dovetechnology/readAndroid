@@ -44,7 +44,7 @@ interface ApiService {
     fun jingxuan(
         @Query("id") id: String, @Query("edition") edition: String, @Query("page") page: Int, //页码号
         @Query("size") size: Int
-    ): Observable<ResponseBean<DetailDataWrap>>
+    ): Observable<ResponseBean<PagingBean<Book>>>
 
     @GET("read/novel/top")
     fun top(
