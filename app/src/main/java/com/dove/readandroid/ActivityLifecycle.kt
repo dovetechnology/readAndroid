@@ -6,6 +6,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
+import com.appbaselib.utils.PreferenceUtils
+import com.dove.readandroid.ui.OpenTypeHandler
+import com.dove.readandroid.ui.common.Constants
+import com.dove.readandroid.ui.model.AdData
 
 /*
  */
@@ -41,7 +45,24 @@ class ActivityLifecycle(private val mApplication: Application) :
 
     override fun onActivityResumed(activity: Activity) {
 
-        //其他事情
+        //广告管理
+        var isshow =
+            PreferenceUtils.getPrefBoolean(mAppManager.currentActivity, Constants.IS_SHOW_AD, false)
+        if (isshow) {
+            var guanggao = PreferenceUtils.getObjectFromGson(
+                mAppManager.currentActivity,
+                Constants.AD,
+                AdData::class.java
+            )
+            guanggao?.let {
+                OpenTypeHandler(it, activity).handle()
+            }
+
+            PreferenceUtils.setPrefBoolean(mAppManager.currentActivity, Constants.IS_SHOW_AD, false)
+        } else {
+            //其他事情
+
+        }
     }
 
     override fun onActivityPaused(activity: Activity) {

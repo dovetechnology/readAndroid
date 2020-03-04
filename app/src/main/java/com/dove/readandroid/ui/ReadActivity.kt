@@ -57,10 +57,6 @@ class ReadActivity : BaseMvcActivity() {
 
     //控制屏幕常亮
     private var mWakeLock: PowerManager.WakeLock? = null
-    private val isFullScreen = false
-
-    private var isShowCollectionDialog = false
-
     lateinit var sectionAdapter: BookSectionAdapter
     lateinit var readAdapter: ReadAdapter
     lateinit var mSectionItem: BookSectionItem //当前章节
@@ -72,7 +68,7 @@ class ReadActivity : BaseMvcActivity() {
         postion = intent.getIntExtra("pos", 0)//默認第一章
         mbook.currentSetion = postion
         //
-       // StatusBarUtil.setTransparentForWindow(this)
+        // StatusBarUtil.setTransparentForWindow(this)
         ReaderSettingManager.init(this)
 
         if (Build.VERSION.SDK_INT >= 19) {
@@ -109,11 +105,9 @@ class ReadActivity : BaseMvcActivity() {
         pv_read.setTouchListener(object : PageView.TouchListener {
             override fun center() {
                 toggleMenu(true)
-                if (mSpeakDialog?.isReading?:false)
-                {
+                if (mSpeakDialog?.isReading ?: false) {
                     mSpeakDialog?.mTts?.pauseSpeaking()
-                }
-                else{
+                } else {
                     mSpeakDialog?.mTts?.resumeSpeaking()
                 }
             }

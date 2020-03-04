@@ -7,6 +7,7 @@ import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.model.Book
+import com.dove.readandroid.ui.shucheng.FenletDetailBookAdapter
 import com.dove.readandroid.ui.shucheng.HomeBookAdapter
 import com.safframework.ext.dp2px
 import kotlinx.android.synthetic.main.fragment_recyclerview.*
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_recyclerview.*
  */
 class BookFragment : BaseRefreshFragment<Book>() {
     override fun initAdapter() {
-        mAdapter = HomeBookAdapter(R.layout.item_shu, mList)
+        mAdapter = FenletDetailBookAdapter(R.layout.item_shu, mList)
         recyclerview.layoutManager = GridLayoutManager(mContext, 3)
         recyclerview.setPadding(
             mContext.dp2px(16),
@@ -36,9 +37,9 @@ class BookFragment : BaseRefreshFragment<Book>() {
     }
 
     override fun requestData() {
-        http().mApiService.search(ms)
+        http().mApiService.search(ms,pageNo,pageSize)
             .get3(next = {
-                loadComplete(it)
+                loadComplete(it?.list)
             }, err = {
                 loadError(it)
             })
@@ -47,6 +48,6 @@ class BookFragment : BaseRefreshFragment<Book>() {
     var ms = ""
     fun search(string: String) {
         ms = string
-        requestData()
+        refreshData(true)
     }
 }

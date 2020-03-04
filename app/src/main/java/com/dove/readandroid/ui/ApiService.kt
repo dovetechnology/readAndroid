@@ -33,7 +33,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("read/novel/user/modify")
     fun xiugai(
-        @Field("username") username: String,
+        @Field("name") username: String,
         @Field("mail") mail: String
     ): Observable<ResponseBean<UserData>>
 
@@ -56,13 +56,22 @@ interface ApiService {
     fun home(): Observable<ResponseBean<HomeData>>
 
     @GET("read/novel/search")
-    fun search(@Query("key") string: String): Observable<ResponseBean<List<Book>>>
+    fun search(
+        @Query("key") string: String, @Query("page") page: Int, //页码号
+        @Query("size") size: Int
+    ): Observable<ResponseBean<PagingBean<Book>>>
 
     @GET("read/novel/other/ad/list")
     fun ad(@Query("location") string: String): Observable<ResponseBean<AdDataWrapper>>
 
     @GET("read/novel/user/collect/list")
     fun shujiaList(): Observable<ResponseBean<List<Book>>>
+
+
+    @FormUrlEncoded
+    @POST("read/novel/user/del/bookshelf")
+    fun removeShujia(@Field("id") id: String): Observable<ResponseBean<Any>>
+
 
     @GET("read/novel/other/act/list")
     fun huodong(
@@ -103,6 +112,11 @@ interface ApiService {
     @FormUrlEncoded
     @POST("read/novel/other/visit/bury")
     fun start(@Field("userAgent") userAgent: String, @Field("deviceId") deviceId: String): Observable<ResponseBean<Any>>
+
+    //埋点json数据,格式:[{adId:广告ID,userId:用户ID}]
+    @FormUrlEncoded
+    @POST("read/novel/other/ad/bury")
+    fun maidian(@Field("adBuryJson") adBuryJson: String): Observable<ResponseBean<Any>>
 
     @FormUrlEncoded
     @POST("read/novel/other/message")

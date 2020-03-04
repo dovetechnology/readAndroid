@@ -1,50 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
->
+    android:layout_height="match_parent">
+    <!--  用一层framlayout包裹一下 videoview没找到点击事件-->
+
 
     <com.appbaselib.view.RatioFramlayout
         android:id="@+id/ratiolayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:ratio="0"
-        >
+        app:ratio="0">
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY" />
 
-        <FrameLayout
-            android:id="@+id/fl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|top"
-            android:layout_margin="16dp"
-            android:alpha="0.7"
-            android:background="@drawable/daojishi_bg"
-            android:paddingLeft="12dp"
-            android:paddingTop="6dp"
-            android:paddingRight="12dp"
-            android:paddingBottom="6dp"
-            android:visibility="visible">
 
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="跳过"
-                android:textColor="#ffffffff"
-                android:textSize="11sp"
-                />
-
-        </FrameLayout>
+        <com.dove.readandroid.view.SimpleVideoView
+            android:id="@+id/video_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
 
     </com.appbaselib.view.RatioFramlayout>
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        android:layout_margin="16dp"
+        android:alpha="0.7"
+        android:background="@drawable/daojishi_bg"
+        android:paddingLeft="12dp"
+        android:paddingTop="6dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="6dp"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="跳过广告"
+            android:textColor="#ffffffff"
+            android:textSize="11sp" />
+
+    </FrameLayout>
+
 </FrameLayout>

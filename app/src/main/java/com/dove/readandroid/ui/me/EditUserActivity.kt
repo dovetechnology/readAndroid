@@ -27,7 +27,7 @@ class EditUserActivity : BaseMvcActivity() {
         btn_save.click {
             http().mApiService.xiugai(tv_name.text.toString(),tv_email.text.toString())
                 .get3 {
-                    UserShell.getInstance().userBean.username=tv_name.text.toString()
+                    UserShell.getInstance().userBean.name=tv_name.text.toString()
                     UserShell.getInstance().userBean.mail=tv_email.text.toString()
                     PreferenceUtils.saveObjectAsGson(mContext,Constants.USER,UserShell.getInstance().userBean)
                     EventBus.getDefault().post(UserEvent())

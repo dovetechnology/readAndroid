@@ -14,6 +14,8 @@ import org.jetbrains.annotations.Nullable;
  * ===============================
  */
 public class Constants {
+    public static final String PATH_CACHE_DIR = PhoneUtil.getCachePath() + "/dove/";//图片缓存根目录
+    public static final String IS_SHOW_AD = "is_show_ad";
 
     public static final String PATH_ROOT_DIR = PhoneUtil.getSdCardRootPath() + "/dove/";//图片缓存根目录
     public static final String PATH_DOWNLOAD_FILES_DIR = PATH_ROOT_DIR + "download/";//下载文件存放地址
@@ -31,4 +33,6 @@ public class Constants {
     public static final String VOLUME_SPEED="volume_preference";
     public static final String STREAM_SPEED="stream_preference";
 
+    @Nullable
+    public static final String AD="ad";
 }

@@ -17,6 +17,7 @@ import com.dove.readandroid.ui.model.AdData
 import com.gcssloop.widget.RCRelativeLayout
 import com.safframework.ext.click
 import android.widget.*
+import com.appbaselib.view.RatioFramlayout
 import com.dove.readandroid.ui.PlayVideoActivity
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
@@ -27,6 +28,7 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 
 class AdView : FrameLayout {
 
+    lateinit var rclayout: FrameLayout
     var imageView: ImageView? = null
     var videoView: SimpleVideoView? = null
 
@@ -53,15 +55,16 @@ class AdView : FrameLayout {
 
     fun setValue() {
 
+        rclayout = view.findViewById<View>(com.dove.readandroid.R.id.relayout) as RatioFramlayout
+
         if (!ad.imgUrl.isNullOrEmpty()) {
             imageView = ImageView(context).apply {
                 this.scaleType = ImageView.ScaleType.FIT_XY
             }
-            view.findViewById<RCRelativeLayout>(com.dove.readandroid.R.id.relayout)
-                .addView(imageView, RelativeLayout.LayoutParams(-1, -1))
+            rclayout.addView(imageView, RelativeLayout.LayoutParams(-1, -1))
             imageView?.load(ad.imgUrl)
             imageView?.click {
-                OpenTypeHandler(ad.openType, context, ad.forwardUrl).handle()
+                OpenTypeHandler(ad, context).handle()
             }
         }
         if (!ad.videoUrl.isNullOrEmpty()) {
@@ -70,8 +73,10 @@ class AdView : FrameLayout {
             }
 
             videoView = SimpleVideoView(context)
-            view.findViewById<RCRelativeLayout>(com.dove.readandroid.R.id.relayout)
-                .addView(videoView, RelativeLayout.LayoutParams(-1, -1))
+            rclayout.addView(videoView, RelativeLayout.LayoutParams(-1, -1))
+            var clicklayout = FrameLayout(context)
+            rclayout.addView(clicklayout,FrameLayout.LayoutParams(-1,-1))
+
             GSYVideoOptionBuilder().apply {
                 setUrl(ad.videoUrl)
                     .setCacheWithPlay(true)

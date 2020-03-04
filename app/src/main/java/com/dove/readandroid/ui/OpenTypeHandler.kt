@@ -3,6 +3,9 @@ package com.dove.readandroid.ui
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import com.dove.readandroid.network.get3
+import com.dove.readandroid.network.http
+import com.dove.readandroid.ui.model.AdData
 
 /**
  * ===============================
@@ -11,17 +14,20 @@ import android.net.Uri
  * 创建日期：2019/11/18 15:22
  * ===============================
  */
-class OpenTypeHandler(var type: String, var context: Context, var url: String) {
+class OpenTypeHandler(var data: AdData, var context: Context) {
 
     fun handle() {
-        if ("4".equals(type)) {
+        http().mApiService.maidian(data.id).get3 {
+
+        }
+        if ("4".equals(data.openType)) {
             return
         }
-        if ("3".equals(type)) {
-            WebViewActivity.instance(url, context)
+        if ("3".equals(data.openType)) {
+            WebViewActivity.instance(data.forwardUrl, context)
         } else {
             var intent = Intent();
-            intent.setData(Uri.parse(url));//Url 就是你要打开的网址
+            intent.setData(Uri.parse(data.forwardUrl));//Url 就是你要打开的网址
             intent.setAction(Intent.ACTION_VIEW);
             context.startActivity(intent); //启动浏览器
         }

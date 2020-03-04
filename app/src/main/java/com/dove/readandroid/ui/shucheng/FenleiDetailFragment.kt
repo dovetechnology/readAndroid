@@ -57,7 +57,7 @@ class FenleiDetailFragment : BaseRefreshFragment<Book>() {
     }
 
     override fun initAdapter() {
-        mAdapter = HomeBookAdapter(R.layout.item_shu, mList)
+        mAdapter = FenletDetailBookAdapter(R.layout.item_shu, mList)
 
     }
 

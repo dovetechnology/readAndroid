@@ -29,7 +29,7 @@ class PlayVideoActivity : BaseMvcActivity() {
         vv.startPlayLogic()
         vv.isEnabled = false
         content.click {
-            OpenTypeHandler(ad.openType, mContext, ad.forwardUrl).handle()
+            OpenTypeHandler(ad, mContext).handle()
             finish()
         }
     }

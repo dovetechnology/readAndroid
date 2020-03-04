@@ -51,6 +51,11 @@ class MeFragment : BaseMvcFragment() {
         setValue(UserShell.getInstance().userBean)
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onAppdataRefresh(muservent: AppData) {
+        appData = muservent
+        setTips()
+    }
 
     override fun getContentViewLayoutID(): Int {
         return R.layout.fragment_me
@@ -79,7 +84,10 @@ class MeFragment : BaseMvcFragment() {
             start(ReadHsitoryActivity::class.java)
         }
         ll_fankui.click {
-            start(YijianFankuiActivity::class.java)
+            if (UserShell.getInstance().isLogin)
+                start(YijianFankuiActivity::class.java)
+            else
+                start(LoginActivity::class.java)
         }
         ll_share.click {
             appData?.let {
@@ -101,9 +109,14 @@ class MeFragment : BaseMvcFragment() {
                 }
             }
         }
+        setTips()
+    }
+
+    fun setTips() {
+
         appData?.let {
             if (!it.refreshWebsite.isNullOrEmpty()) {
-             //   iv_tishi.visibility = View.VISIBLE
+                iv_tishi.visibility = View.VISIBLE
             }
         }
     }
@@ -115,7 +128,7 @@ class MeFragment : BaseMvcFragment() {
     }
 
     private fun updateApp(url: String) {
-        val mFile = File(Constants.PATH_DOWNLOAD_FILES_DIR + "aiyu_new.apk")
+        val mFile = File(Constants.PATH_DOWNLOAD_FILES_DIR + "qingdian_new.apk")
         http().mApiService.download(url)
             .subscribeOn(Schedulers.io())
             .unsubscribeOn(Schedulers.io())
@@ -142,6 +155,7 @@ class MeFragment : BaseMvcFragment() {
                 override fun onNext(t: ResponseBody) {
                     Log.d("更新文件", "下载完成")
                     //安装文件
+                    iv_tishi.visibility = View.GONE
                     mContext.installApk(mFile)
                 }
 

@@ -48,6 +48,7 @@ public class Book implements Serializable {
     public String createTime;
     public String updateTime;
     public String description;
+    public String caseId;
     @Ignore
     public List<BookSectionItem> novelList;
     public String content;

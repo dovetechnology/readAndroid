@@ -22,7 +22,6 @@ import com.dove.readandroid.network.http
 import com.iflytek.cloud.SpeechConstant
 import com.iflytek.cloud.SpeechUtility
 import com.safframework.ext.getAppVersionCode
-import com.safframework.ext.getDeviceId
 import com.tencent.bugly.Bugly
 import com.umeng.commonsdk.UMConfigure
 import com.umeng.message.IUmengRegisterCallback

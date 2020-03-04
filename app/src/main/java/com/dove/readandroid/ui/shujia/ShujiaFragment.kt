@@ -13,6 +13,7 @@ import com.safframework.ext.click
 import kotlinx.android.synthetic.main.fragment_shujia.*
 import com.appbaselib.common.load
 import com.appbaselib.network.RxHttpUtil
+import com.appbaselib.utils.DialogUtils
 import com.appbaselib.utils.LogUtils
 import com.dove.readandroid.R
 import com.dove.readandroid.event.ShujiaEvent
@@ -47,7 +48,7 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
             http().mApiService.open(book.articleId)
                 .get3(isShowDialog = true) {
                     var list = App.instance.db.getChapDao().findChap(book.name)
-                    if (list != null&&list.size!=0) {
+                    if (list != null && list.size != 0) {
                         it?.data?.novelList = list  //本地可能缓存过一些章节
                     }
 
@@ -109,6 +110,17 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
 //            }
 
         }
+        mAdapter.setOnItemLongClickListener { adapter, view, position ->
+            DialogUtils.getDefaultDialog(mContext, "确定移除书架吗？") {
+
+                http().mApiService.removeShujia(mList.get(position).caseId)
+                    .get3(isShowDialog = true) {
+                        mAdapter.remove(position)
+                    }
+
+            }.show()
+            return@setOnItemLongClickListener true
+        }
     }
 
 
@@ -140,6 +152,9 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
 //        }
         //获取网络书架信息
         swipe.isRefreshing = true
+        mAdapter.loadMoreModule?.isEnableLoadMore = false
+        mAdapter.loadMoreModule?.isAutoLoadMore = false
+        mAdapter.loadMoreModule?.isEnableLoadMoreIfNotFullPage = false
         requestData()
 
     }

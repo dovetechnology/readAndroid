@@ -91,9 +91,8 @@ class JingxuanFragment : BaseMvcFragment() {
                     banner.setImages(list)
                     banner.setOnBannerListener {
                         OpenTypeHandler(
-                            adDatas?.get(it).openType,
-                            mContext,
-                            adDatas.get(it).forwardUrl
+                            adDatas?.get(it),
+                            mContext
                         ).handle()
                     }
                     banner.start()

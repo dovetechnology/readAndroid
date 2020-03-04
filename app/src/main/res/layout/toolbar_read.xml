@@ -9,11 +9,12 @@
     android:visibility="gone"
     tools:visibility="visible">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/lin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFFFF"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageView
@@ -22,6 +23,11 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:src="@drawable/icon_title_back"></ImageView>
+
+        <androidx.legacy.widget.Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/tv_add"
@@ -39,9 +45,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:padding="16dp"
             android:layout_marginRight="8dp"
-            android:src="@drawable/icon_setting"></ImageView>
-    </RelativeLayout>
+            android:padding="16dp"
+            android:src="@drawable/icon_setting"
+            android:visibility="gone"></ImageView>
+    </LinearLayout>
 
 </com.google.android.material.appbar.AppBarLayout>
