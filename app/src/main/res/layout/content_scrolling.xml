@@ -59,6 +59,12 @@
             android:textSize="14sp"
             tools:text="简介：十年后，他终于回到了江南，只想陪着他的爱人平平淡淡过日子，然鹅，冷艳的妍美剑圣找上门来，桃花纷纷……" />
 
+        <TextView
+            android:id="@+id/tv_more"
+            android:text="全文"
+            android:textColor="@color/colorAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

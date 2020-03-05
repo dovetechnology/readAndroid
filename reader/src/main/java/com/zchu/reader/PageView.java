@@ -85,6 +85,8 @@ public class PageView extends View {
 
     private OnThemeChangeListener onThemeChangeListener;
 
+    private  OnPrepareCompleteListener onPrepareCompleteListener;
+
     //内容加载器
     public PageLoader mPageLoader;
     private PageLoaderAdapter mAdapter;
@@ -97,6 +99,11 @@ public class PageView extends View {
 
     public PageLoader getmPageLoader() {
         return mPageLoader;
+    }
+
+    public void setPrepareListener(OnPrepareCompleteListener m)
+    {
+        this.onPrepareCompleteListener=m;
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -180,6 +187,10 @@ public class PageView extends View {
         }
         //初始化完成
         isPrepare = true;
+        if (onPrepareCompleteListener!=null)
+        {
+            onPrepareCompleteListener.prepare();
+        }
     }
 
     //设置翻页的模式
@@ -443,6 +454,9 @@ public class PageView extends View {
         void center();
 
         void cancel();
+    }
+    public interface  OnPrepareCompleteListener{
+        void prepare();
     }
 
     public void setTextSize(int sizePx) {

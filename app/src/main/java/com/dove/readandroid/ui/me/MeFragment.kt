@@ -41,7 +41,7 @@ import java.io.File
  */
 class MeFragment : BaseMvcFragment() {
 
-    lateinit var appData: AppData
+    var appData: AppData? = null
     override fun registerEventBus(): Boolean {
         return true
     }
@@ -63,8 +63,7 @@ class MeFragment : BaseMvcFragment() {
 
     override fun initView() {
 
-        appData =
-            PreferenceUtils.getObjectFromGson(mContext, Constants.APPDATA, AppData::class.java)
+        appData = PreferenceUtils.getObjectFromGson(mContext, Constants.APPDATA, AppData::class.java)
         if (UserShell.getInstance().userBean != null) {
             setValue(UserShell.getInstance().userBean)
 
@@ -104,7 +103,7 @@ class MeFragment : BaseMvcFragment() {
                 } else {
                     DialogUtils.getDefaultDialog(mContext, "发现新版本，需要更新吗", title = "提") {
                         toast("后台更新中")
-                        updateApp(appData.refreshWebsite)
+                        updateApp(appData!!.refreshWebsite)
                     }.show()
                 }
             }

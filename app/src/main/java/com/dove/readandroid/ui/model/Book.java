@@ -35,10 +35,11 @@ public class Book implements Serializable {
      * description : null
      * novelList : null
      */
-    @PrimaryKey(autoGenerate = true)
-    public int id;
+   // public String id;
     public String category;
     public String author;
+    @NotNull
+    @PrimaryKey()
     public String name;
     public String stat;
     public String title;

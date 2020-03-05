@@ -22,6 +22,7 @@ import com.dove.readandroid.network.get4
 import com.dove.readandroid.ui.*
 import com.dove.readandroid.ui.common.Constants
 import com.dove.readandroid.ui.common.UserShell
+import com.safframework.ext.bluetoothAdapter
 import kotlinx.android.synthetic.main.view_ad.*
 import okhttp3.*
 import org.greenrobot.eventbus.Subscribe
@@ -42,72 +43,56 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
         mAdapter = HomeBookAdapter(com.dove.readandroid.R.layout.item_shu, mList)
         recyclerview.layoutManager = GridLayoutManager(mContext, 3)
         mAdapter.setOnItemClickListener { adapter, view, position ->
+            //            http().mApiService.open(book.articleId)
+//                .get3(isShowDialog = true) {
+//                    var list = App.instance.db.getChapDao().findChap(book.name)
+//                    if (list != null && list.size != 0) {
+//                        it?.data?.novelList = list  //本地可能缓存过一些章节
+//                    }
+//
+//                    start(ReadActivity::class.java, Bundle().apply {
+//                        putSerializable("data", it?.data)
+//                    })
+//                }
+            //改为优先本地获取
             var book = mList.get(position)
+            if (App.instance.db.getBookDao().find(book.name) != null) {
+                //封面图非空 所以数据库存在书
+                book = App.instance.db.getBookDao().find(book.name)
+                book.novelList = App.instance.db.getChapDao().findChap(book.name)
 
+                start(ReadActivity::class.java, Bundle().apply {
+                    putSerializable("data", book)
+                })
+            } else {
+                //获取 book
+                http().mApiService.open(book.articleId)
+                    .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
+                    .map {
+                        it.data.data.novelList?.forEach {
+                            it.name = book.name //保存数据库 用书名来关联章节
+                        }
 
-            http().mApiService.open(book.articleId)
-                .get3(isShowDialog = true) {
-                    var list = App.instance.db.getChapDao().findChap(book.name)
-                    if (list != null && list.size != 0) {
-                        it?.data?.novelList = list  //本地可能缓存过一些章节
+                        it
                     }
+                    .get4(isShowDialog = true) {
+//                        var list = App.instance.db.getChapDao().findChap(book.name)
+//                        if (list != null && list.size != 0) {
+//                            it?.data?.novelList = list  //本地可能缓存过一些章节
+//                        }
+                        App.instance.db.getBookDao().add(it?.data)
+                        App.instance.db.getChapDao().addAll(it?.data?.novelList)
+                        // 必须用 数据库查出来的 数据  不然那阅读数据没法保存
+                        it?.data?.novelList=   App.instance.db.getChapDao().findChap(it?.data?.name)
 
-                    start(ReadActivity::class.java, Bundle().apply {
-                        putSerializable("data", it?.data)
-                    })
-                }
-            //改为本地获取
-//            book.novelList = App.instance.db.getChapDao().findChap(book.name)
-//            if (book.novelList != null && book.novelList.size != 0 && !book.novelUrl.isNullOrEmpty()) {
-//
-//                start(ReadActivity::class.java, Bundle().apply {
-//                    putSerializable("data", book)
-//                })
-////                start(BookDetailActivity::class.java, Bundle().apply {
-////                    putSerializable("data", book)
-////                })
-//            } else {
-//                //获取 book
-//                http().mApiService.openName(book.name, book.author, "")
-////                    .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
-////                    .map {
-////
-////                    }
-//                    .get3(isShowDialog = true) {
-//                        //补充书的信息
-//                        var oldBook = App.instance.db.getBookDao().find(book.name)
-//                        oldBook.novelUrl = it?.data?.novelUrl
-//                        oldBook.novelList = it?.data?.novelList
-//                        mList.set(position, oldBook)
-//                        App.instance.db.getBookDao().update(oldBook)
-//                        onRefresh(null)
-//                        start(ReadActivity::class.java, Bundle().apply {
-//                            putSerializable("data", it?.data)
-//                        })
-//                    }
-//            }
-            //测试 Socket closed 的原因
-            //           val url =
-//                "http://test.imuguang.com/read/novel/open/name?name=${book.name}&author=${book.author}"
-//         //   val okHttpClient = RetrofitHelper.getInstance().provideOkHttpClient(OkHttpClient.Builder())
-//            var okHttpClient=OkHttpClient()
-//            val request = Request.Builder()
-//                .url(url)
-//                .build()
-//            thread {
-//                var call = okHttpClient.newCall(request)
-//                call.enqueue(object : Callback {
-//                    override fun onFailure(call: Call, e: IOException) {
-//                        LogUtils.e(e.message)
-//
-//                    }
-//
-//                    override fun onResponse(call: Call, response: Response) {
-//                        LogUtils.e(response.message)
-//                    }
-//
-//                })
-//            }
+                        mList.set(position,it?.data!!)
+                        mAdapter.notifyDataSetChanged() //刷新章节
+
+                        start(ReadActivity::class.java, Bundle().apply {
+                            putSerializable("data", it?.data)
+                        })
+                    }
+            }
 
         }
         mAdapter.setOnItemLongClickListener { adapter, view, position ->
@@ -179,12 +164,14 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
             .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
             .map {
                 var datas = arrayListOf<Book>()
-                datas.addAll(it.data)
+                datas.addAll(it.data) //服务器的数据 书本信息不全  需要和本地数据融合
 
-                it.data?.forEachIndexed { index, book ->
-                    var title = book.name
-                    var book = App.instance.db.getBookDao().find(title)
-                    book?.apply {
+                it.data?.forEachIndexed { index, b ->
+                    //书架返回的book里面有 书架id
+                    var title = b.name
+                    var book = App.instance.db.getBookDao().find(title) //因为本地存的书本信息更多一点
+                    book?.let {
+                        book.caseId = b.caseId
                         datas.set(index, book)
                     }
                 }

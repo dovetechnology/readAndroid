@@ -16,6 +16,6 @@ import java.util.List;
 public class BookWithChap implements Serializable {
     @Embedded
     public Book book;
-    @Relation(parentColumn = "name", entityColumn = "book_name")
+    @Relation(parentColumn = "name", entityColumn = "name")
     public List<BookSectionItem> novelList;
 }

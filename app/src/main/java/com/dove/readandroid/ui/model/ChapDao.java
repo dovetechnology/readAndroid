@@ -17,7 +17,7 @@ import java.util.List;
 @Dao
 public interface ChapDao {
 
-    @Query("select * from BookSectionItem where book_name= (:name)")
+    @Query("select * from BookSectionItem where name= (:name)")
     List<BookSectionItem> findChap(String name);
 
     @Insert

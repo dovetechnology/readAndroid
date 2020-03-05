@@ -22,7 +22,6 @@ public interface BookDao {
     List<Book> getAllBook();
 
 
-
     @Insert
     void addAll(List<Book> m);
 
@@ -31,9 +30,13 @@ public interface BookDao {
 
     @Query("select * from book where name=:name")
     Book find(String name);
-    @Query("select * from book where isAddShlef=1")
-    List<Book> shujia( );
 
+    @Query("select * from book where isAddShlef=1")
+    List<Book> shujia();
+
+
+    @Query("update book set isAddShlef=1 where name=:s")
+    void addShelf(String s);
 
     @Update
     void update(Book m);

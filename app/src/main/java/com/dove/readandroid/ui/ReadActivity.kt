@@ -12,14 +12,17 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.ext.toast
+import com.appbaselib.network.RxHttpUtil
 import com.appbaselib.utils.LogUtils
 import com.appbaselib.utils.ScreenUtils
 import com.dove.readandroid.R
 import com.dove.readandroid.event.ShujiaEvent
 import com.dove.readandroid.network.get3
+import com.dove.readandroid.network.get4
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.model.Book
 import com.dove.readandroid.ui.model.BookSectionContent
@@ -45,7 +48,6 @@ import org.greenrobot.eventbus.EventBus
 class ReadActivity : BaseMvcActivity() {
 
     lateinit var mbook: Book
-    var postion = 0; //章节
     private val K_EXTRA_BOOK_TB = "book_tb"
     lateinit var mTopInAnim: Animation
     lateinit var mTopOutAnim: Animation
@@ -65,8 +67,7 @@ class ReadActivity : BaseMvcActivity() {
     @SuppressLint("InvalidWakeLockTag")
     override fun initView(mSavedInstanceState: Bundle?) {
         mbook = intent.getSerializableExtra("data") as Book
-        postion = intent.getIntExtra("pos", 0)//默認第一章
-        mbook.currentSetion = postion
+        mSectionItem = mbook.novelList.get(mbook.currentSetion)
         //
         // StatusBarUtil.setTransparentForWindow(this)
         ReaderSettingManager.init(this)
@@ -74,10 +75,6 @@ class ReadActivity : BaseMvcActivity() {
         if (Build.VERSION.SDK_INT >= 19) {
             appbar.setPadding(0, ScreenUtils.getStatusHeight(this), 0, 0)
         }
-        //半透明化StatusBar
-        //隐藏StatusBar
-        appbar.post(Runnable { hideSystemBar() })
-
         //初始化屏幕常亮类
         val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
         mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "keep bright")
@@ -100,6 +97,7 @@ class ReadActivity : BaseMvcActivity() {
         lin.setBackgroundColor(ReaderSettingManager.getInstance().getPageBackground())
         // read_bottom.setBackgroundColor(ReaderSettingManager.getInstance().getPageBackground())
         read_bottom.setBackgroundColor(ReaderSettingManager.getInstance().pageBackground)
+        //设置状态栏背景颜色
         StatusBarUtil.setColor(this, ReaderSettingManager.getInstance().getPageBackground())
 
         pv_read.setTouchListener(object : PageView.TouchListener {
@@ -127,31 +125,8 @@ class ReadActivity : BaseMvcActivity() {
         //加载目录
 
         sectionAdapter = BookSectionAdapter(R.layout.list_item_book_section, mbook.novelList)
-        //选中章节
-        sectionAdapter.setOnItemClickListener { adapter, view, position ->
-            read_drawer.closeDrawers()
-            sectionAdapter.setSingleChoosed(position)
-            mSectionItem = mbook.novelList.get(position)
-            hideSystemBar()
-            postDelayed(time = 300) {
-                startRead(position)
-            }
-        }
-        sectionAdapter.setOnItemChildClickListener { adapter, view, position ->
-            if (view.id == R.id.iv_download) {
-                //缓存选中章节
-                mbook.novelList.get(position).isLoading = true
-                sectionAdapter.notifyItemChanged(position)
 
-                getContentByChap(mbook.novelList.get(position), position, false)
-                {
-                    //刷新章节列表
-                    mbook.novelList.get(position).isLoading = false
 
-                    sectionAdapter.notifyItemChanged(position)
-                }
-            }
-        }
         sectionAdapter.setTextColor(pv_read.textColor)
         read_rv_section.setLayoutManager(LinearLayoutManager(this))
         read_rv_section.adapter = sectionAdapter
@@ -185,41 +160,44 @@ class ReadActivity : BaseMvcActivity() {
         tv_add.click {
 
             http().mApiService.addShujia(mbook.articleId, mbook.chapterId)
-                .get3(isShowDialog = true) {
+                .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
+//                .map {
+//                    mbook.isAddShlef = 1
+//                  //  App.instance.db.getBookDao().addShelf(mbook.name)
+//                    it
+//                }
+                .get4(isShowDialog = true, next = {
                     mbook.isAddShlef = 1
                     App.instance.db.getBookDao().update(mbook)
                     EventBus.getDefault().post(ShujiaEvent())
                     toast("已加入书架")
-                }
+                })
         }
 
         pv_read.setOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageChange(pos: Int) {
-                print("页面改变$pos")
+                LogUtils.e("页面改变$pos")
                 mSectionItem.currentPage = pos
                 //在这里预加载下一章 上一章
                 postDelayed(300) {
                     speakByhand()//判断是否语音播报
-
                 }
+            }
+
+            override fun onChapterChange(pos: Int) {
+                LogUtils.e("章节改变$pos")
+                mSectionItem = mbook.novelList.get(pos)
+                mbook.currentSetion = pos
+                //章节切换的时候自动加载上一章下一章
                 addPreZhangjie()
                 addNextZhangjie()
             }
 
-            override fun onChapterChange(pos: Int) {
-                print("章节改变$pos")
-                mSectionItem = mbook.novelList.get(pos)
-                mbook.currentSetion = pos
-            }
-
             override fun onPageCountChange(count: Int) {
-                print("页面页数改变$count")
+                LogUtils.e("页面页数改变$count")
 
             }
         })
-
-
-
 
         read_tv_night_mode.click {
             val nightModeSelected = !read_tv_night_mode.isSelected()
@@ -290,13 +268,48 @@ class ReadActivity : BaseMvcActivity() {
             mSpeakDialog?.show()
 
         }
-        //开始阅读
-        if (mbook.currentSetion != 0) {
-            //渡过
-        } else {
-            //没读过
+        //章节 里面的点击事件
+        sectionAdapter.setOnItemChildClickListener { adapter, view, position ->
+            if (view.id == R.id.iv_download) {
+                //缓存选中章节
+                mbook.novelList.get(position).isLoading = true
+                sectionAdapter.notifyItemChanged(position)
+
+                getContentByChap(mbook.novelList.get(position), position, false)
+                {
+                    //刷新章节列表
+                    mbook.novelList.get(position).isLoading = false
+
+                    sectionAdapter.notifyItemChanged(position)
+                }
+            }
         }
-        read()
+        //选中章节
+        sectionAdapter.setOnItemClickListener { adapter, view, position ->
+            read_drawer.closeDrawers()
+            sectionAdapter.setSingleChoosed(position)
+            mbook.currentSetion = position //保存位置
+            mSectionItem = mbook.novelList.get(position)
+            hideSystemBar()
+            //选中过后同时加载前后两章节
+            postDelayed(time = 300) {
+                requestZhangjie(position, true)
+                addPreZhangjie()
+                addNextZhangjie()
+            }
+        }
+
+        pv_read.setPrepareListener {
+            //开始阅读
+            //   postDelayed {
+            if (mbook.currentSetion != 0) {
+                //渡过
+            } else {
+                //没读过
+            }
+            read()
+            //  }
+        }
 
     }
 
@@ -317,34 +330,32 @@ class ReadActivity : BaseMvcActivity() {
     }
 
     private fun read() {
-        startRead(mbook.currentSetion)
+
+        getContentByChap(mSectionItem, mbook.currentSetion, true) {
+            pv_read.openSection(mbook.currentSetion, mSectionItem.currentPage) //从网络获取的就从第一页读
+        }
         //预加载前一张和下一章
         addPreZhangjie()
         addNextZhangjie()
     }
 
     fun addPreZhangjie() {
-        if (!readAdapter.hasPreviousSection(pv_read.chapPosition)) {
-            //加载上一章
-            var p = mbook.novelList.indexOf(mSectionItem) - 1
-            if (p >= 0)
+        //加载上一章
+        var p = mbook.currentSetion - 1
+        if (p >= 0)
 
-                getContentByChap(mbook.novelList.get(p), p, false) {
-                }
-        }
-
+            getContentByChap(mbook.novelList.get(p), p, false) {
+            }
     }
 
     fun addNextZhangjie() {
-        if (!readAdapter.hasNextSection(pv_read.chapPosition)) {
-            //加载下一章
-            var p = mbook.novelList.indexOf(mSectionItem) + 1
-            if (p < mbook.novelList.size)
+        //加载下一章
+        var p = mbook.currentSetion + 1
+        if (p < mbook.novelList.size)
 
-                getContentByChap(mbook.novelList.get(p), p, false) {
+            getContentByChap(mbook.novelList.get(p), p, false) {
 
-                }
-        }
+            }
     }
 
     private fun toggleNightMode(isOpen: Boolean) {
@@ -373,23 +384,13 @@ class ReadActivity : BaseMvcActivity() {
         StatusBarUtil.setColor(this, ReaderSettingManager.getInstance().getPageBackground())
     }
 
-    fun startRead(p: Int) {
+    fun requestZhangjie(p: Int, isShoaDialog: Boolean = false) {
+//加载当前章节
+        var xuanzhong = mbook.novelList.get(p)
 
-        mSectionItem = mbook.novelList.get(p)
+        getContentByChap(xuanzhong, p, isShoaDialog) {
+            pv_read.openSection(p, mSectionItem.currentPage) //从网络获取的就从第一页读
 
-        if (mSectionItem.content.isNullOrEmpty()) {
-            //从网络获取
-            getContentByChap(mSectionItem, p) {
-                pv_read.openSection(p, 0) //从网络获取的就从第一页读
-            }
-
-        } else {
-            //本地
-            readAdapter.addData(
-                p,
-                BookSectionContent(p, mSectionItem.title, mSectionItem.content)
-            )
-            pv_read.openSection(p, mSectionItem.currentPage)//从本地获取的就接着读
         }
 
     }
@@ -402,28 +403,42 @@ class ReadActivity : BaseMvcActivity() {
         mSpeakDialog?.stopTTs()
     }
 
+    // next 为获取网络结果后的回调
     fun getContentByChap(
         bookSectionItem: BookSectionItem,
         p: Int,
-        isShowtitle: Boolean = true,
+        isShowtitle: Boolean = false,
         next: () -> Unit
     ) {
-
-        http().mApiService.openChap(mbook.articleId, bookSectionItem.chapterId)
-            .get3(isShowDialog = isShowtitle, title = "", message = "加载章节中……") {
-                var content = it?.data?.content?.replace("<br>", "")
-                content = content?.replace("&nbsp;", "")
-                bookSectionItem.content = content//改变了mbook书里面的内容
-                App.instance.db.getChapDao().updata(bookSectionItem) //保存到数据库
-
-                //添加章节
+        //已经从网络获取过内容
+        if (!bookSectionItem.content.isNullOrEmpty()) {
+            //  没有加载过才加载
+            if (!readAdapter.hasSection(p)) {
                 readAdapter.addData(
                     p,
-                    BookSectionContent(p, mSectionItem.title, mSectionItem.content)
+                    BookSectionContent(p, bookSectionItem.title, bookSectionItem.content)
                 )
-                //自定义的操作
-                next()
             }
+            //自定义的操作
+            next()
+        } else {
+            //还没加载过 从网路获取
+            http().mApiService.openChap(mbook.articleId, bookSectionItem.chapterId)
+                .get3(isShowDialog = isShowtitle, title = "", message = "加载章节中……") {
+                    var content = it?.data?.content?.replace("<br>", "")
+                    content = content?.replace("&nbsp;", "")
+                    bookSectionItem.content = content//改变了mbook书里面的内容
+                    App.instance.db.getChapDao().updata(bookSectionItem) //保存到数据库
+
+                    //添加章节
+                    readAdapter.addData(
+                        p,
+                        BookSectionContent(p, bookSectionItem.title, bookSectionItem.content)
+                    )
+                    //自定义的操作
+                    next()
+                }
+        }
 
 
     }

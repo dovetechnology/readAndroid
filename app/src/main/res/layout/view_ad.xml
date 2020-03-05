@@ -13,32 +13,25 @@
         android:layout_height="wrap_content"
         app:round_corner="8dp">
 
-        <FrameLayout
-
+        <com.appbaselib.view.RatioFramlayout
+            android:id="@+id/relayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:ratio="4">
 
-            <com.appbaselib.view.RatioFramlayout
-                android:id="@+id/relayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:ratio="4">
-
-
-            </com.appbaselib.view.RatioFramlayout>
-
-            <ImageView
-                android:id="@+id/iv_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|bottom"
-                android:layout_margin="4dp"
-                android:background="@drawable/chacha_bg"
-                android:padding="6dp"
-                android:src="@drawable/icon_chacha" />
-        </FrameLayout>
+        </com.appbaselib.view.RatioFramlayout>
 
     </com.gcssloop.widget.RCRelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:layout_margin="4dp"
+        android:background="@drawable/chacha_bg"
+        android:padding="6dp"
+        android:src="@drawable/icon_chacha" />
 </androidx.cardview.widget.CardView>
 
 

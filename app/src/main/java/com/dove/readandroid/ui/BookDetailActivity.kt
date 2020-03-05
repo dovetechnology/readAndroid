@@ -44,7 +44,8 @@ class BookDetailActivity : BaseMvcActivity() {
                 .get3(isShowDialog = true) {
                     toast("已加入书架")
                     book.isAddShlef = 1
-                    App.instance.db.getBookDao().update(book)
+                    App.instance.db.getBookDao().addShelf(book.name)
+
                     //更新主页书架的信息
                     EventBus.getDefault().post(ShujiaEvent())
 
@@ -56,6 +57,21 @@ class BookDetailActivity : BaseMvcActivity() {
             })
             finish()
         }
+        tv_more.click {
+            if (it.text.equals("全文")) {
+                jianjie.maxLines = 100
+                tv_more.text = "收起"
+            } else {
+                jianjie.maxLines = 3
+                tv_more.text = "全文"
+            }
+        }
+//        if (jianjie.lineCount>3) {
+//            tv_more.visibility = View.VISIBLE
+//        } else {
+//            tv_more.visibility = View.GONE
+//
+//        }
 
 //查看数据库有没有浏览过改书
         var b = App.instance.db.getBookDao().find(book.name)
@@ -77,6 +93,8 @@ class BookDetailActivity : BaseMvcActivity() {
                     setValue(it?.data)
                     App.instance.db.getBookDao().add(book)
                     App.instance.db.getChapDao().addAll(book.novelList) //sb room数据库
+                    //很重要     // 必须用 数据库查出来的 数据  不然那阅读数据 章节没法保存（因为主键id是自增）
+                    it?.data?.novelList=   App.instance.db.getChapDao().findChap(it?.data?.name)
 
                     if (it?.data?.novelList == null || it.data.novelList.size == 0) {
                         toast("没找到该书本章节")
@@ -132,7 +150,7 @@ class BookDetailActivity : BaseMvcActivity() {
         var titles = arrayListOf<String>()
 
         mb?.novelList?.let {
-//
+            //
 //                thread {
 //                    mb.novelList.forEachIndexed { index, book ->
 //                        //                    if (index > 10) {
@@ -156,7 +174,7 @@ class BookDetailActivity : BaseMvcActivity() {
 
             runBackground(it, {
                 mb.novelList?.forEachIndexed { index, book ->
-//                    if (index > 10) {
+                    //                    if (index > 10) {
 //                        return@forEachIndexed
 //                    }
                     titles.add(book.title)
@@ -167,10 +185,9 @@ class BookDetailActivity : BaseMvcActivity() {
                     LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
                 rv_mulu.adapter = MuluAdapter(R.layout.item_mulu, it).apply {
                     setOnItemClickListener { adapter, view, position ->
-
+                        book.currentSetion = position
                         start(ReadActivity::class.java, Bundle().apply {
                             putSerializable("data", book)
-                            putInt("pos", position)
                         })
                     }
                 }

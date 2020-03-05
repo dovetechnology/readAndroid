@@ -95,7 +95,17 @@ fun <T> Observable<ResponseBean<T>>.get3(context: Context = AppManager.getInstan
         }
     })
 }
-//不绑定生命周期 复写onFail
+//不绑定生命周期
+fun <T> Observable<ResponseBean<T>>.get4(context: Context = AppManager.getInstance().currentActivity, isShowDialog: Boolean = false, message: String? = "请稍候", title: String? = "", next: (T?) -> Unit) {
+
+    this.subscribe(object : MySubscriber2<T>(if (isShowDialog) context else null, message, title) {
+        override fun onSucess(t: T?) {
+            next(t)
+        }
+
+    })
+}
+//不绑定生命周期 复习error
 fun <T> Observable<ResponseBean<T>>.get4(context: Context = AppManager.getInstance().currentActivity, isShowDialog: Boolean = false, message: String? = "请稍候", title: String? = "", next: (T?) -> Unit, err: (mS: String?) -> Unit,complete: (() -> Unit)?=null) {
 
     this.subscribe(object : MySubscriber2<T>(if (isShowDialog) context else null, message, title) {

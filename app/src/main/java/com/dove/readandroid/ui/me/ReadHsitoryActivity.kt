@@ -27,13 +27,14 @@ class ReadHsitoryActivity : BaseMvcActivity() {
         var mAdapter = HistoryBookAdapter(R.layout.item_lishishu, mBooks)
         recyclerview.adapter = mAdapter
         mAdapter.setOnItemClickListener { adapter, view, position ->
-            http().mApiService.open(mBooks!!.get(position).articleId)
 
-                .get3(isShowDialog = true) {
-                    start(ReadActivity::class.java, Bundle().apply {
-                        putSerializable("data", it?.data)
-                    })
-                }
+
+            start(ReadActivity::class.java, Bundle().apply {
+                putSerializable(
+                    "data",
+                    App.instance.db.getBookDao().find(mBooks?.get(position)?.name)
+                )
+            })
         }
         titleBar.setRightTitle("清空", this).click {
             App.instance.db.getBookDao().deleteAll()

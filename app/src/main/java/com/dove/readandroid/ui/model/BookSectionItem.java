@@ -39,7 +39,6 @@ public class BookSectionItem implements Serializable {
      */
 
     public String author;
-    @ColumnInfo(name = "book_name")
     public String name;
     public String title;
     public String chapterUrl;

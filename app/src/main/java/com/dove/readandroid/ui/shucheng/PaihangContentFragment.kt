@@ -25,7 +25,7 @@ class PaihangContentFragment : BaseRefreshFragment<Book>() {
 
             start(BookDetailActivity::class.java, Bundle().apply {
                 putSerializable("data", Book().apply {
-                    novelUrl = mList.get(position).novelUrl
+                    articleId = mList.get(position).articleId
                     name = mList.get(position).name
                 })
             })

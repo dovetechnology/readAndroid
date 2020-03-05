@@ -3,14 +3,18 @@ package com.dove.readandroid.ui.shujia
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.utils.PreferenceUtils
 import com.dove.readandroid.R
 import com.dove.readandroid.event.UserEvent
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
+import com.dove.readandroid.ui.WebViewActivity
 import com.dove.readandroid.ui.common.Constants
 import com.dove.readandroid.ui.common.UserShell
+import com.framework.ext.clickSpan
+import com.framework.ext.colorSpan
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.safframework.ext.click
 import io.reactivex.Observable
@@ -18,6 +22,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function4
 import kotlinx.android.synthetic.main.activity_register.*
 import org.greenrobot.eventbus.EventBus
+import androidx.core.content.ContextCompat
 
 class RegisterActivity : BaseMvcActivity() {
     override fun initView(mSavedInstanceState: Bundle?) {
@@ -63,6 +68,20 @@ class RegisterActivity : BaseMvcActivity() {
                         }
                 }
         }
+        tv_yueduxuzhi.colorSpan(tv_yueduxuzhi.text.toString(),12..16 ,ContextCompat.getColor(mContext, R.color.colorAccent))
+        tv_yueduxuzhi.clickSpan(tv_yueduxuzhi.text.toString(),12..16,
+            ContextCompat.getColor(mContext,R.color.colorAccent),true,object : View.OnClickListener{
+                override fun onClick(v: View?) {
+             //       WebViewActivity.instance(appData.findPassWebsite,mContext)
+                }
+            })
+        tv_yueduxuzhi.colorSpan(tv_yueduxuzhi.text.toString(),19..23 ,ContextCompat.getColor(mContext, R.color.colorAccent))
+        tv_yueduxuzhi.clickSpan(tv_yueduxuzhi.text.toString(),19..23,
+            ContextCompat.getColor(mContext,R.color.colorAccent),true,object : View.OnClickListener{
+                override fun onClick(v: View?) {
+                    //       WebViewActivity.instance(appData.findPassWebsite,mContext)
+                }
+            })
 
     }
 

@@ -31,6 +31,7 @@ class AdView : FrameLayout {
     lateinit var rclayout: FrameLayout
     var imageView: ImageView? = null
     var videoView: SimpleVideoView? = null
+    lateinit var close: View
 
     constructor(@NonNull context: Context) : super(context) {}
 
@@ -74,16 +75,18 @@ class AdView : FrameLayout {
 
             videoView = SimpleVideoView(context)
             rclayout.addView(videoView, RelativeLayout.LayoutParams(-1, -1))
+
             var clicklayout = FrameLayout(context)
-            rclayout.addView(clicklayout,FrameLayout.LayoutParams(-1,-1))
+            rclayout.addView(clicklayout, FrameLayout.LayoutParams(-1, -1))
 
             GSYVideoOptionBuilder().apply {
                 setUrl(ad.videoUrl)
                     .setCacheWithPlay(true)
                     .build(videoView)
             }
+            videoView?.isEnabled=false
             videoView?.startPlayLogic()
-            this.click {
+            clicklayout?.click {
                 context.startActivity(Intent(context, PlayVideoActivity::class.java).apply {
                     putExtra("data", ad)
                 })
@@ -94,15 +97,12 @@ class AdView : FrameLayout {
 
     fun initView() {
         view = View.inflate(context, com.dove.readandroid.R.layout.view_ad, this)
-        view.findViewById<ImageView>(com.dove.readandroid.R.id.iv_close)
-            .click {
-                view.visibility = View.GONE
-            }
+        close = view.findViewById<ImageView>(com.dove.readandroid.R.id.iv_close)
+        close.click {
+            this.visibility = View.GONE
+        }
 
         // addView(view)
     }
 
-    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        return true
-    }
 }
