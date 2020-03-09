@@ -1,5 +1,7 @@
 package com.dove.readandroid.event;
 
+import com.dove.readandroid.ui.model.Book;
+
 /**
  * ===============================
  * 描    述：
@@ -8,4 +10,9 @@ package com.dove.readandroid.event;
  * ===============================
  */
 public class ShujiaEvent {
+   public Book mb;
+
+    public ShujiaEvent(Book mb) {
+        this.mb = mb;
+    }
 }

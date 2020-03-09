@@ -116,7 +116,7 @@ class JingxuanFragment : BaseMvcFragment() {
                     adapter.setNewData(it1)
                 }
                 it?.newin?.let { it1 ->
-                    adapterx.addData(it1)
+                    adapterx.setNewData(it1)
                 }
             }, err = {
                 swipe.isRefreshing = false

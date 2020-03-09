@@ -14,4 +14,6 @@ public class AppData implements Serializable {
     public String findPassWebsite;
     public String refreshWebsite;
     public String refreshContent;
+    public String privacyPolicies;
+    public String userAgreement;
 }

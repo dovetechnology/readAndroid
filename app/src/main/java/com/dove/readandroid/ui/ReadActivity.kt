@@ -70,11 +70,12 @@ class ReadActivity : BaseMvcActivity() {
         mSectionItem = mbook.novelList.get(mbook.currentSetion)
         //
         // StatusBarUtil.setTransparentForWindow(this)
-        ReaderSettingManager.init(this)
 
-        if (Build.VERSION.SDK_INT >= 19) {
-            appbar.setPadding(0, ScreenUtils.getStatusHeight(this), 0, 0)
-        }
+        initData()
+    }
+
+    fun initData() {
+        ReaderSettingManager.init(this)
         //初始化屏幕常亮类
         val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
         mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "keep bright")
@@ -161,15 +162,8 @@ class ReadActivity : BaseMvcActivity() {
 
             http().mApiService.addShujia(mbook.articleId, mbook.chapterId)
                 .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
-//                .map {
-//                    mbook.isAddShlef = 1
-//                  //  App.instance.db.getBookDao().addShelf(mbook.name)
-//                    it
-//                }
                 .get4(isShowDialog = true, next = {
-                    mbook.isAddShlef = 1
-                    App.instance.db.getBookDao().update(mbook)
-                    EventBus.getDefault().post(ShujiaEvent())
+                    EventBus.getDefault().post(ShujiaEvent(mbook))
                     toast("已加入书架")
                 })
         }
@@ -226,12 +220,13 @@ class ReadActivity : BaseMvcActivity() {
                 putSerializable("data", mbook)
             })
         }
+        read_sb_chapter_progress.max = mbook.novelList.size - 1
         read_sb_chapter_progress.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                var currentPosition = mbook.novelList.size * progress / 100
-                mbook.currentSetion = currentPosition
-                tv_zhangjie.setText("第" + currentPosition + "章")
+                mbook.currentSetion = progress
+                mSectionItem = mbook.novelList[progress]
+                tv_zhangjie.setText(mSectionItem.title)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -310,7 +305,6 @@ class ReadActivity : BaseMvcActivity() {
             read()
             //  }
         }
-
     }
 
     //手动翻页的时候 播放语音

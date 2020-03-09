@@ -26,7 +26,7 @@
             android:layout_centerVertical="true"
             android:drawableLeft="@drawable/icno_shangyizhang" />
 
-        <SeekBar
+        <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/read_sb_chapter_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,7 +35,6 @@
             android:layout_marginRight="8.0dp"
             android:layout_toLeftOf="@+id/read_tv_next_chapter"
             android:layout_toRightOf="@id/read_tv_pre_chapter"
-            android:max="100"
             android:maxHeight="1dp"
             android:minHeight="1dp"
             android:progressDrawable="@drawable/bg_read_seek_bar"

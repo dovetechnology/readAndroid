@@ -39,7 +39,7 @@ public class BookSectionItem implements Serializable {
      */
 
     public String author;
-    public String name;
+    public String name; //自己赋值 用于书本的章节查找
     public String title;
     public String chapterUrl;
     public String coverImage;

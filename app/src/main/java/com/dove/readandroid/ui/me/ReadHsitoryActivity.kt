@@ -9,6 +9,7 @@ import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.App
 import com.dove.readandroid.ui.ReadActivity
+import com.dove.readandroid.ui.StartReadBook
 import com.safframework.ext.click
 import kotlinx.android.synthetic.main.activity_read_hsitory.*
 import kotlinx.android.synthetic.main.title_bar.*
@@ -28,13 +29,12 @@ class ReadHsitoryActivity : BaseMvcActivity() {
         recyclerview.adapter = mAdapter
         mAdapter.setOnItemClickListener { adapter, view, position ->
 
+            StartReadBook(
+                mContext,
+                mBooks?.get(position)?.name ?: "",
+                mBooks?.get(position)?.articleId ?: ""
+            ).start()
 
-            start(ReadActivity::class.java, Bundle().apply {
-                putSerializable(
-                    "data",
-                    App.instance.db.getBookDao().find(mBooks?.get(position)?.name)
-                )
-            })
         }
         titleBar.setRightTitle("清空", this).click {
             App.instance.db.getBookDao().deleteAll()

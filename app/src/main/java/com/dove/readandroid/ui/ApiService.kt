@@ -65,7 +65,7 @@ interface ApiService {
     fun ad(@Query("location") string: String): Observable<ResponseBean<AdDataWrapper>>
 
     @GET("read/novel/user/collect/list")
-    fun shujiaList(): Observable<ResponseBean<List<Book>>>
+    fun shujiaList(): Observable<ResponseBean<List<BookShelf>>>
 
 
     @FormUrlEncoded

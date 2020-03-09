@@ -43,11 +43,8 @@ class BookDetailActivity : BaseMvcActivity() {
             http().mApiService.addShujia(book.articleId, book.chapterId)
                 .get3(isShowDialog = true) {
                     toast("已加入书架")
-                    book.isAddShlef = 1
-                    App.instance.db.getBookDao().addShelf(book.name)
-
                     //更新主页书架的信息
-                    EventBus.getDefault().post(ShujiaEvent())
+                    EventBus.getDefault().post(ShujiaEvent(book))
 
                 }
         }
@@ -90,11 +87,11 @@ class BookDetailActivity : BaseMvcActivity() {
                 }
                 .get4(next = {
                     progressDialog?.dismiss()
-                    setValue(it?.data)
-                    App.instance.db.getBookDao().add(book)
-                    App.instance.db.getChapDao().addAll(book.novelList) //sb room数据库
+                    App.instance.db.getBookDao().add(it?.data)
+                    App.instance.db.getChapDao().addAll(it?.data?.novelList) //sb room数据库
                     //很重要     // 必须用 数据库查出来的 数据  不然那阅读数据 章节没法保存（因为主键id是自增）
-                    it?.data?.novelList=   App.instance.db.getChapDao().findChap(it?.data?.name)
+                    it?.data?.novelList = App.instance.db.getChapDao().findChap(it?.data?.name)
+                    setValue(it?.data)
 
                     if (it?.data?.novelList == null || it.data.novelList.size == 0) {
                         toast("没找到该书本章节")

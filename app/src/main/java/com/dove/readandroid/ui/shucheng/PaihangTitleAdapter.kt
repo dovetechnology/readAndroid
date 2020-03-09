@@ -26,10 +26,12 @@ class PaihangTitleAdapter(layout: Int, data: MutableList<Fenlei>) : BaseRecycler
 
         if (mSinglePosition==helper.layoutPosition)
         {
-            helper.setTextColor(R.id.tvName,ContextCompat.getColor(context,R.color.colorAccent))
+         //   helper.setTextColor(R.id.tvName,ContextCompat.getColor(context,R.color.colorAccent))
+            helper.setVisible(R.id.view_tag,true)
         }
         else{
-            helper.setTextColor(R.id.tvName,Color.parseColor("#3B3B3B"))
+          //  helper.setTextColor(R.id.tvName,Color.parseColor("#3B3B3B"))
+            helper.setVisible(R.id.view_tag,false)
 
         }
     }

@@ -135,13 +135,7 @@ class SpalashFragment(var next: () -> Unit) : BaseMvcFragment() {
         mdDisposable = Flowable.intervalRange(1, 5, 0, 1, TimeUnit.SECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnComplete {
-                Handler().postDelayed(object : Runnable {
-                    override fun run() {
-                        next()
-                    }
-
-                }, 500)
-
+                next()
             }
             .doOnCancel {
                 Handler().postDelayed(object : Runnable {

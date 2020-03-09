@@ -4,35 +4,59 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
-    <com.appbaselib.view.RatioFramlayout
-        android:id="@+id/ratiolayout"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/paihang"
-        app:ratio="0.7">
+        android:layout_marginTop="8dp">
+
+        <ImageView
+            android:id="@+id/iv_tag"
+            android:layout_width="14dp"
+            android:layout_height="22dp"
+            android:background="@drawable/book_paihao" />
 
         <TextView
-
-            android:layout_margin="8dp"
-            android:id="@+id/tvName"
+            android:id="@+id/tv_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="凌天战尊"
+            android:text="12"
             android:textColor="#ffffffff"
-            android:textSize="11sp" />
-    </com.appbaselib.view.RatioFramlayout>
+            android:textSize="10sp" />
+    </FrameLayout>
 
-    <TextView
-        android:layout_margin="12dp"
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="凌天战尊"
-        android:textColor="#ff2d2d2d"
-        android:textSize="13sp"
-        android:textStyle="bold" />
+        android:orientation="vertical">
+
+
+
+            <com.appbaselib.view.RatioImageView
+                android:id="@+id/iv_shu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/paihang"
+                android:scaleType="centerCrop"
+                android:transitionName="book"
+                app:ratio="0.65" />
+
+
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="凌天战尊"
+            android:textColor="#ff2d2d2d"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 </LinearLayout>

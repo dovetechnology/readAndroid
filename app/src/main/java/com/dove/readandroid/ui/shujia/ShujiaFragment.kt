@@ -13,6 +13,7 @@ import com.safframework.ext.click
 import kotlinx.android.synthetic.main.fragment_shujia.*
 import com.appbaselib.common.load
 import com.appbaselib.network.RxHttpUtil
+import com.appbaselib.utils.DateUtils
 import com.appbaselib.utils.DialogUtils
 import com.appbaselib.utils.LogUtils
 import com.dove.readandroid.R
@@ -22,13 +23,18 @@ import com.dove.readandroid.network.get4
 import com.dove.readandroid.ui.*
 import com.dove.readandroid.ui.common.Constants
 import com.dove.readandroid.ui.common.UserShell
+import com.dove.readandroid.ui.model.BookShelf
+import com.dove.readandroid.ui.shucheng.BookShelfAdapter
+import com.iflytek.cloud.msc.util.DataUtil
 import com.safframework.ext.bluetoothAdapter
 import kotlinx.android.synthetic.main.view_ad.*
 import okhttp3.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.io.IOException
+import java.util.*
 import kotlin.concurrent.thread
+import java.text.SimpleDateFormat
 
 
 /**
@@ -38,61 +44,13 @@ import kotlin.concurrent.thread
  * 创建日期：2019/12/16 15:43
  * ===============================
  */
-class ShujiaFragment : BaseRefreshFragment<Book>() {
+class ShujiaFragment : BaseRefreshFragment<BookShelf>() {
     override fun initAdapter() {
-        mAdapter = HomeBookAdapter(com.dove.readandroid.R.layout.item_shu, mList)
+        mAdapter = BookShelfAdapter(com.dove.readandroid.R.layout.item_shu, mList)
         recyclerview.layoutManager = GridLayoutManager(mContext, 3)
         mAdapter.setOnItemClickListener { adapter, view, position ->
-            //            http().mApiService.open(book.articleId)
-//                .get3(isShowDialog = true) {
-//                    var list = App.instance.db.getChapDao().findChap(book.name)
-//                    if (list != null && list.size != 0) {
-//                        it?.data?.novelList = list  //本地可能缓存过一些章节
-//                    }
-//
-//                    start(ReadActivity::class.java, Bundle().apply {
-//                        putSerializable("data", it?.data)
-//                    })
-//                }
-            //改为优先本地获取
-            var book = mList.get(position)
-            if (App.instance.db.getBookDao().find(book.name) != null) {
-                //封面图非空 所以数据库存在书
-                book = App.instance.db.getBookDao().find(book.name)
-                book.novelList = App.instance.db.getChapDao().findChap(book.name)
 
-                start(ReadActivity::class.java, Bundle().apply {
-                    putSerializable("data", book)
-                })
-            } else {
-                //获取 book
-                http().mApiService.open(book.articleId)
-                    .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
-                    .map {
-                        it.data.data.novelList?.forEach {
-                            it.name = book.name //保存数据库 用书名来关联章节
-                        }
-
-                        it
-                    }
-                    .get4(isShowDialog = true) {
-//                        var list = App.instance.db.getChapDao().findChap(book.name)
-//                        if (list != null && list.size != 0) {
-//                            it?.data?.novelList = list  //本地可能缓存过一些章节
-//                        }
-                        App.instance.db.getBookDao().add(it?.data)
-                        App.instance.db.getChapDao().addAll(it?.data?.novelList)
-                        // 必须用 数据库查出来的 数据  不然那阅读数据没法保存
-                        it?.data?.novelList=   App.instance.db.getChapDao().findChap(it?.data?.name)
-
-                        mList.set(position,it?.data!!)
-                        mAdapter.notifyDataSetChanged() //刷新章节
-
-                        start(ReadActivity::class.java, Bundle().apply {
-                            putSerializable("data", it?.data)
-                        })
-                    }
-            }
+            StartReadBook(mContext, mList.get(position).name, mList.get(position).articleId).start()
 
         }
         mAdapter.setOnItemLongClickListener { adapter, view, position ->
@@ -100,6 +58,7 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
 
                 http().mApiService.removeShujia(mList.get(position).caseId)
                     .get3(isShowDialog = true) {
+                        App.instance.db.getBookDao().remove(mList.get(position).name)
                         mAdapter.remove(position)
                     }
 
@@ -130,17 +89,12 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
         if (!UserShell.getInstance().isLogin) {
             return
         }
-//        //优先展示本地的书架书本信息
-//        var datas = App.instance.db.getBookDao().shujia()
-//        if (datas != null && datas.size != 0) {
-//            mAdapter.addData(App.instance.db.getBookDao().shujia())
-//        }
         //获取网络书架信息
         swipe.isRefreshing = true
         mAdapter.loadMoreModule?.isEnableLoadMore = false
         mAdapter.loadMoreModule?.isAutoLoadMore = false
         mAdapter.loadMoreModule?.isEnableLoadMoreIfNotFullPage = false
-        requestData()
+        getData()
 
     }
 
@@ -148,8 +102,20 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
         return swipe
     }
 
-    override fun requestData() {
-
+    fun getData() {
+        //优先展示本地的书架书本信息
+        var datas = App.instance.db.getBookDao().getShujia()
+//            ?.apply {
+//            Collections.reverse(this)
+//        }
+        if (datas != null && datas.size != 0) {
+            mList.clear()
+            mAdapter.addData(datas)
+            swipe.isRefreshing = false
+        } else {
+            //从网络获取
+            requestData()
+        }
         //广告
         http().mApiService.ad("2")
             .get3 {
@@ -159,27 +125,21 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
                     }
                 }
             }
+    }
+
+    override fun requestData() {
 
         http().mApiService.shujiaList()
-            .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
-            .map {
-                var datas = arrayListOf<Book>()
-                datas.addAll(it.data) //服务器的数据 书本信息不全  需要和本地数据融合
+            .get3(next = {
 
-                it.data?.forEachIndexed { index, b ->
-                    //书架返回的book里面有 书架id
-                    var title = b.name
-                    var book = App.instance.db.getBookDao().find(title) //因为本地存的书本信息更多一点
-                    book?.let {
-                        book.caseId = b.caseId
-                        datas.set(index, book)
+                it?.forEach {
+                    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                    var time=sdf.parse(it.joindate)
+                    it.joinTime=time.time
+                    if (App.instance.db.getBookDao().findShelf(it.name) == null) {
+                        App.instance.db.getBookDao().addShujia(it)
                     }
                 }
-                it.data = datas
-                it
-            }
-            .get4(next = {
-                // App.instance.db.getBookDao().addAll(it)
                 mList.clear()
                 loadComplete(it)
             }, err = {
@@ -188,11 +148,12 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
                 swipe.isRefreshing = false
             })
 
+
     }
 
 
     override fun getContentViewLayoutID(): Int {
-        return R.layout.fragment_shujia
+        return com.dove.readandroid.R.layout.fragment_shujia
     }
 
     override fun registerEventBus(): Boolean {
@@ -200,9 +161,17 @@ class ShujiaFragment : BaseRefreshFragment<Book>() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onRefresh(muservent: ShujiaEvent?) {
+    fun onRefresh(muservent: ShujiaEvent) {
         //信息更新了
         requestData()
+//        var newBookShelf=BookShelf().apply {
+//            this.caseId=muservent.mb.caseId
+//            this.name=muservent.mb.name
+//            this.articleId=muservent.mb.articleId
+//            this.img=muservent.mb.coverImage
+//        }
+//        mAdapter.addData(0,newBookShelf)
+        //  App.instance.db.getBookDao().addShelf()
     }
 
 }

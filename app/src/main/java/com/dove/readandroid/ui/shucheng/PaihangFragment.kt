@@ -2,13 +2,16 @@ package com.dove.rea
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appbaselib.base.BaseMvcFragment
 import com.appbaselib.base.Navigator
 import com.appbaselib.ext.toast
+import com.appbaselib.network.RxHttpUtil
 import com.dove.readandroid.R
 import com.dove.readandroid.network.get3
+import com.dove.readandroid.network.get4
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.BookDetailActivity
 import com.dove.readandroid.ui.model.Book
@@ -72,9 +75,17 @@ class PaihangFragment : BaseMvcFragment() {
     private fun getData() {
 
         http().mApiService.tag()
-            .get3(next = {
+            .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
+            .map {
+                it.data.forEach {
+                    var s = it.name.substring(0..1)
+                    it.name = it.name.toString().replace(s, s + "\n")
+                }
+                it
+            }
+            .get4(next = {
                 swipe.isRefreshing = false
-                swipe.isEnabled=false
+                swipe.isEnabled = false
                 it?.let { it1 -> titles.addAll(it1) }
                 titleAdapter.notifyDataSetChanged()
                 //默认第一个排行
@@ -89,7 +100,7 @@ class PaihangFragment : BaseMvcFragment() {
             }, err = {
                 toast(it)
                 swipe.isRefreshing = false
-                swipe.isEnabled=false
+                swipe.isEnabled = false
 
             })
 

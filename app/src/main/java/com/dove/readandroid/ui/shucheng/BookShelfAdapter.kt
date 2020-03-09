@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.dove.readandroid.R
 import com.dove.readandroid.ui.model.Book
+import com.dove.readandroid.ui.model.BookShelf
 
 /**
  * ===============================
@@ -19,15 +20,15 @@ import com.dove.readandroid.ui.model.Book
  * 创建日期：2019/5/7 10:03
  * ===============================
  */
-class HomeBookAdapter(layout: Int, data: MutableList<Book>?) :
-    BaseQuickAdapter<Book, BaseViewHolder>(layout, data) {
-    override fun convert(helper: BaseViewHolder, item: Book?) {
+class BookShelfAdapter(layout: Int, data: MutableList<BookShelf>?) :
+    BaseQuickAdapter<BookShelf, BaseViewHolder>(layout, data) {
+    override fun convert(helper: BaseViewHolder, item: BookShelf?) {
 
         item?.let {
             helper.setText(R.id.tv_name, item.name)
 
-            if (!item.coverImage.isNullOrEmpty())
-                ImageLoader.load(context, item.coverImage, helper.getView(R.id.iv_shu),4f)
+            if (!item.img.isNullOrEmpty())
+                ImageLoader.load(context, item.img, helper.getView(R.id.iv_shu),4f)
 
         }
     }

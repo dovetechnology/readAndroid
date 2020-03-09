@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginTop="16dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
@@ -20,8 +21,16 @@
                 android:id="@+id/rv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
+            <View
+                android:visibility="gone"
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="#E8E8E8"
+                />
 
             <FrameLayout
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

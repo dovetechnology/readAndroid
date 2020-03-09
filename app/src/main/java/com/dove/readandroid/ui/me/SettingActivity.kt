@@ -8,8 +8,10 @@ import android.view.View
 import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.utils.PreferenceUtils
 import com.dove.readandroid.R
+import com.dove.readandroid.ui.WebViewActivity
 import com.dove.readandroid.ui.common.Constants
 import com.dove.readandroid.ui.common.UserShell
+import com.dove.readandroid.ui.model.AppData
 import com.dove.readandroid.ui.shujia.LoginActivity
 import com.dove.readandroid.utils.AppConfig
 import com.dove.readandroid.utils.CleanDataUtils
@@ -18,7 +20,12 @@ import kotlinx.android.synthetic.main.activity_setting.*
 import kotlinx.android.synthetic.main.title_bar.*
 
 class SettingActivity : BaseMvcActivity() {
+    var appData: AppData? = null
+
     override fun initView(mSavedInstanceState: Bundle?) {
+
+        appData = PreferenceUtils.getObjectFromGson(mContext, Constants.APPDATA, AppData::class.java)
+
         titleBar.titleTextView.text = "设置"
         tv_huancun.setText(CleanDataUtils.getTotalCacheSize(mContext))
 
@@ -68,6 +75,16 @@ class SettingActivity : BaseMvcActivity() {
 
                 }).show()
 
+
+        }
+        ll_xieyi.click {
+            WebViewActivity.instance(appData?.userAgreement,mContext)
+
+        }
+
+        ll_yinsi.click {
+
+            WebViewActivity.instance(appData?.privacyPolicies,mContext)
 
         }
     }
