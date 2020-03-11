@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_wangji_pass.*
 import kotlinx.android.synthetic.main.title_bar.*
 
 class WangjiPassActivity : BaseMvcActivity() {
-    lateinit var appData: AppData
+     var appData: AppData?=null
 
     override fun initView(mSavedInstanceState: Bundle?) {
 
@@ -36,14 +36,23 @@ class WangjiPassActivity : BaseMvcActivity() {
 //                }
 //        }
         appData?.let {
-            tvmima.text="请登录网站${it.findPassWebsite}找回密码"
-            var p=tvmima.text.toString().length-4
-            tvmima.colorSpan(tvmima.text.toString(),5..p, ContextCompat.getColor(mContext, R.color.colorAccent))
-            tvmima.clickSpan(tvmima.text.toString(),5..p,ContextCompat.getColor(mContext,R.color.colorAccent),true,object :View.OnClickListener{
-                override fun onClick(v: View?) {
-                    WebViewActivity.instance(appData.findPassWebsite,mContext)
-                }
-            })
+            tvmima.text = "请登录网站${it.findPassWebsite}找回密码"
+            var p = tvmima.text.toString().length - 4
+            tvmima.colorSpan(
+                tvmima.text.toString(),
+                5..p,
+                ContextCompat.getColor(mContext, R.color.colorAccent)
+            )
+            tvmima.clickSpan(
+                tvmima.text.toString(),
+                5..p,
+                ContextCompat.getColor(mContext, R.color.colorAccent),
+                true,
+                object : View.OnClickListener {
+                    override fun onClick(v: View?) {
+                        WebViewActivity.instance(it.findPassWebsite, mContext)
+                    }
+                })
         }
     }
 

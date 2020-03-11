@@ -55,6 +55,11 @@ interface ApiService {
     @GET("read/novel/home")
     fun home(): Observable<ResponseBean<HomeData>>
 
+    @GET("read/novel/lastupdate")
+    fun lastupdate(@Query("edition") edition: String,@Query("page") page: Int, //页码号
+                   @Query("size") size: Int): Observable<ResponseBean<PagingBean<Book>>>
+
+
     @GET("read/novel/search")
     fun search(
         @Query("key") string: String, @Query("page") page: Int, //页码号

@@ -21,7 +21,11 @@ import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.iflytek.cloud.SpeechConstant
 import com.iflytek.cloud.SpeechUtility
+import com.safframework.ext.dp2px
 import com.safframework.ext.getAppVersionCode
+import com.scwang.smart.refresh.footer.ClassicsFooter
+import com.scwang.smart.refresh.header.MaterialHeader
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.tencent.bugly.Bugly
 import com.umeng.commonsdk.UMConfigure
 import com.umeng.message.IUmengRegisterCallback
@@ -47,10 +51,10 @@ import org.json.JSONObject
 class App : BaseApplication() {
     lateinit var mActivityLifecycle: ActivityLifecycle
 
-  public  lateinit var db: AppDatabase
+    public lateinit var db: AppDatabase
 
     override fun onCreate() {
-        SpeechUtility.createUtility(this, SpeechConstant.APPID+"=5e54b50f" )
+        SpeechUtility.createUtility(this, SpeechConstant.APPID + "=5e54b50f")
         super.onCreate()
 //
 //        RxJavaPlugins.setErrorHandler {
@@ -123,7 +127,18 @@ class App : BaseApplication() {
         //初始化数据库
         db = Room.databaseBuilder(this, AppDatabase::class.java, "app_database.db")
             .allowMainThreadQueries().build()
+        //全局刷新
+        initRefresh()
+    }
 
+    private fun initRefresh() {
+        SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout ->
+            layout.setPrimaryColorsId(R.color.colorAccent);//全局设置主题颜色
+            MaterialHeader(context).setColorSchemeResources(R.color.colorAccent);
+        }
+        SmartRefreshLayout.setDefaultRefreshFooterCreator { context, layout ->
+            ClassicsFooter(this).setDrawableSize(20f)
+        }
     }
 
     private fun initArouter() {

@@ -3,10 +3,12 @@ package com.dove.rea
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.appbaselib.base.BaseMvcFragment
 import com.appbaselib.common.load
 import com.appbaselib.ext.toast
 import com.appbaselib.view.RatioImageView
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.dove.readandroid.BannerImageloadr
 import com.dove.readandroid.R
@@ -15,9 +17,14 @@ import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.BookDetailActivity
 import com.dove.readandroid.ui.OpenTypeHandler
 import com.dove.readandroid.ui.model.AdData
+import com.dove.readandroid.ui.model.Book
 import com.dove.readandroid.ui.shucheng.HomeBookAdapter
+import com.dove.readandroid.ui.shucheng.RenqiBookAdapter
+import com.dove.readandroid.ui.shucheng.ZuijinBookAdapter
 import com.safframework.ext.click
+import com.safframework.ext.postDelayed
 import kotlinx.android.synthetic.main.fragment_jingxuan.*
+import kotlinx.android.synthetic.main.fragment_shujia.view.*
 
 /**
  * ===============================
@@ -26,10 +33,12 @@ import kotlinx.android.synthetic.main.fragment_jingxuan.*
  * 创建日期：2019/12/16 15:43
  * ===============================
  */
-class JingxuanFragment : BaseMvcFragment() {
+class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
 
     lateinit var adapter: HomeBookAdapter
-    lateinit var adapterx: HomeBookAdapter
+    lateinit var adapterx: RenqiBookAdapter
+    lateinit var adapterZuijin: ZuijinBookAdapter
+
     override fun getContentViewLayoutID(): Int {
         return R.layout.fragment_jingxuan
     }
@@ -45,37 +54,89 @@ class JingxuanFragment : BaseMvcFragment() {
         }
         adapter.setOnItemClickListener { a, view, position ->
 
-            var viewHolder = adapter.weakRecyclerView.get()?.findViewHolderForLayoutPosition(position) as BaseViewHolder
+            var viewHolder =
+                adapter.weakRecyclerView.get()?.findViewHolderForLayoutPosition(position) as BaseViewHolder
             var image = viewHolder.getView<RatioImageView>(R.id.iv_shu)
 
             start(BookDetailActivity::class.java, Bundle().apply {
                 putSerializable("data", adapter.data.get(position))
             }, image, "book")
         }
-        rv_xinshu.layoutManager = GridLayoutManager(mContext, 3)
-        rv_xinshu.adapter = HomeBookAdapter(R.layout.item_shu, arrayListOf()).apply {
+        rv_xinshu.layoutManager = GridLayoutManager(mContext, 2)
+        rv_xinshu.adapter = RenqiBookAdapter(R.layout.item_shu_renqi, arrayListOf()).apply {
             adapterx = this
         }
         adapterx.setOnItemClickListener { a, view, position ->
 
-            var viewHolder = adapterx.weakRecyclerView.get()?.findViewHolderForLayoutPosition(position) as BaseViewHolder
+            var viewHolder =
+                adapterx.weakRecyclerView.get()?.findViewHolderForLayoutPosition(position) as BaseViewHolder
             var image = viewHolder.getView<RatioImageView>(R.id.iv_shu)
 
             start(BookDetailActivity::class.java, Bundle().apply {
                 putSerializable("data", adapterx.data.get(position))
             }, image, "book")
         }
+        rv_zuijin.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+        rv_zuijin.adapter = ZuijinBookAdapter(R.layout.item_shu_zuijin, arrayListOf()).apply {
+            adapterZuijin = this
+        }
+        adapterZuijin.setOnItemClickListener { adapter, view, position ->
+
+            var viewHolder =
+                adapterZuijin.weakRecyclerView.get()?.findViewHolderForLayoutPosition(position) as BaseViewHolder
+            var image = viewHolder.getView<RatioImageView>(R.id.iv_shu)
+
+            start(BookDetailActivity::class.java, Bundle().apply {
+                putSerializable("data", adapterZuijin.data.get(position))
+            }, image, "book")
+        }
+
         banner.setImageLoader(BannerImageloadr())
+        tv_more.click {
+            //刷新数据
+            assembleData()
+        }
+        tv_more_renqi.click {
+            next()
+        }
 
-        swipe.isRefreshing = true
+        //   swipe.autoRefresh(200)
         getData()
-
         swipe.setOnRefreshListener {
             getData()
         }
+        swipe.setOnLoadMoreListener {
+            getLastData()
+        }
+//        swipe.setOnAutoLoadListener {
+//            getLastData()
+//        }
+
     }
 
+    var pageNo = 1  //当前页
+    var pageSize = 10 //每页条数
+
     lateinit var adDatas: List<AdData>
+    var hot: List<Book>? = null
+
+    fun getLastData() {
+        http().mApiService.lastupdate("2", pageNo, pageSize)
+            .get3 {
+                pageNo++
+                it?.list?.let { it1 ->
+                    swipe.finishRefresh()
+                    if (it1.size == 0)
+                        swipe.finishLoadMoreWithNoMoreData()
+                    else
+                        swipe.finishLoadMore()
+                    postDelayed(300) {
+                        adapterZuijin.addData(it1)
+                    }
+                }
+            }
+    }
+
     fun getData() {
 
         //广告1
@@ -110,18 +171,43 @@ class JingxuanFragment : BaseMvcFragment() {
 
         http().mApiService.home()
             .get3(next = {
-                swipe.isRefreshing = false
 
                 it?.hot?.let { it1 ->
-                    adapter.setNewData(it1)
+                    hot = it1
+                    assembleData()
                 }
-                it?.newin?.let { it1 ->
+                it?.besthot?.let { it1 ->
                     adapterx.setNewData(it1)
                 }
+
+                //
+                getLastData()
+
             }, err = {
-                swipe.isRefreshing = false
+                swipe.finishRefresh()
                 toast(it)
             })
+
+    }
+
+    var tag = 0;
+    private fun assembleData() {
+
+        hot?.let {
+            var data = mutableListOf<Book>()
+            var x = 0
+            while (x < 6) {
+                if (tag < it.size) {
+                    data.add(it.get(tag))
+                    tag++
+                } else {
+                    tag = 0
+                }
+                x++
+            }
+            adapter.setNewData(data)
+        }
+
 
     }
 

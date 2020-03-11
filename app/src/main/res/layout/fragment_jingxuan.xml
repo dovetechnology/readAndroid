@@ -8,8 +8,10 @@
     android:orientation="vertical">
 
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/swipe"
+        app:srlEnableScrollContentWhenLoaded="true"
+        app:srlEnableFooterFollowWhenLoadFinished="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -83,20 +85,22 @@
 
                             <TextView
                                 android:id="@+id/tv_more"
-                                android:visibility="gone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="right|bottom"
-                                android:text="更多"
+                                android:drawableRight="@drawable/icon_gegnxin"
+                                android:drawablePadding="4dp"
+                                android:padding="8dp"
+                                android:text="换一换"
                                 android:textColor="#ffb2b2b2"
                                 android:textSize="12sp" />
                         </FrameLayout>
 
                         <androidx.recyclerview.widget.RecyclerView
-                            android:layout_marginTop="8dp"
                             android:id="@+id/rv_jingxuan"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp">
 
                         </androidx.recyclerview.widget.RecyclerView>
 
@@ -142,14 +146,13 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="热门推荐 ·新书"
+                                android:text="人气榜"
                                 android:textColor="#ff1e2023"
                                 android:textSize="21sp"
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:visibility="gone"
-                                android:id="@+id/tv_more_xin"
+                                android:id="@+id/tv_more_renqi"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="right|bottom"
@@ -159,10 +162,63 @@
                         </FrameLayout>
 
                         <androidx.recyclerview.widget.RecyclerView
-                            android:layout_marginTop="8dp"
                             android:id="@+id/rv_xinshu"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp">
+
+                        </androidx.recyclerview.widget.RecyclerView>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@color/white"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:orientation="vertical">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="最近更新"
+                                android:textColor="#ff1e2023"
+                                android:textSize="21sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_more_zuijin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right|bottom"
+                                android:text="更多"
+                                android:textColor="#ffb2b2b2"
+                                android:textSize="12sp"
+                                android:visibility="gone" />
+                        </FrameLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_zuijin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp">
 
                         </androidx.recyclerview.widget.RecyclerView>
 
@@ -173,6 +229,7 @@
 
 
         </androidx.core.widget.NestedScrollView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+    >
 
 </LinearLayout>

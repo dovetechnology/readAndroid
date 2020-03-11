@@ -24,6 +24,12 @@ public class Constants {
     public static final String USER = "user";
     public static final String TOKEN = "token";
     public static final String IMAGE="";
+    public static final int TYPE_AD = 1;
+    public static final int TYPE_JINGXUAN = 2;
+    public static final int TYPE_RENQI = 3;
+    public static final int TYPE_ZUIJING = 4;
+
+
     public static String IS_BLACK ="is_black";
     public static final String HISTORY = "history";
     public final static String K_NIGHT_MODE = "night_mode";

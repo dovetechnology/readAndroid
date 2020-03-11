@@ -1,5 +1,8 @@
 package com.dove.readandroid.ui.model;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.dove.readandroid.ui.common.Constants;
+
 import java.io.Serializable;
 
 /**
@@ -9,7 +12,7 @@ import java.io.Serializable;
  * 创建日期：2019/12/27 16:05
  * ===============================
  */
-public class AdData implements Serializable {
+public class AdData implements Serializable , MultiItemEntity {
 
 
     /**
@@ -51,4 +54,9 @@ public class AdData implements Serializable {
     public String type;
     public String updateTime;
     public String videoUrl;
+
+    @Override
+    public int getItemType() {
+        return Constants.TYPE_AD;
+    }
 }
