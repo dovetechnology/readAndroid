@@ -5,11 +5,15 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.appbaselib.base.BaseMvcFragment
 import com.dove.readandroid.R
+import com.dove.readandroid.event.ButtonClick
 import com.dove.readandroid.ui.SearchActivity
 import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
 import com.safframework.ext.click
+import kotlinx.android.synthetic.main.fragment_jingxuan.*
 import kotlinx.android.synthetic.main.fragment_shucheng.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * ===============================
@@ -25,8 +29,22 @@ class ShuchengFragment : BaseMvcFragment() {
     lateinit var jingxuanFragment: JingxuanFragment;
     lateinit var paihangFragment: PaihangFragment
     lateinit var fenleiFragment: FenleiFragment
-    public var fragments = arrayListOf<Fragment>()
+     var fragments = arrayListOf<Fragment>()
 
+    override fun registerEventBus(): Boolean {
+        return true
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onClick(muservent: ButtonClick) {
+      when(ctlTab.currentTab)
+      {
+          0-> jingxuanFragment.toTop()
+          1-> fenleiFragment.toTop()
+          2-> paihangFragment.toTop()
+
+      }
+    }
 
     override fun getContentViewLayoutID(): Int {
         return R.layout.fragment_shucheng
@@ -48,7 +66,6 @@ class ShuchengFragment : BaseMvcFragment() {
         tabData.add(TabData("分类"))
         tabData.add(TabData("排行"))
         ctlTab.setTabData(tabData)
-
         ctlTab!!.setOnTabSelectListener(object : OnTabSelectListener {
             override fun onTabSelect(position: Int) {
                 vpView!!.currentItem = position

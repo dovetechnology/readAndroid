@@ -2,27 +2,25 @@ package com.dove.readandroid.ui.shucheng
 
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appbaselib.view.RatioImageView
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.dove.imuguang.base.BaseRefreshFragment
 import com.dove.readandroid.R
-import com.dove.readandroid.event.ButtonClick
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.BookDetailActivity
 import com.dove.readandroid.ui.model.Book
 import com.safframework.ext.click
 import kotlinx.android.synthetic.main.fragment_fenlei_paihang_content.*
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
-class PaihangContentFragment : BaseRefreshFragment<Book>() {
+class FenleiContentFragment : BaseRefreshFragment<Book>() {
+
     override fun getContentViewLayoutID(): Int {
         return R.layout.fragment_fenlei_paihang_content;
     }
+
     fun toTop() {
         mRecyclerview.smoothScrollToPosition(0)
 
@@ -33,7 +31,6 @@ class PaihangContentFragment : BaseRefreshFragment<Book>() {
         toggleShowLoading(true)
         requestData()
         setLoadMoreListener()
-
         iv_up.click {
             mRecyclerview.smoothScrollToPosition(0)
 
@@ -49,10 +46,11 @@ class PaihangContentFragment : BaseRefreshFragment<Book>() {
                 }
             }
         })
+
     }
 
     override fun initAdapter() {
-        mAdapter = PaihangContentAdapter(R.layout.item_paihang_content, mList)
+        mAdapter = FenleiContentAdapter(R.layout.item_fenlei_content, mList)
         mAdapter.setOnItemClickListener { adapter, view, position ->
             var viewHolder =
                 mAdapter.weakRecyclerView.get()?.findViewHolderForLayoutPosition(position) as BaseViewHolder
@@ -67,13 +65,9 @@ class PaihangContentFragment : BaseRefreshFragment<Book>() {
 
     }
 
-//    override fun getLayoutManager(): RecyclerView.LayoutManager {
-//        return  GridLayoutManager(mContext, 3)
-//    }
-
     override fun requestData() {
 
-        http().mApiService.top(arguments!!.getString("data"), "2", pageNo, pageSize)
+        http().mApiService.fenleiDetail(arguments!!.getString("data"), "2", pageNo, pageSize)
             .get3(next = {
                 loadComplete(it?.list)
 

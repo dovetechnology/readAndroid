@@ -25,24 +25,65 @@ import com.dove.readandroid.ui.model.Top
 class PaihangContentAdapter(layout: Int, data: MutableList<Book>) :
     BaseRecyclerViewAdapter<Book>(layout, data) {
     override fun convert(helper: BaseViewHolder, item: Book?) {
+
+
         item?.let {
-          //  helper.setText(R.id.tvName, item.name)
-            helper.setText(R.id.name, item.name)
-        }
-        helper.setText(R.id.tv_number, (helper.adapterPosition + 1).toString())
-        if (helper.adapterPosition > 2) {
-            helper.setImageDrawable(
-                R.id.iv_tag,
-                ContextCompat.getDrawable(context, R.drawable.book_paihao_blue)
-            )
-        } else {
-            helper.setImageDrawable(
-                R.id.iv_tag,
-                ContextCompat.getDrawable(context, R.drawable.book_paihao)
-            )
+            //  helper.setText(R.id.tvName, item.name)
+            helper.setText(R.id.tv_name, item.name)
+            helper.setText(R.id.tv_type, item.category)
+            helper.setText(R.id.tv_author, item.author)
+            helper.setText(R.id.tv_desc, item.description.trim())
+
+            ImageLoader.load(context, item?.coverImage ?: "", helper.getView(R.id.iv_shu), 4f)
 
         }
-        ImageLoader.load(context, item?.coverImage ?: "", helper.getView(R.id.iv_shu), 4f)
+        when (helper.adapterPosition) {
+            0 -> {
+                helper.setVisible(R.id.iv_tag, true)
+                helper.setImageDrawable(
+                    R.id.iv_tag,
+                    ContextCompat.getDrawable(context, R.drawable.icon_one)
+                )
+            }
+            1 -> {
+                helper.setVisible(R.id.iv_tag, true)
+                helper.setImageDrawable(
+                    R.id.iv_tag,
+                    ContextCompat.getDrawable(context, R.drawable.icon_two)
+                )
+            }
+            2 -> {
+                helper.setVisible(R.id.iv_tag, true)
+                helper.setImageDrawable(
+                    R.id.iv_tag,
+                    ContextCompat.getDrawable(context, R.drawable.icon_three)
+                )
+            }
+            else -> {
+                helper.setVisible(R.id.iv_tag, false)
+
+            }
+        }
+
+
+//        item?.let {
+//          //  helper.setText(R.id.tvName, item.name)
+//            helper.setText(R.id.name, item.name)
+//        }
+//        helper.setText(R.id.tv_number, (helper.adapterPosition + 1).toString())
+//        if (helper.adapterPosition > 2) {
+//            helper.setImageDrawable(
+//                R.id.iv_tag,
+//                ContextCompat.getDrawable(context, R.drawable.book_paihao_blue)
+//            )
+//        } else {
+//            helper.setImageDrawable(
+//                R.id.iv_tag,
+//                ContextCompat.getDrawable(context, R.drawable.book_paihao)
+//            )
+//
+//        }
+//        ImageLoader.load(context, item?.coverImage ?: "", helper.getView(R.id.iv_shu), 4f)
 
     }
 

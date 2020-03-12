@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.dove.readandroid.BannerImageloadr
 import com.dove.readandroid.R
+import com.dove.readandroid.event.ButtonClick
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.BookDetailActivity
@@ -25,6 +26,8 @@ import com.safframework.ext.click
 import com.safframework.ext.postDelayed
 import kotlinx.android.synthetic.main.fragment_jingxuan.*
 import kotlinx.android.synthetic.main.fragment_shujia.view.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * ===============================
@@ -38,6 +41,10 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
     lateinit var adapter: HomeBookAdapter
     lateinit var adapterx: RenqiBookAdapter
     lateinit var adapterZuijin: ZuijinBookAdapter
+
+    fun toTop() {
+        nestscroll.smoothScrollTo(0,0)
+    }
 
     override fun getContentViewLayoutID(): Int {
         return R.layout.fragment_jingxuan
@@ -108,6 +115,7 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
         swipe.setOnLoadMoreListener {
             getLastData()
         }
+        swipe.setEnableAutoLoadMore(false)
 //        swipe.setOnAutoLoadListener {
 //            getLastData()
 //        }
@@ -210,5 +218,7 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
 
 
     }
+
+
 
 }

@@ -14,6 +14,7 @@ import com.dove.rea.ShuchengFragment
 import com.dove.readandroid.BuildConfig
 import com.dove.readandroid.R
 import com.dove.readandroid.event.AppDataEvent
+import com.dove.readandroid.event.ButtonClick
 import com.dove.readandroid.network.get2
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
@@ -43,6 +44,7 @@ class MainActivity : BaseMvcActivity() {
         return R.layout.activity_main
     }
 
+    var id = 0;
     override fun initView(mSavedInstanceState: Bundle?) {
         navigator = Navigator(supportFragmentManager, R.id.content)
         mshujia = ShujiaFragment()
@@ -51,6 +53,10 @@ class MainActivity : BaseMvcActivity() {
         shuchengfragment = ShuchengFragment()
         navigator.showFragment(mshujia)
         navigation.setOnNavigationItemSelectedListener {
+            if (id==it.itemId)
+            {
+                EventBus.getDefault().post(ButtonClick())
+            }
             when (it.itemId) {
                 R.id.main_shujia -> navigator.showFragment(mshujia)
                 R.id.main_shucheng -> navigator.showFragment(shuchengfragment)
@@ -66,6 +72,7 @@ class MainActivity : BaseMvcActivity() {
                 }
 
             }
+            id = it.itemId
             return@setOnNavigationItemSelectedListener true
         }
         navigation.setTextSize(12f)
@@ -77,7 +84,7 @@ class MainActivity : BaseMvcActivity() {
         http().mApiService.start("2", CommonParamUtil.getUUID(this))
             .get3 {
 
-        }
+            }
         getUrl()
         getAppData()
         getAd()
@@ -87,12 +94,13 @@ class MainActivity : BaseMvcActivity() {
         http().mApiService.ad("1")
             .get3 {
 
-                if (it!=null&&it.list.get(0)!=null) {
+                if (it != null && it.list.get(0) != null) {
                     PreferenceUtils.saveObjectAsGson(this@MainActivity, Constants.AD, it?.list[0])
                 }
 
             }
     }
+
     private fun cacheAd(guanggao: AdData, cacheKey: String) {
         if (!TextUtils.isEmpty(guanggao.imgUrl)) {
             //预加载广告
@@ -116,9 +124,10 @@ class MainActivity : BaseMvcActivity() {
 
         }
     }
+
     private fun getAppData() {
-        http().mApiService.appData("2",getAppVersionCode()).get3 {
-            PreferenceUtils.saveObjectAsGson(mContext,Constants.APPDATA,it)
+        http().mApiService.appData("2", getAppVersionCode()).get3 {
+            PreferenceUtils.saveObjectAsGson(mContext, Constants.APPDATA, it)
             //更新 mefragment 的小红点
             EventBus.getDefault().post(AppDataEvent(it))
         }

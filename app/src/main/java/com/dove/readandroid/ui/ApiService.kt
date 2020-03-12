@@ -41,16 +41,18 @@ interface ApiService {
     fun tag(): Observable<ResponseBean<List<Fenlei>>>
 
     @GET("read/novel/classify/detail")
-    fun jingxuan(
+    fun fenleiDetail(
         @Query("id") id: String, @Query("edition") edition: String, @Query("page") page: Int, //页码号
         @Query("size") size: Int
     ): Observable<ResponseBean<PagingBean<Book>>>
 
-    @GET("read/novel/top")
+    @GET("read/novel/top/new")
     fun top(
         @Query("id") id: String, @Query("edition") edition: String, @Query("page") page: Int, //页码号
         @Query("size") size: Int
     ): Observable<ResponseBean<PagingBean<Book>>>
+    @GET("read/novel/top/classify")
+    fun paihangTag(): Observable<ResponseBean<List<Top>>>
 
     @GET("read/novel/home")
     fun home(): Observable<ResponseBean<HomeData>>

@@ -6,7 +6,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appbaselib.common.load
-import com.appbaselib.ext.toast
 import com.appbaselib.view.RatioImageView
 import com.dove.imuguang.base.BaseRefreshFragment
 import com.dove.readandroid.R
@@ -14,12 +13,7 @@ import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.BookDetailActivity
 import com.dove.readandroid.ui.model.Book
-import com.dove.readandroid.ui.model.DetailDataWrap
-import com.google.android.material.appbar.AppBarLayout
 import com.safframework.ext.click
-import kotlinx.android.synthetic.main.fragment_fenlei_detail.*
-import kotlinx.android.synthetic.main.view_fenlei_detail_title.*
-import org.w3c.dom.Text
 
 class FenleiDetailFragment : BaseRefreshFragment<Book>() {
 
@@ -64,7 +58,7 @@ class FenleiDetailFragment : BaseRefreshFragment<Book>() {
     override fun requestData() {
 
         arguments?.getString("data")?.let {
-            http().mApiService.jingxuan(it, "2", pageNo, pageSize)
+            http().mApiService.fenleiDetail(it, "2", pageNo, pageSize)
                 .get3(isShowDialog = false, next = {
 
                     if (isFirstReresh)

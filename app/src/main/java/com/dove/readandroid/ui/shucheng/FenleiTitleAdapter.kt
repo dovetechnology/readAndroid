@@ -20,8 +20,8 @@ import com.dove.readandroid.ui.model.Top
  * 创建日期：2019/5/7 10:03
  * ===============================
  */
-class PaihangTitleAdapter(layout: Int, data: MutableList<Top>) : BaseRecyclerViewAdapter<Top>(layout,data) {
-    override fun convert(helper: BaseViewHolder, item: Top?) {
+class FenleiTitleAdapter(layout: Int, data: MutableList<Fenlei>) : BaseRecyclerViewAdapter<Fenlei>(layout,data) {
+    override fun convert(helper: BaseViewHolder, item: Fenlei?) {
         
        helper.setText(R.id.tvName, item?.name)
 

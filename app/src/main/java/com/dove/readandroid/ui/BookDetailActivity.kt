@@ -10,6 +10,7 @@ import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.common.load
 import com.appbaselib.ext.toast
 import com.appbaselib.network.RxHttpUtil
+import com.appbaselib.utils.LogUtils
 import com.dove.readandroid.R
 import com.dove.readandroid.event.ShujiaEvent
 import com.dove.readandroid.network.get3
@@ -147,27 +148,6 @@ class BookDetailActivity : BaseMvcActivity() {
         var titles = arrayListOf<String>()
 
         mb?.novelList?.let {
-            //
-//                thread {
-//                    mb.novelList.forEachIndexed { index, book ->
-//                        //                    if (index > 10) {
-////                        return@forEachIndexed
-////                    }
-//                        titles.add(book.title)
-//                    }
-//                    rv_mulu.layoutManager =
-//                        LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-//                    rv_mulu.adapter = MuluAdapter(R.layout.item_mulu, titles).apply {
-//                        setOnItemClickListener { adapter, view, position ->
-//
-//                            start(ReadActivity::class.java, Bundle().apply {
-//                                putSerializable("data", book)
-//                                putInt("pos", position)
-//                            })
-//                        }
-//                    }
-//                }
-
 
             runBackground(it, {
                 mb.novelList?.forEachIndexed { index, book ->

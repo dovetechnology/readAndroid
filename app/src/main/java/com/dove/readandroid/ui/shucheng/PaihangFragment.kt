@@ -31,9 +31,11 @@ import kotlinx.android.synthetic.main.fragment_paihang.*
  */
 class PaihangFragment : BaseMvcFragment() {
 
-    var titles = mutableListOf<Fenlei>()
+    var titles = mutableListOf<Top>()
     var map = hashMapOf<Int, PaihangContentFragment>()
     lateinit var navigator: Navigator
+    var p = 0
+
     override fun getContentViewLayoutID(): Int {
         return R.layout.fragment_paihang
     }
@@ -48,7 +50,7 @@ class PaihangFragment : BaseMvcFragment() {
             titleAdapter = this
         }
         titleAdapter.setOnItemClickListener { adapter, view, position ->
-
+            p = position
             if (!map.containsKey(position)) {
                 map.put(position, PaihangContentFragment().apply {
                     arguments = Bundle().apply {
@@ -74,15 +76,15 @@ class PaihangFragment : BaseMvcFragment() {
 
     private fun getData() {
 
-        http().mApiService.tag()
+        http().mApiService.paihangTag()
             .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
-            .map {
-                it.data.forEach {
-                    var s = it.name.substring(0..1)
-                    it.name = it.name.toString().replace(s, s + "\n")
-                }
-                it
-            }
+//            .map {
+//                it.data.forEach {
+//                    var s = it.name.substring(0..1)
+//                    it.name = it.name.toString().replace(s, s + "\n")
+//                }
+//                it
+//            }
             .get4(next = {
                 swipe.isRefreshing = false
                 swipe.isEnabled = false
@@ -104,6 +106,11 @@ class PaihangFragment : BaseMvcFragment() {
 
             })
 
+
+    }
+
+    fun toTop() {
+        map.get(p)?.toTop()
 
     }
 
