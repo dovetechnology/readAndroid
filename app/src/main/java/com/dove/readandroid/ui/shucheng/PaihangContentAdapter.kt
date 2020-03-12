@@ -30,7 +30,7 @@ class PaihangContentAdapter(layout: Int, data: MutableList<Book>) :
         item?.let {
             //  helper.setText(R.id.tvName, item.name)
             helper.setText(R.id.tv_name, item.name)
-            helper.setText(R.id.tv_type, item.category)
+            helper.setText(R.id.tv_type, item.category.trim())
             helper.setText(R.id.tv_author, item.author)
             helper.setText(R.id.tv_desc, item.description.trim())
 

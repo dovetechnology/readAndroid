@@ -53,7 +53,7 @@ class FenleiFragment : BaseMvcFragment() {
 
         navigator = Navigator(childFragmentManager, R.id.content)
         rv_title.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-        rv_title.adapter = FenleiTitleAdapter(R.layout.item_paihang_title, titles).apply {
+        rv_title.adapter = FenleiTitleAdapter(R.layout.item_fenlei_title, titles).apply {
             titleAdapter = this
         }
         titleAdapter.setOnItemClickListener { adapter, view, position ->
@@ -70,7 +70,7 @@ class FenleiFragment : BaseMvcFragment() {
 
         }
 
-
+        toggleShowLoading(true)
         getData()
         swipe.setOnRefreshListener {
             getData()
@@ -87,16 +87,18 @@ class FenleiFragment : BaseMvcFragment() {
 
         http().mApiService.tag()
             .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
-            .map {
-                it.data.forEach {
-                    var s = it.name.substring(0..1)
-                    it.name = it.name.toString().replace(s, s + "\n")
-                }
-                it
-            }
+//            .map {
+//                it.data.forEach {
+//                    var s = it.name.substring(0..1)
+//                    it.name = it.name.toString().replace(s, s + "\n")
+//                }
+//                it
+//            }
             .get4(next = {
                 swipe.isRefreshing = false
                 swipe.isEnabled = false
+                toggleShowLoading(false)
+
                 it?.let { it1 -> titles.addAll(it1) }
                 titleAdapter.notifyDataSetChanged()
                 //默认第一个排行
@@ -112,6 +114,9 @@ class FenleiFragment : BaseMvcFragment() {
                 toast(it)
                 swipe.isRefreshing = false
                 swipe.isEnabled = false
+                toggleNetworkError(false){
+                    getData()
+                }
 
             })
 

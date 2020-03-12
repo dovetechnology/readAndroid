@@ -2,6 +2,9 @@ package com.dove.rea
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
+import androidx.core.widget.NestedScrollView
+import androidx.core.widget.TextViewCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appbaselib.base.BaseMvcFragment
@@ -23,6 +26,7 @@ import com.dove.readandroid.ui.shucheng.HomeBookAdapter
 import com.dove.readandroid.ui.shucheng.RenqiBookAdapter
 import com.dove.readandroid.ui.shucheng.ZuijinBookAdapter
 import com.safframework.ext.click
+import com.safframework.ext.inflateLayout
 import com.safframework.ext.postDelayed
 import kotlinx.android.synthetic.main.fragment_jingxuan.*
 import kotlinx.android.synthetic.main.fragment_shujia.view.*
@@ -41,9 +45,10 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
     lateinit var adapter: HomeBookAdapter
     lateinit var adapterx: RenqiBookAdapter
     lateinit var adapterZuijin: ZuijinBookAdapter
-
+    lateinit var moreView: View
+    var isAdd = true;
     fun toTop() {
-        nestscroll.smoothScrollTo(0,0)
+        nestscroll.smoothScrollTo(0, 0)
     }
 
     override fun getContentViewLayoutID(): Int {
@@ -108,19 +113,33 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
         }
 
         //   swipe.autoRefresh(200)
+        swipe.isRefreshing = true
         getData()
+        swipe.setColorSchemeResources(R.color.colorAccent)
         swipe.setOnRefreshListener {
             getData()
         }
-        swipe.setOnLoadMoreListener {
-            getLastData()
-        }
-        swipe.setEnableAutoLoadMore(false)
 //        swipe.setOnAutoLoadListener {
 //            getLastData()
 //        }
+        moreView = mContext.inflateLayout(R.layout.view_load_more, null, false)
+
+        nestscroll.setOnScrollChangeListener { v: NestedScrollView, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
+            if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                //滑动到底部
+                loadMore();
+            }
+        }
+        rv_jingxuan.isNestedScrollingEnabled=false
+        rv_zuijin.isNestedScrollingEnabled=false
+        rv_xinshu.isNestedScrollingEnabled=false
 
     }
+
+    private fun loadMore() {
+        getLastData()
+    }
+
 
     var pageNo = 1  //当前页
     var pageSize = 10 //每页条数
@@ -130,19 +149,35 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
 
     fun getLastData() {
         http().mApiService.lastupdate("2", pageNo, pageSize)
-            .get3 {
+            .get3(next = {
                 pageNo++
                 it?.list?.let { it1 ->
-                    swipe.finishRefresh()
-                    if (it1.size == 0)
-                        swipe.finishLoadMoreWithNoMoreData()
-                    else
-                        swipe.finishLoadMore()
-                    postDelayed(300) {
-                        adapterZuijin.addData(it1)
+                    //    swipe.finishRefresh()
+                    if (it1.size == 0) {
+                        //加载完毕
+                        lin_frame.removeView(moreView)
+                        //               lin_frame.getChildAt(lin_frame.childCount-1)
+                    }
+                    //   swipe.finishLoadMoreWithNoMoreData()
+                    //  swipe.finishLoadMore()
+                    swipe.isRefreshing = false
+                    adapterZuijin.addData(it1)
+                }
+                //增加尾部的footer
+                if (isAdd) {
+                    isAdd = false
+                    lin_frame.addView(moreView)
+                }
+            }, err = {
+                moreView.findViewById<TextView>(R.id.text).apply {
+                    setText("加载失败,点击重新加载")
+                    click {
+                        getLastData()
+                        setText("正在加载中...")
                     }
                 }
-            }
+
+            })
     }
 
     fun getData() {
@@ -192,7 +227,8 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
                 getLastData()
 
             }, err = {
-                swipe.finishRefresh()
+                // swipe.finishRefresh()
+                swipe.isRefreshing = false
                 toast(it)
             })
 
@@ -218,7 +254,6 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
 
 
     }
-
 
 
 }

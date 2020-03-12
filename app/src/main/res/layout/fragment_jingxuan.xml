@@ -8,20 +8,21 @@
     android:orientation="vertical">
 
 
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe"
-        app:srlEnableScrollContentWhenLoaded="true"
-        app:srlEnableFooterFollowWhenLoadFinished="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
-        <androidx.core.widget.NestedScrollView
+        <com.dove.readandroid.view.NoAutoSlideScrollView
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:id="@+id/nestscroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/lin_frame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -229,8 +230,8 @@
             </LinearLayout>
 
 
-        </androidx.core.widget.NestedScrollView>
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+        </com.dove.readandroid.view.NoAutoSlideScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     >
 
 </LinearLayout>

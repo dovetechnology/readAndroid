@@ -54,7 +54,7 @@ class PaihangFragment : BaseMvcFragment() {
             if (!map.containsKey(position)) {
                 map.put(position, PaihangContentFragment().apply {
                     arguments = Bundle().apply {
-                        putString("data", titles.get(position).id)
+                        putString("data", (p+1).toString())
                     }
                 })
             }

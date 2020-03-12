@@ -22,7 +22,7 @@ class FenleiContentFragment : BaseRefreshFragment<Book>() {
     }
 
     fun toTop() {
-        mRecyclerview.smoothScrollToPosition(0)
+        mRecyclerview.scrollToPosition(0)
 
     }
 
@@ -32,8 +32,7 @@ class FenleiContentFragment : BaseRefreshFragment<Book>() {
         requestData()
         setLoadMoreListener()
         iv_up.click {
-            mRecyclerview.smoothScrollToPosition(0)
-
+        toTop()
         }
         mRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

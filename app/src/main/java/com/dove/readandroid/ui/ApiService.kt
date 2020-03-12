@@ -48,7 +48,7 @@ interface ApiService {
 
     @GET("read/novel/top/new")
     fun top(
-        @Query("id") id: String, @Query("edition") edition: String, @Query("page") page: Int, //页码号
+        @Query("type") id: String, @Query("edition") edition: String, @Query("page") page: Int, //页码号
         @Query("size") size: Int
     ): Observable<ResponseBean<PagingBean<Book>>>
     @GET("read/novel/top/classify")

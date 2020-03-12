@@ -3,6 +3,7 @@ package com.dove.readandroid.ui.shujia
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.KeyEvent
 import android.widget.ImageView
 import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.base.Navigator
@@ -28,10 +29,12 @@ import com.dove.readandroid.utils.FileUtlis
 import com.safframework.ext.getAppVersionCode
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_fenlei_detail.*
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import java.io.File
+import android.content.Intent
+import android.widget.Toast
+
 
 class MainActivity : BaseMvcActivity() {
     lateinit var mshujia: ShujiaFragment
@@ -41,29 +44,29 @@ class MainActivity : BaseMvcActivity() {
     lateinit var navigator: Navigator
 
     override fun getContentViewLayoutID(): Int {
-        return R.layout.activity_main
+        return com.dove.readandroid.R.layout.activity_main
     }
 
     var id = 0;
     override fun initView(mSavedInstanceState: Bundle?) {
-        navigator = Navigator(supportFragmentManager, R.id.content)
+        navigator = Navigator(supportFragmentManager, com.dove.readandroid.R.id.content)
         mshujia = ShujiaFragment()
         huodongfragment = HuodongFragment()
         mefragment = MeFragment()
         shuchengfragment = ShuchengFragment()
+        navigator.showFragment(shuchengfragment)//提前请求网络
         navigator.showFragment(mshujia)
         navigation.setOnNavigationItemSelectedListener {
-            if (id==it.itemId)
-            {
+            if (id == it.itemId) {
                 EventBus.getDefault().post(ButtonClick())
             }
             when (it.itemId) {
-                R.id.main_shujia -> navigator.showFragment(mshujia)
-                R.id.main_shucheng -> navigator.showFragment(shuchengfragment)
+                com.dove.readandroid.R.id.main_shujia -> navigator.showFragment(mshujia)
+                com.dove.readandroid.R.id.main_shucheng -> navigator.showFragment(shuchengfragment)
 
-                R.id.main_huodong -> navigator.showFragment(huodongfragment)
+                com.dove.readandroid.R.id.main_huodong -> navigator.showFragment(huodongfragment)
 
-                R.id.main_my -> {
+                com.dove.readandroid.R.id.main_my -> {
 //                    if (!UserShell.getInstance().isLogin) {
 //                        start(LoginActivity::class.java)
 //                        return@setOnNavigationItemSelectedListener true
@@ -155,6 +158,28 @@ class MainActivity : BaseMvcActivity() {
             }, err = {
 
             })
+
+    }
+
+    //按两次返回到桌面
+    private var exitTime: Long = 0
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+            && event.getAction() == KeyEvent.ACTION_DOWN
+        ) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                toast("再按一下返回到桌面")
+                exitTime = System.currentTimeMillis();
+            } else {
+                var i = Intent(Intent.ACTION_MAIN);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.addCategory(Intent.CATEGORY_HOME);
+                startActivity(i);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
 
     }
 

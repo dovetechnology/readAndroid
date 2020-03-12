@@ -14,8 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="3"
         android:background="?android:attr/selectableItemBackground"
-        android:paddingTop="26dp"
-        android:paddingBottom="26dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp"
         android:singleLine="false"
         android:textColor="#3B3B3B"
         android:textSize="15sp"
@@ -28,8 +28,8 @@
         android:id="@+id/view_tag"
         android:layout_width="3dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="26dp"
-        android:layout_marginBottom="26dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="18dp"
         android:backgroundTint="#FB7070"
         android:background="@drawable/default_btn" />
 </LinearLayout>

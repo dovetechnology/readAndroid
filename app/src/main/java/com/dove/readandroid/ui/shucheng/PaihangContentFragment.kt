@@ -24,7 +24,7 @@ class PaihangContentFragment : BaseRefreshFragment<Book>() {
         return R.layout.fragment_fenlei_paihang_content;
     }
     fun toTop() {
-        mRecyclerview.smoothScrollToPosition(0)
+        mRecyclerview.scrollToPosition(0)
 
     }
 
@@ -35,7 +35,7 @@ class PaihangContentFragment : BaseRefreshFragment<Book>() {
         setLoadMoreListener()
 
         iv_up.click {
-            mRecyclerview.smoothScrollToPosition(0)
+          toTop()
 
         }
         mRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
