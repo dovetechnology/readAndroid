@@ -48,17 +48,12 @@ public interface BookDao {
     @Query("DELETE FROM book")
     void deleteAll();
 
-    @Query("select * from bookshelf order by joinTime desc")
-    List<BookShelf> getShujia();
 
     @Insert
     void addShujia(BookShelf m);
 
     @Insert
     void addShujias(List<BookShelf> mlist);
-
-    @Query("DELETE from bookshelf where name=:name")
-    void remove(String name);
 
     @Query("select * from bookshelf where name=:name")
     BookShelf findShelf(String name);

@@ -4,34 +4,33 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.core.widget.NestedScrollView
-import androidx.core.widget.TextViewCompat
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appbaselib.base.BaseMvcFragment
-import com.appbaselib.common.load
 import com.appbaselib.ext.toast
+import com.appbaselib.network.RxHttpUtil
+import com.appbaselib.utils.PreferenceUtils
 import com.appbaselib.view.RatioImageView
-import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.dove.readandroid.BannerImageloadr
 import com.dove.readandroid.R
-import com.dove.readandroid.event.ButtonClick
 import com.dove.readandroid.network.get3
+import com.dove.readandroid.network.get4
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.BookDetailActivity
 import com.dove.readandroid.ui.OpenTypeHandler
+import com.dove.readandroid.ui.common.Constants
 import com.dove.readandroid.ui.model.AdData
+import com.dove.readandroid.ui.model.AdDataWrapper
 import com.dove.readandroid.ui.model.Book
+import com.dove.readandroid.ui.model.HomeData
 import com.dove.readandroid.ui.shucheng.HomeBookAdapter
 import com.dove.readandroid.ui.shucheng.RenqiBookAdapter
 import com.dove.readandroid.ui.shucheng.ZuijinBookAdapter
 import com.safframework.ext.click
 import com.safframework.ext.inflateLayout
-import com.safframework.ext.postDelayed
 import kotlinx.android.synthetic.main.fragment_jingxuan.*
-import kotlinx.android.synthetic.main.fragment_shujia.view.*
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 /**
  * ===============================
@@ -46,7 +45,11 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
     lateinit var adapterx: RenqiBookAdapter
     lateinit var adapterZuijin: ZuijinBookAdapter
     lateinit var moreView: View
-    var isAdd = true;
+    var isAdd = true; //加载更多的提示
+
+    var homeData: HomeData? = null//缓存的首页json信息
+    var adDataWrapper: AdDataWrapper? = null //首页广告信息
+
     fun toTop() {
         nestscroll.smoothScrollTo(0, 0)
     }
@@ -113,9 +116,8 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
         }
 
         //   swipe.autoRefresh(200)
-        swipe.isRefreshing = true
-        getData()
         swipe.setColorSchemeResources(R.color.colorAccent)
+
         swipe.setOnRefreshListener {
             getData()
         }
@@ -130,10 +132,26 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
                 loadMore();
             }
         }
-        rv_jingxuan.isNestedScrollingEnabled=false
-        rv_zuijin.isNestedScrollingEnabled=false
-        rv_xinshu.isNestedScrollingEnabled=false
+        rv_jingxuan.isNestedScrollingEnabled = false
+        rv_zuijin.isNestedScrollingEnabled = false
+        rv_xinshu.isNestedScrollingEnabled = false
 
+        //swipe.isRefreshing = true
+        //先获取本地的信息
+        homeData =
+            PreferenceUtils.getObjectFromGson(mContext, Constants.JINGXUAN, HomeData::class.java)
+        homeData?.let {
+            setData(it)
+        }
+        adDataWrapper = PreferenceUtils.getObjectFromGson(
+            mContext,
+            Constants.JINGXUAN_AD,
+            AdDataWrapper::class.java
+        )
+        adDataWrapper?.list?.let {
+            setAd(it)
+        }
+        getData()
     }
 
     private fun loadMore() {
@@ -184,23 +202,16 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
 
         //广告1
         http().mApiService.ad("3")
-            .get3 {
+            .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
+            .map {
+
+                PreferenceUtils.saveObjectAsGson(mContext, Constants.JINGXUAN_AD, it.data)
+                it
+            }
+            .get4 {
                 it?.list?.let {
 
-                    adDatas = it
-                    var list = arrayListOf<String>()
-                    it.forEach {
-                        list.add(it.imgUrl)
-                    }
-                    banner.setImages(list)
-                    banner.setOnBannerListener {
-                        OpenTypeHandler(
-                            adDatas?.get(it),
-                            mContext
-                        ).handle()
-                    }
-                    banner.start()
-
+                    setAd(it)
                 }
             }
         //广告2
@@ -213,15 +224,16 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
 //            }
 
         http().mApiService.home()
-            .get3(next = {
+            .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
+            .map {
 
-                it?.hot?.let { it1 ->
-                    hot = it1
-                    assembleData()
-                }
-                it?.besthot?.let { it1 ->
-                    adapterx.setNewData(it1)
-                }
+                PreferenceUtils.saveObjectAsGson(mContext, Constants.JINGXUAN, it.data)
+                it
+            }
+            .get4(next = {
+
+
+                it?.let { it1 -> setData(it1) }
 
                 //
                 getLastData()
@@ -232,6 +244,32 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
                 toast(it)
             })
 
+    }
+
+    fun setAd(ad: MutableList<AdData>) {
+        adDatas = ad
+        var list = arrayListOf<String>()
+        ad.forEach {
+            list.add(it.imgUrl)
+        }
+        banner.setImages(list)
+        banner.setOnBannerListener {
+            OpenTypeHandler(
+                adDatas?.get(it),
+                mContext
+            ).handle()
+        }
+        banner.start()
+    }
+
+    fun setData(homeData: HomeData) {
+        homeData?.hot?.let { it1 ->
+            hot = it1
+            assembleData()
+        }
+        homeData?.besthot?.let { it1 ->
+            adapterx.setNewData(it1)
+        }
     }
 
     var tag = 0;

@@ -17,5 +17,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun getChapDao(): ChapDao
     abstract fun getBookDao(): BookDao
     abstract fun getBookWithChapDao(): BookWithChapDao
+    abstract  fun getBookShelfDao():BookShelfDao
 
 }

@@ -41,4 +41,8 @@ public class Constants {
 
     @Nullable
     public static final String AD="ad";
+    @Nullable
+    public static final String JINGXUAN="jingxuan";
+    @Nullable
+    public static final String JINGXUAN_AD="jingxuan_ad";
 }

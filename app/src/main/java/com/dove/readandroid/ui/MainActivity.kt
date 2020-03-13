@@ -54,7 +54,7 @@ class MainActivity : BaseMvcActivity() {
         huodongfragment = HuodongFragment()
         mefragment = MeFragment()
         shuchengfragment = ShuchengFragment()
-        navigator.showFragment(shuchengfragment)//提前请求网络
+      //  navigator.showFragment(shuchengfragment)//提前请求网络
         navigator.showFragment(mshujia)
         navigation.setOnNavigationItemSelectedListener {
             if (id == it.itemId) {
@@ -161,26 +161,26 @@ class MainActivity : BaseMvcActivity() {
 
     }
 
-    //按两次返回到桌面
-    private var exitTime: Long = 0
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK
-            && event.getAction() == KeyEvent.ACTION_DOWN
-        ) {
-            if ((System.currentTimeMillis() - exitTime) > 2000) {
-                toast("再按一下返回到桌面")
-                exitTime = System.currentTimeMillis();
-            } else {
-                var i = Intent(Intent.ACTION_MAIN);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.addCategory(Intent.CATEGORY_HOME);
-                startActivity(i);
-            }
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-
-    }
+//    //按两次返回到桌面
+//    private var exitTime: Long = 0
+//
+//    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+//        if (keyCode == KeyEvent.KEYCODE_BACK
+//            && event.getAction() == KeyEvent.ACTION_DOWN
+//        ) {
+//            if ((System.currentTimeMillis() - exitTime) > 2000) {
+//                toast("再按一下返回到桌面")
+//                exitTime = System.currentTimeMillis();
+//            } else {
+//                var i = Intent(Intent.ACTION_MAIN);
+//                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                i.addCategory(Intent.CATEGORY_HOME);
+//                startActivity(i);
+//            }
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//
+//    }
 
 }

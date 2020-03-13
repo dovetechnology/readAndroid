@@ -58,7 +58,7 @@ class ShujiaFragment : BaseRefreshFragment<BookShelf>() {
 
                 http().mApiService.removeShujia(mList.get(position).caseId)
                     .get3(isShowDialog = true) {
-                        App.instance.db.getBookDao().remove(mList.get(position).name)
+                        App.instance.db.getBookShelfDao().delete(mList.get(position))
                         mAdapter.remove(position)
                     }
 
@@ -89,13 +89,12 @@ class ShujiaFragment : BaseRefreshFragment<BookShelf>() {
         if (!UserShell.getInstance().isLogin) {
             return
         }
-        //获取网络书架信息
-        swipe.isRefreshing = true
+
         mAdapter.loadMoreModule?.isEnableLoadMore = false
         mAdapter.loadMoreModule?.isAutoLoadMore = false
         mAdapter.loadMoreModule?.isEnableLoadMoreIfNotFullPage = false
+        //获取网络书架信息
         getData()
-
     }
 
     override fun getLoadingTargetView(): View? {
@@ -104,18 +103,16 @@ class ShujiaFragment : BaseRefreshFragment<BookShelf>() {
 
     fun getData() {
         //优先展示本地的书架书本信息
-        var datas = App.instance.db.getBookDao().getShujia()
-//            ?.apply {
-//            Collections.reverse(this)
-//        }
+        var datas = App.instance.db.getBookShelfDao().getShujia()
+
         if (datas != null && datas.size != 0) {
             mList.clear()
             mAdapter.addData(datas)
-            swipe.isRefreshing = false
         } else {
-            //从网络获取
-            requestData()
+            swipe.isRefreshing = true
         }
+        //再从网络获取
+        requestData()
         //广告
         http().mApiService.ad("2")
             .get3 {
@@ -134,8 +131,8 @@ class ShujiaFragment : BaseRefreshFragment<BookShelf>() {
 
                 it?.forEach {
                     val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                    var time=sdf.parse(it.joindate)
-                    it.joinTime=time.time
+                    var time = sdf.parse(it.joindate)
+                    it.joinTime = time.time
                     if (App.instance.db.getBookDao().findShelf(it.name) == null) {
                         App.instance.db.getBookDao().addShujia(it)
                     }
@@ -160,10 +157,16 @@ class ShujiaFragment : BaseRefreshFragment<BookShelf>() {
         return true
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        if (!hidden) {
+            requestData()
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRefresh(muservent: ShujiaEvent) {
         //信息更新了
-        requestData()
+        //    requestData()  //替换成吗 每进这个页面就刷新
 //        var newBookShelf=BookShelf().apply {
 //            this.caseId=muservent.mb.caseId
 //            this.name=muservent.mb.name
