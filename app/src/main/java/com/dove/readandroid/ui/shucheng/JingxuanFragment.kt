@@ -8,6 +8,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appbaselib.base.BaseMvcFragment
+import com.appbaselib.ext.toJson
+import com.appbaselib.ext.toList
 import com.appbaselib.ext.toast
 import com.appbaselib.network.RxHttpUtil
 import com.appbaselib.utils.PreferenceUtils
@@ -49,6 +51,7 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
 
     var homeData: HomeData? = null//缓存的首页json信息
     var adDataWrapper: AdDataWrapper? = null //首页广告信息
+    var mlist:List<Book>?=null
 
     fun toTop() {
         nestscroll.smoothScrollTo(0, 0)
@@ -151,6 +154,15 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
         adDataWrapper?.list?.let {
             setAd(it)
         }
+
+        var s=PreferenceUtils.getPrefString(mContext,Constants.JINGXUAN_ZUIJIN,"")
+        if (!s.isNullOrEmpty())
+        {
+            mlist=s.toList(Book::class.java)
+        }
+        mlist?.let {
+            adapterZuijin.addData(it)
+        }
         getData()
     }
 
@@ -168,24 +180,24 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
     fun getLastData() {
         http().mApiService.lastupdate("2", pageNo, pageSize)
             .get3(next = {
-                pageNo++
                 it?.list?.let { it1 ->
-                    //    swipe.finishRefresh()
                     if (it1.size == 0) {
                         //加载完毕
                         lin_frame.removeView(moreView)
-                        //               lin_frame.getChildAt(lin_frame.childCount-1)
                     }
-                    //   swipe.finishLoadMoreWithNoMoreData()
-                    //  swipe.finishLoadMore()
+
                     swipe.isRefreshing = false
                     adapterZuijin.addData(it1)
+                    //增加尾部的footer
+                    if (pageNo==1) {
+                        //缓存第一页
+                        PreferenceUtils.setPrefString(mContext, Constants.JINGXUAN_ZUIJIN, it.list?.toJson())
+                        lin_frame.addView(moreView)
+                    }
+                    pageNo++
                 }
-                //增加尾部的footer
-                if (isAdd) {
-                    isAdd = false
-                    lin_frame.addView(moreView)
-                }
+
+
             }, err = {
                 moreView.findViewById<TextView>(R.id.text).apply {
                     setText("加载失败,点击重新加载")

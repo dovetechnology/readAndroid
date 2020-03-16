@@ -126,7 +126,7 @@ class App : BaseApplication() {
         Bugly.init(applicationContext, "xxxxx", BuildConfig.DEBUG)
         //初始化数据库
         db = Room.databaseBuilder(this, AppDatabase::class.java, "app_database.db")
-            .allowMainThreadQueries().build()
+            .allowMainThreadQueries().fallbackToDestructiveMigration().build()
         //全局刷新
         initRefresh()
     }

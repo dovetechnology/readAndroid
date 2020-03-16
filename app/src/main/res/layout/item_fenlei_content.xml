@@ -31,21 +31,30 @@
             android:layout_weight="2"
             android:orientation="vertical">
 
-            <TextView
-            android:maxLines="1"
-                android:ellipsize="end"
-                android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#ff2f2f2f"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                tools:text="锦衣春秋" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="#ff2f2f2f"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="锦衣春秋锦衣春秋锦衣春秋锦衣春秋锦衣春秋锦衣春秋锦衣春秋" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <TextView
@@ -85,12 +94,5 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ImageView
-        android:visibility="gone"
-        android:id="@+id/iv_tag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/icon_one" />
+
 </FrameLayout>

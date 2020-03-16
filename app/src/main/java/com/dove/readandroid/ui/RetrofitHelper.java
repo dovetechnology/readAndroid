@@ -7,6 +7,7 @@ import com.appbaselib.utils.PreferenceUtils;
 import com.dove.readandroid.BuildConfig;
 import com.dove.readandroid.ui.common.CommonParamsInterceptor;
 import com.dove.readandroid.ui.common.Constants;
+import com.dove.readandroid.ui.common.Retry;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -35,7 +36,7 @@ public class RetrofitHelper {
         //创建OkHttpClient
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.addInterceptor(new CommonParamsInterceptor());//添加参数拦截器
-
+        builder.addInterceptor(new Retry(3));//重试次数
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
                 @Override
@@ -47,10 +48,10 @@ public class RetrofitHelper {
             builder.addInterceptor(loggingInterceptor);
         }
         //设置超时
-        builder.connectTimeout(15, TimeUnit.SECONDS);
-        builder.readTimeout(15, TimeUnit.SECONDS);
-        builder.writeTimeout(15, TimeUnit.SECONDS);
-        builder.callTimeout(15, TimeUnit.SECONDS);
+        builder.connectTimeout(5, TimeUnit.SECONDS);
+        builder.readTimeout(5, TimeUnit.SECONDS);
+        builder.writeTimeout(5, TimeUnit.SECONDS);
+        builder.callTimeout(5, TimeUnit.SECONDS);
         //错误重连
         builder.retryOnConnectionFailure(true);
         File httpCacheDirectory = new File(App.instance.getCacheDir(), "responses");

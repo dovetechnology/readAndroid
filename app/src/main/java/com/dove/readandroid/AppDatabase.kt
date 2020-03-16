@@ -11,7 +11,7 @@ import com.dove.readandroid.ui.model.*
  * 创建日期：2019/11/21 14:43
  * ===============================
  */
-@Database(entities = [Book::class, BookSectionItem::class,BookShelf::class], version = 2)
+@Database(entities = [Book::class, BookSectionItem::class,BookShelf::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun getChapDao(): ChapDao
