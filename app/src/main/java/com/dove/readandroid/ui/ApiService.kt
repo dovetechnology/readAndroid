@@ -136,4 +136,8 @@ interface ApiService {
     @Streaming
     @GET
     fun download(@Url url: String): Observable<ResponseBody>
+
+    @GET
+    fun test(@Url url: String): Observable<ResponseBean<Any>>
+
 }

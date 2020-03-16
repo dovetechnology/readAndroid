@@ -11,6 +11,7 @@ import com.appbaselib.base.BaseMvcFragment
 import com.appbaselib.ext.toJson
 import com.appbaselib.ext.toList
 import com.appbaselib.ext.toast
+import com.appbaselib.network.RetryWithDelay
 import com.appbaselib.network.RxHttpUtil
 import com.appbaselib.utils.PreferenceUtils
 import com.appbaselib.view.RatioImageView
@@ -32,6 +33,8 @@ import com.dove.readandroid.ui.shucheng.RenqiBookAdapter
 import com.dove.readandroid.ui.shucheng.ZuijinBookAdapter
 import com.safframework.ext.click
 import com.safframework.ext.inflateLayout
+import com.safframework.ext.postDelayed
+import kotlinx.android.synthetic.main.activity_book_detail.*
 import kotlinx.android.synthetic.main.fragment_jingxuan.*
 
 /**
@@ -51,7 +54,7 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
 
     var homeData: HomeData? = null//缓存的首页json信息
     var adDataWrapper: AdDataWrapper? = null //首页广告信息
-    var mlist:List<Book>?=null
+    var mlist: List<Book>? = null
 
     fun toTop() {
         nestscroll.smoothScrollTo(0, 0)
@@ -155,15 +158,22 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
             setAd(it)
         }
 
-        var s=PreferenceUtils.getPrefString(mContext,Constants.JINGXUAN_ZUIJIN,"")
-        if (!s.isNullOrEmpty())
-        {
-            mlist=s.toList(Book::class.java)
+        var s = PreferenceUtils.getPrefString(mContext, Constants.JINGXUAN_ZUIJIN, "")
+        if (!s.isNullOrEmpty()) {
+            mlist = s.toList(Book::class.java)
         }
         mlist?.let {
             adapterZuijin.addData(it)
         }
         getData()
+
+        //test
+//        test.click {
+//                http().mApiService.test("http://www.google.com")
+//                    .get3 {
+//                    }
+//
+//        }
     }
 
     private fun loadMore() {
@@ -189,9 +199,13 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
                     swipe.isRefreshing = false
                     adapterZuijin.addData(it1)
                     //增加尾部的footer
-                    if (pageNo==1) {
+                    if (pageNo == 1) {
                         //缓存第一页
-                        PreferenceUtils.setPrefString(mContext, Constants.JINGXUAN_ZUIJIN, it.list?.toJson())
+                        PreferenceUtils.setPrefString(
+                            mContext,
+                            Constants.JINGXUAN_ZUIJIN,
+                            it.list?.toJson()
+                        )
                         lin_frame.addView(moreView)
                     }
                     pageNo++
@@ -233,8 +247,7 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
 //                    ad_two.setData(it)
 //                    ad_two.getImageView().load(it.imgUrl)
 //                }
-//            }
-
+//            }\
         http().mApiService.home()
             .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
             .map {

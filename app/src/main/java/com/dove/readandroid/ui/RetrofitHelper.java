@@ -35,8 +35,8 @@ public class RetrofitHelper {
 
         //创建OkHttpClient
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
+       // builder.addInterceptor(new Retry(3));//重试次数  不知道为什么没效果
         builder.addInterceptor(new CommonParamsInterceptor());//添加参数拦截器
-        builder.addInterceptor(new Retry(3));//重试次数
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
                 @Override

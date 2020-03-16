@@ -15,6 +15,7 @@ import com.google.gson.JsonSyntaxException
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
+import java.io.InterruptedIOException
 
 /**
  * 2019 5.6 tangming  获取全部结果
@@ -87,7 +88,11 @@ abstract class MySubscriber2<T>(
             onFail("网络不可用")
         } else if (e is JsonSyntaxException) {  //其余不知名错误
             onFail("数据解析异常")
-        } else {
+        } else if (e is InterruptedIOException)
+        {
+            onFail("连接超时,请稍后重试")
+        }
+        else {
             onFail(e.message) //其他异常
         }
 
