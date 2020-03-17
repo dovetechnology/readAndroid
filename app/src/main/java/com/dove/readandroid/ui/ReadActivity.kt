@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
+import android.speech.tts.TextToSpeech
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -35,6 +36,7 @@ import com.dove.readandroid.view.page.ReaderSettingManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.leaf.library.StatusBarUtil
 import com.safframework.ext.click
+import com.safframework.ext.isVisible
 import com.safframework.ext.postDelayed
 import com.zchu.reader.OnPageChangeListener
 import com.zchu.reader.PageView
@@ -44,6 +46,7 @@ import kotlinx.android.synthetic.main.toolbar_read.*
 import kotlinx.android.synthetic.main.toolbar_read.tv_add
 import kotlinx.coroutines.delay
 import org.greenrobot.eventbus.EventBus
+import java.util.*
 
 class ReadActivity : BaseMvcActivity() {
 
@@ -104,11 +107,14 @@ class ReadActivity : BaseMvcActivity() {
         pv_read.setTouchListener(object : PageView.TouchListener {
             override fun center() {
                 toggleMenu(true)
-                if (mSpeakDialog?.isReading ?: false) {
-                    mSpeakDialog?.mTts?.pauseSpeaking()
+                if (appbar.isVisible) {
+                    //暂停
+                    mSpeakDialog?.tts?.pause()
                 } else {
-                    mSpeakDialog?.mTts?.resumeSpeaking()
+                    mSpeakDialog?.tts?.resume()
+
                 }
+
             }
 
             override fun cancel() {
@@ -255,12 +261,13 @@ class ReadActivity : BaseMvcActivity() {
                 }
             } else {
                 //
-                if (!(mSpeakDialog?.isReading ?: true)) {
-                    mSpeakDialog?.mTts?.resumeSpeaking()
-                }
+//                if (!(mSpeakDialog?.isReading ?: true)) {
+//                    mSpeakDialog?.tts?.resume()
+//                }
             }
 
             mSpeakDialog?.show()
+
 
         }
         //章节 里面的点击事件
@@ -306,6 +313,7 @@ class ReadActivity : BaseMvcActivity() {
             //  }
         }
     }
+
 
     //手动翻页的时候 播放语音
     fun speakByhand() {
@@ -490,7 +498,7 @@ class ReadActivity : BaseMvcActivity() {
      * 切换菜单栏的可视状态
      * 默认是隐藏的
      */
-    private fun toggleMenu(hideStatusBar: Boolean) {
+    private fun toggleMenu(hideStatusBar: Boolean): Boolean {
         initMenuAnim()
 
         if (appbar.getVisibility() === VISIBLE) {
@@ -521,6 +529,7 @@ class ReadActivity : BaseMvcActivity() {
             )
             showSystemBar()
         }
+        return appbar.isVisible
     }
 
     /**

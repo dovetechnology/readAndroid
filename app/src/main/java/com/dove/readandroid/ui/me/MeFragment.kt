@@ -11,8 +11,10 @@ import com.appbaselib.utils.DialogUtils
 import com.appbaselib.utils.LogUtils
 import com.appbaselib.utils.PreferenceUtils
 import com.dove.readandroid.R
+import com.dove.readandroid.event.AppDataEvent
 import com.dove.readandroid.event.UserEvent
 import com.dove.readandroid.network.SimpleDownloadListener
+import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.common.Constants
 import com.dove.readandroid.ui.common.UserShell
@@ -21,6 +23,7 @@ import com.dove.readandroid.ui.model.UserBean
 import com.dove.readandroid.ui.shujia.LoginActivity
 import com.dove.readandroid.utils.FileUtlis
 import com.safframework.ext.click
+import com.safframework.ext.getAppVersionCode
 import com.safframework.ext.installApk
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,6 +31,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_me.*
 import okhttp3.ResponseBody
+import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.io.File
@@ -63,7 +67,8 @@ class MeFragment : BaseMvcFragment() {
 
     override fun initView() {
 
-        appData = PreferenceUtils.getObjectFromGson(mContext, Constants.APPDATA, AppData::class.java)
+        appData =
+            PreferenceUtils.getObjectFromGson(mContext, Constants.APPDATA, AppData::class.java)
         if (UserShell.getInstance().userBean != null) {
             setValue(UserShell.getInstance().userBean)
 
@@ -97,16 +102,25 @@ class MeFragment : BaseMvcFragment() {
             }
         }
         ll_update.click {
-            appData?.let {
-                if (it.refreshWebsite.isNullOrEmpty()) {
-                    toast("已是最新版本")
-                } else {
-                    DialogUtils.getDefaultDialog(mContext, "发现新版本，需要更新吗", title = "提") {
-                        toast("后台更新中")
-                        updateApp(appData!!.refreshWebsite)
-                    }.show()
+
+
+            http().mApiService.appData("2", mContext.getAppVersionCode())
+                .get3(isShowDialog = true) {
+                    PreferenceUtils.saveObjectAsGson(mContext, Constants.APPDATA, it)
+                    //更新 mefragment 的小红点
+                    it?.let {
+                        if (it.refreshWebsite.isNullOrEmpty()) {
+                            toast("已是最新版本")
+                        } else {
+                            DialogUtils.getDefaultDialog(mContext, "发现新版本，需要更新吗", title = "提") {
+                                toast("后台更新中")
+                                updateApp(appData!!.refreshWebsite)
+                            }.show()
+                        }
+                    }
                 }
-            }
+
+
         }
         setTips()
     }

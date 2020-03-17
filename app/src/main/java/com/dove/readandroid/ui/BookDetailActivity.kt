@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appbaselib.base.BaseMvcActivity
@@ -22,7 +23,7 @@ import com.leaf.library.StatusBarUtil
 import com.safframework.ext.click
 import com.safframework.ext.postDelayed
 import kotlinx.android.synthetic.main.activity_book_detail.*
-import kotlinx.android.synthetic.main.content_scrolling.*
+import kotlinx.android.synthetic.main.book_detail_content_scrolling.*
 import kotlinx.coroutines.delay
 import org.greenrobot.eventbus.EventBus
 import kotlin.concurrent.thread
@@ -76,7 +77,7 @@ class BookDetailActivity : BaseMvcActivity() {
 
         if (b == null) {
             //如果本地没有就从网络获取
-            progressDialog = ProgressDialog.show(mContext, "", "加载中", false, true)
+            //   progressDialog = ProgressDialog.show(mContext, "", "加载中", false, true)
 
             http().mApiService.open(book.articleId)
                 .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
@@ -87,7 +88,7 @@ class BookDetailActivity : BaseMvcActivity() {
                     it
                 }
                 .get4(next = {
-                    progressDialog?.dismiss()
+                    //     progressDialog?.dismiss()
                     App.instance.db.getBookDao().add(it?.data)
                     App.instance.db.getChapDao().addAll(it?.data?.novelList) //sb room数据库
                     //很重要     // 必须用 数据库查出来的 数据  不然那阅读数据 章节没法保存（因为主键id是自增）
@@ -129,8 +130,29 @@ class BookDetailActivity : BaseMvcActivity() {
                 }
 
             }
+        rv_mulu.layoutManager =
+            LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+        rv_mulu.adapter = MuluAdapter(R.layout.item_mulu, mutableListOf()).apply {
+            muluAdapter = this
+            setOnItemClickListener { adapter, view, position ->
+                book.currentSetion = position
+                start(ReadActivity::class.java, Bundle().apply {
+                    putSerializable("data", book)
+                })
+            }
+        }
+        rv_mulu.isNestedScrollingEnabled=false
+        ns.setOnScrollChangeListener { v: NestedScrollView, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
+            if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                //滑动到底部
+                if (p < book.novelList?.size ?: 0) {
+                    addMuluData();
+                }
+            }
+        }
         setValue(book)
     }
+
 
     private fun setValue(mb: Book?) {
         mb?.let {
@@ -142,38 +164,32 @@ class BookDetailActivity : BaseMvcActivity() {
             jianjie.text = it.description
             if (!it.coverImage.isNullOrEmpty())
                 iv_cover.load(it.coverImage)
+            addMuluData()
         }
         //loaddata
         //加载目录
-        var titles = arrayListOf<String>()
+    }
 
-        mb?.novelList?.let {
+    var p = 0;//目录现在的位置
+    lateinit var muluAdapter: MuluAdapter
+    fun addMuluData() {
+        book.novelList?.let {
 
-            runBackground(it, {
-                mb.novelList?.forEachIndexed { index, book ->
-                    //                    if (index > 10) {
-//                        return@forEachIndexed
-//                    }
-                    titles.add(book.title)
+            if (p < it.size) {
+                var i = 20;//加载的条数
+                //继续加载目录
+                if (it.size - p < 20) {
+                    i = it.size - p  //剩余条数不够
                 }
-                titles
-            }, {
-                rv_mulu.layoutManager =
-                    LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-                rv_mulu.adapter = MuluAdapter(R.layout.item_mulu, it).apply {
-                    setOnItemClickListener { adapter, view, position ->
-                        book.currentSetion = position
-                        start(ReadActivity::class.java, Bundle().apply {
-                            putSerializable("data", book)
-                        })
-                    }
+                var titles = mutableListOf<String>()
+                for (index in 1..i) {
+                    titles.add(it.get(p++).title)
                 }
-            }, {
+                muluAdapter.addData(titles)
+            } else {
 
-            })
-
+            }
         }
-
     }
 
     override fun getContentViewLayoutID(): Int {

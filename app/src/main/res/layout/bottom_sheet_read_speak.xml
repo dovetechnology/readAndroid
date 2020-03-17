@@ -27,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:max="100"
+            android:max="200"
             android:maxHeight="1dp"
             android:minHeight="1dp"
             android:progressDrawable="@drawable/bg_read_seek_bar"
@@ -130,11 +130,11 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_tuichu"
+        android:background="?android:attr/selectableItemBackground"
+        android:id="@+id/tv_exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:enabled="false"
         android:gravity="center"
         android:padding="16dp"
         android:text="退出朗读"

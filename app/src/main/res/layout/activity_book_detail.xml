@@ -134,7 +134,7 @@
             </LinearLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <include layout="@layout/content_scrolling" />
+        <include layout="@layout/book_detail_content_scrolling" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
