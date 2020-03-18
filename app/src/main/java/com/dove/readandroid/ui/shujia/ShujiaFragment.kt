@@ -18,22 +18,12 @@ import com.appbaselib.utils.DialogUtils
 import com.appbaselib.utils.LogUtils
 import com.dove.readandroid.R
 import com.dove.readandroid.event.ShujiaEvent
-import com.dove.readandroid.event.UserEvent
-import com.dove.readandroid.network.get4
 import com.dove.readandroid.ui.*
-import com.dove.readandroid.ui.common.Constants
 import com.dove.readandroid.ui.common.UserShell
 import com.dove.readandroid.ui.model.BookShelf
 import com.dove.readandroid.ui.shucheng.BookShelfAdapter
-import com.iflytek.cloud.msc.util.DataUtil
-import com.safframework.ext.bluetoothAdapter
-import kotlinx.android.synthetic.main.view_ad.*
-import okhttp3.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.io.IOException
-import java.util.*
-import kotlin.concurrent.thread
 import java.text.SimpleDateFormat
 
 

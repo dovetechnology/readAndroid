@@ -22,9 +22,6 @@ import com.dove.readandroid.R
 import com.dove.readandroid.tts.ChinaTTSManager
 import com.dove.readandroid.ui.common.Constants
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.iflytek.cloud.*
-import com.iflytek.cloud.msc.util.FileUtil
-import com.iflytek.cloud.msc.util.log.DebugLog
 import com.safframework.ext.click
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -69,7 +66,7 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
 
     private fun initView() {
 
-        voicer = PreferenceUtils.getPrefFloat(context, SpeechConstant.VOICE_NAME, 1f) //1f是常规
+        voicer = PreferenceUtils.getPrefFloat(context, Constants.VOICE_NAME, 1f) //1f是常规
         yusu = PreferenceUtils.getPrefFloat(context, Constants.SPEECH_SPEED, 1f) //设置的0-200
         if (voicer == 1f) {
             read_nvsheng.isSelected = true;//默认
@@ -84,7 +81,7 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
             //重新读本章节
             read_nvsheng.isSelected = true
             read_tv_nansheng.isSelected = false
-            PreferenceUtils.setPrefFloat(context, SpeechConstant.VOICE_NAME, voicer)
+            PreferenceUtils.setPrefFloat(context, Constants.VOICE_NAME, voicer)
             speak()
 
         }
@@ -93,7 +90,7 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
             //重新读本章节
             read_nvsheng.isSelected = false
             read_tv_nansheng.isSelected = true
-            PreferenceUtils.setPrefFloat(context, SpeechConstant.VOICE_NAME, voicer)
+            PreferenceUtils.setPrefFloat(context, Constants.VOICE_NAME, voicer)
             speak()
 
         }

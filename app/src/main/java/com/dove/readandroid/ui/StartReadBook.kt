@@ -49,7 +49,7 @@ class StartReadBook(
                         }
                         it
                     }
-                    .get4(isShowDialog = true) {
+                    .get4(isShowDialog = true,message = "正在加载书籍信息") {
                         App.instance.db.getBookDao().add(it?.data)
                         App.instance.db.getChapDao().addAll(it?.data?.novelList)
                         //很重要     // 必须用 数据库查出来的 数据  不然那阅读数据 章节没法保存（因为主键id是自增）

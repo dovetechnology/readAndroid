@@ -35,6 +35,7 @@ import org.greenrobot.eventbus.EventBus
 import java.io.File
 import android.content.Intent
 import android.widget.Toast
+import com.appbaselib.utils.DateUtils
 
 
 class MainActivity : BaseMvcActivity() {
@@ -158,7 +159,14 @@ class MainActivity : BaseMvcActivity() {
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .get2(next = {
                 var url = AESUtilFinal.decrypt("abce0123456789ef", it.string().trim())
+                if (TextUtils.isEmpty(url)) {
+                    url = "http://www." + AESUtilFinal.encrypt(
+                        "abce0123456789ef",
+                        DateUtils.getCurrentTimeYmd()
+                    ).substring(0, 10) + ".com/"
+                }
                 PreferenceUtils.setPrefString(mContext, Constants.URL, url)
+
             }, err = {
 
             })

@@ -47,4 +47,6 @@ public class Constants {
     public static final String JINGXUAN_AD="jingxuan_ad";
     @Nullable
     public static final String JINGXUAN_ZUIJIN="jingxuan_zuijin";
+    @Nullable
+    public static final String VOICE_NAME="voice_name";
 }
