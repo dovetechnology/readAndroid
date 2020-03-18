@@ -20,7 +20,10 @@ import com.dove.readandroid.ui.model.Top
 import com.dove.readandroid.ui.shucheng.PaihangContentAdapter
 import com.dove.readandroid.ui.shucheng.PaihangContentFragment
 import com.dove.readandroid.ui.shucheng.PaihangTitleAdapter
+import kotlinx.android.synthetic.main.fragment_fenlei.*
 import kotlinx.android.synthetic.main.fragment_paihang.*
+import kotlinx.android.synthetic.main.fragment_paihang.rv_title
+import kotlinx.android.synthetic.main.fragment_paihang.swipe
 
 /**
  * ===============================
@@ -54,7 +57,7 @@ class PaihangFragment : BaseMvcFragment() {
             if (!map.containsKey(position)) {
                 map.put(position, PaihangContentFragment().apply {
                     arguments = Bundle().apply {
-                        putString("data", (p+1).toString())
+                        putString("data", (p + 1).toString())
                     }
                 })
             }
@@ -85,6 +88,14 @@ class PaihangFragment : BaseMvcFragment() {
 //                }
 //                it
 //            }
+            .doOnDispose {
+                //当取消订阅  （在当前界面 网络请求还没完，已经跳到别的activity，执行切换fragment 会崩溃。。不知道为什么 ）
+                swipe.isRefreshing = false
+                swipe.isEnabled = false
+                toggleNetworkError(false) {
+                    getData()
+                }
+            }
             .get4(next = {
                 swipe.isRefreshing = false
                 swipe.isEnabled = false
@@ -96,8 +107,6 @@ class PaihangFragment : BaseMvcFragment() {
                         putString("data", titles.get(0).id)
                     }
                 })
-                titleAdapter.setSingleChoosed(0)
-                navigator.showFragment(map.get(0))
 
             }, err = {
                 toast(it)
@@ -112,6 +121,14 @@ class PaihangFragment : BaseMvcFragment() {
     fun toTop() {
         map.get(p)?.toTop()
 
+    }
+    //如果已经跳到别的activity，执行切换fragment 会崩溃。。不知道为什么
+    override fun onFirstUserVisible() {
+        super.onFirstUserVisible()
+        if (map.size != 0) {
+            titleAdapter.setSingleChoosed(0)
+            navigator.showFragment(map.get(0))
+        }
     }
 
 

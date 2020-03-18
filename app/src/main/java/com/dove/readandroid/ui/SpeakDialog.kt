@@ -49,9 +49,9 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
     BottomSheetDialog(context, R.style.Read_Setting_Dialog) {
 
     var isReading = false;
-    //  var textToSpeech: TextToSpeech? = null
     var tts: ChinaTTSManager? = null
-
+    private var voicer = 1f
+    private var yusu = 0.1f
 
     init {
         super.setContentView(R.layout.bottom_sheet_read_speak)
@@ -69,12 +69,15 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
 
     private fun initView() {
 
-        voicer = PreferenceUtils.getPrefFloat(context, SpeechConstant.VOICE_NAME, 1f)
+        voicer = PreferenceUtils.getPrefFloat(context, SpeechConstant.VOICE_NAME, 1f) //1f是常规
         yusu = PreferenceUtils.getPrefFloat(context, Constants.SPEECH_SPEED, 1f) //设置的0-200
         if (voicer == 1f) {
             read_nvsheng.isSelected = true;//默认
-        } else {
             read_tv_nansheng.isSelected = false;//默认是开启的
+
+        } else {
+            read_nvsheng.isSelected = false;
+            read_tv_nansheng.isSelected = true;
         }
         read_nvsheng.click {
             voicer = 1f
@@ -215,8 +218,6 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
     }
 
 
-    private var voicer = 1f
-    private var yusu = 0.1f
 
     private fun setParam() {
 

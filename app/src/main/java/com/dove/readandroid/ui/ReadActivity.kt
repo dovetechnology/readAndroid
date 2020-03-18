@@ -188,6 +188,8 @@ class ReadActivity : BaseMvcActivity() {
                 LogUtils.e("章节改变$pos")
                 mSectionItem = mbook.novelList.get(pos)
                 mbook.currentSetion = pos
+                sectionAdapter.setSingleChoosed(pos) //选中当前章节
+
                 //章节切换的时候自动加载上一章下一章
                 addPreZhangjie()
                 addNextZhangjie()

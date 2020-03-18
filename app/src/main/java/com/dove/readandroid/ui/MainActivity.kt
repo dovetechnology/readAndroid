@@ -1,5 +1,6 @@
 package com.dove.readandroid.ui.shujia
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -45,6 +46,9 @@ class MainActivity : BaseMvcActivity() {
 
     override fun getContentViewLayoutID(): Int {
         return com.dove.readandroid.R.layout.activity_main
+    }
+    @SuppressLint("MissingSuperCall")
+    override fun onSaveInstanceState(outState: Bundle) {
     }
 
     var id = 0;

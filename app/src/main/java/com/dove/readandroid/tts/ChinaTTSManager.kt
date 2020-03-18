@@ -8,9 +8,10 @@ import com.appbaselib.utils.ToastUtils
 
 import java.util.HashMap
 
-class ChinaTTSManager(context: Context, private var text: String="",var next:()->Unit) : WhyTTS {
+class ChinaTTSManager(context: Context, private var text: String = "", var next: () -> Unit) :
+    WhyTTS {
     var mSpeech: TextToSpeech? = null
-    private var residenceContent=""
+    private var residenceContent = ""
     private val sentenceStep = HashMap<Int, Long>()
     private var startTime: Long = 0
     private var duration: Long = 0
@@ -39,7 +40,7 @@ class ChinaTTSManager(context: Context, private var text: String="",var next:()-
         //sentenceStep.clear();
         //getSentenceStep();
         startTime = System.currentTimeMillis()
-        mSpeech!!.speak(content, TextToSpeech.QUEUE_FLUSH, null,"id")
+        mSpeech!!.speak(content, TextToSpeech.QUEUE_FLUSH, null, "id")
     }
 
     override fun pause() {
@@ -76,8 +77,13 @@ class ChinaTTSManager(context: Context, private var text: String="",var next:()-
         if (duration > charStep * residenceContent!!.length) {
             return ""
         }
-        residenceContent = residenceContent!!.substring(tempIndex - 1)
-        return residenceContent
+        if (tempIndex == 0) {
+            return residenceContent
+        }
+        else {
+            residenceContent = residenceContent!!.substring(tempIndex - 1)
+            return residenceContent
+        }
         //        int index=findSentenceIndex(duration);
         //        if(index==-1){
         //            return "";

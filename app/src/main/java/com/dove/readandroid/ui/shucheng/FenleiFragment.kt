@@ -36,7 +36,7 @@ class FenleiFragment : BaseMvcFragment() {
     var titles = mutableListOf<Fenlei>()
     var map = hashMapOf<Int, FenleiContentFragment>()
     lateinit var navigator: Navigator
-    var p=0
+    var p = 0
     lateinit var titleAdapter: FenleiTitleAdapter
 
     override fun getContentViewLayoutID(): Int {
@@ -57,7 +57,7 @@ class FenleiFragment : BaseMvcFragment() {
             titleAdapter = this
         }
         titleAdapter.setOnItemClickListener { adapter, view, position ->
-            p=position
+            p = position
             if (!map.containsKey(position)) {
                 map.put(position, FenleiContentFragment().apply {
                     arguments = Bundle().apply {
@@ -94,6 +94,14 @@ class FenleiFragment : BaseMvcFragment() {
 //                }
 //                it
 //            }
+            .doOnDispose {
+                //当取消订阅  （在当前界面 网络请求还没完，已经跳到别的activity，执行切换fragment 会崩溃。。不知道为什么 ）
+                swipe.isRefreshing = false
+                swipe.isEnabled = false
+                toggleNetworkError(false) {
+                    getData()
+                }
+            }
             .get4(next = {
                 swipe.isRefreshing = false
                 swipe.isEnabled = false
@@ -107,14 +115,12 @@ class FenleiFragment : BaseMvcFragment() {
                         putString("data", titles.get(0).id)
                     }
                 })
-                titleAdapter.setSingleChoosed(0)
-                navigator.showFragment(map.get(0))
 
             }, err = {
                 toast(it)
                 swipe.isRefreshing = false
                 swipe.isEnabled = false
-                toggleNetworkError(false){
+                toggleNetworkError(false) {
                     getData()
                 }
 
@@ -123,7 +129,14 @@ class FenleiFragment : BaseMvcFragment() {
 
     }
 
-
+    //如果已经跳到别的activity，执行切换fragment 会崩溃。。不知道为什么
+    override fun onFirstUserVisible() {
+        super.onFirstUserVisible()
+        if (map.size != 0) {
+            titleAdapter.setSingleChoosed(0)
+            navigator.showFragment(map.get(0))
+        }
+    }
 
 
 }

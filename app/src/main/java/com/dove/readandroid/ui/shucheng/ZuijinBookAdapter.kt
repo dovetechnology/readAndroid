@@ -28,7 +28,7 @@ class ZuijinBookAdapter(layout: Int, data: MutableList<Book>?) :
             helper.setText(R.id.tv_desc, item.description.trim())
             if (!item.coverImage.isNullOrEmpty())
                 ImageLoader.load(context, item.coverImage, helper.getView(R.id.iv_shu), 4f)
-
+            helper.setText(R.id.tv_time, item.updateTime)
         }
     }
 
