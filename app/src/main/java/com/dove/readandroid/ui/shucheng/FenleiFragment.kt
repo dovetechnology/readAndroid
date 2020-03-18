@@ -6,6 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.appbaselib.app.AppManager
 import com.appbaselib.base.BaseMvcFragment
 import com.appbaselib.base.Navigator
 import com.appbaselib.ext.toast
@@ -115,6 +116,11 @@ class FenleiFragment : BaseMvcFragment() {
                         putString("data", titles.get(0).id)
                     }
                 })
+                //如果已经跳到别的activity，执行切换fragment 会崩溃。。不知道为什么
+                if (AppManager.getInstance().currentActivity==mContext) {
+                    titleAdapter.setSingleChoosed(0)
+                    navigator.showFragment(map.get(0))
+                }
 
             }, err = {
                 toast(it)

@@ -157,7 +157,7 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
         adDataWrapper?.list?.let {
             setAd(it)
         }
-
+//最近更新的缓存
         var s = PreferenceUtils.getPrefString(mContext, Constants.JINGXUAN_ZUIJIN, "")
         if (!s.isNullOrEmpty()) {
             mlist = s.toList(Book::class.java)
