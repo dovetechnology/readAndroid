@@ -36,6 +36,7 @@ import java.io.File
 import android.content.Intent
 import android.widget.Toast
 import com.appbaselib.utils.DateUtils
+import com.dove.readandroid.ui.huodong.HuodongFragment2
 
 
 class MainActivity : BaseMvcActivity() {
