@@ -107,9 +107,10 @@ class ShujiaFragment : BaseRefreshFragment<BookShelf>() {
         http().mApiService.ad("2")
             .get3 {
                 if (it != null && !it.list.isNullOrEmpty()) {
-                    it.list.get(0).let {
-                        ad.setData(it)
-                    }
+                    ad.visibility=View.VISIBLE
+                    ad.setData(it.list.get(0))
+                }else{
+                    ad.visibility=View.GONE
                 }
             }
     }

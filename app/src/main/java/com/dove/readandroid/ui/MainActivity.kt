@@ -103,7 +103,7 @@ class MainActivity : BaseMvcActivity() {
         http().mApiService.ad("1")
             .get3 {
 
-                if (it != null && it.list.get(0) != null) {
+                if (it != null && it.list.isNotEmpty()) {
                     PreferenceUtils.saveObjectAsGson(this@MainActivity, Constants.AD, it?.list[0])
                 }
 

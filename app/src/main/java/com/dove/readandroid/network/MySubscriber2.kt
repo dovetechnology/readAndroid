@@ -87,7 +87,7 @@ abstract class MySubscriber2<T>(
         } else if (!NetWorkUtils.isNetworkConnected(App.instance)) { //判断网络
             onFail("网络不可用")
         } else if (e is JsonSyntaxException) {  //其余不知名错误
-            onFail("数据解析异常")
+            onFail("数据异常")
         } else if (e is InterruptedIOException)
         {
             onFail("连接超时,请稍后重试")

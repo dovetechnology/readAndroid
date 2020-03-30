@@ -36,6 +36,7 @@ import com.safframework.ext.inflateLayout
 import com.safframework.ext.postDelayed
 import kotlinx.android.synthetic.main.activity_book_detail.*
 import kotlinx.android.synthetic.main.fragment_jingxuan.*
+import kotlinx.android.synthetic.main.view_fenlei_detail_title.*
 
 /**
  * ===============================
@@ -235,9 +236,13 @@ class JingxuanFragment(var next: () -> Unit) : BaseMvcFragment() {
                 it
             }
             .get4 {
-                it?.list?.let {
 
-                    setAd(it)
+                if (!it?.list.isNullOrEmpty()) {
+                    card_view.visibility=View.VISIBLE
+                    setAd(it?.list!!)
+                }
+                else{
+                    card_view.visibility=View.GONE
                 }
             }
         //广告2

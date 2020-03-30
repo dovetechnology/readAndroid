@@ -115,9 +115,9 @@ class BookDetailActivity : BaseMvcActivity() {
         //广告1/2
         http().mApiService.ad("5")
             .get3 {
-                if (it != null && !it.list.isNullOrEmpty()) {
-                    it.list.get(0).let {
-                        ad_c.setData(it)
+                if ( !it?.list.isNullOrEmpty()) {
+                    it?.list?.get(0).let {
+                        ad_c.setData(it!!)
                     }
                 }
             }
