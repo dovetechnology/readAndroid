@@ -1,6 +1,6 @@
 
 include ':FlycoTabLayout_Lib'
-include ':reader','speechDemo'
+include ':reader'
 include':flowlayout_lib'
 include ':app'
 include ':photopicker'
