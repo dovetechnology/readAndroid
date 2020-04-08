@@ -107,10 +107,10 @@ class ShujiaFragment : BaseRefreshFragment<BookShelf>() {
         http().mApiService.ad("2")
             .get3 {
                 if (it != null && !it.list.isNullOrEmpty()) {
-                    ad.visibility=View.VISIBLE
+                    ad.visibility = View.VISIBLE
                     ad.setData(it.list.get(0))
-                }else{
-                    ad.visibility=View.GONE
+                } else {
+                    ad.visibility = View.GONE
                 }
             }
     }
@@ -133,7 +133,7 @@ class ShujiaFragment : BaseRefreshFragment<BookShelf>() {
             }, err = {
                 loadError(it)
             }, complete = {
-                swipe.isRefreshing = false
+                swipe?.isRefreshing = false
             })
 
 
@@ -148,24 +148,16 @@ class ShujiaFragment : BaseRefreshFragment<BookShelf>() {
         return true
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        if (!hidden) {
-            requestData()
-        }
-    }
+//    override fun onHiddenChanged(hidden: Boolean) {
+//        if (!hidden) {
+//            requestData()
+//        }
+//    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRefresh(muservent: ShujiaEvent) {
         //信息更新了
-        //    requestData()  //替换成吗 每进这个页面就刷新
-//        var newBookShelf=BookShelf().apply {
-//            this.caseId=muservent.mb.caseId
-//            this.name=muservent.mb.name
-//            this.articleId=muservent.mb.articleId
-//            this.img=muservent.mb.coverImage
-//        }
-//        mAdapter.addData(0,newBookShelf)
-        //  App.instance.db.getBookDao().addShelf()
+        requestData()
     }
 
 }

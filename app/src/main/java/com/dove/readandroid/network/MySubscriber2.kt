@@ -88,11 +88,9 @@ abstract class MySubscriber2<T>(
             onFail("网络不可用")
         } else if (e is JsonSyntaxException) {  //其余不知名错误
             onFail("数据异常")
-        } else if (e is InterruptedIOException)
-        {
+        } else if (e is InterruptedIOException) {
             onFail("连接超时,请稍后重试")
-        }
-        else {
+        } else {
             onFail(e.message) //其他异常
         }
 
@@ -107,7 +105,7 @@ abstract class MySubscriber2<T>(
         when (e.code) {
             -2//处理被其他设备挤掉线 token失效
             -> {
-                // toast("您的设备在其他地方登陆")
+                toast("登录信息过期，请重新登录")
                 login()
             }
             -3//没有登录
@@ -136,11 +134,10 @@ abstract class MySubscriber2<T>(
      * 重新登陆
      */
     private fun login() {
-        UserShell.getInstance().exitLoginButSavePre()//清除用户信息
-        //关闭当前页并跳转到登录
-        AppManager.getInstance().currentActivity.startActivity(
-            Intent(AppManager.getInstance().currentActivity, LoginActivity::class.java)
-        )
+        UserShell.getInstance().exitLogin()
+        var intent = Intent( AppManager.getInstance().currentActivity, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        AppManager.getInstance().currentActivity.startActivity(intent)
     }
 
 }

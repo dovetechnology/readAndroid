@@ -143,8 +143,8 @@ class MainActivity : BaseMvcActivity() {
     }
 
     private fun getUrl() {
-        var url = "https://raw.githubusercontent.com/dovetechnology/address/master/readingUrl"
-
+      //  var url = "https://raw.githubusercontent.com/dovetechnology/address/master/readingUrl"
+        var url="https://raw.githubusercontent.com/wawowa/test1/master/1.txt"
 //        if (BuildConfig.BASE_URL.contains("imuguang")) {
 //            if (BuildConfig.DEBUG) {
 //                url = "${Constants.IMAGE}rluri-test.txt?"

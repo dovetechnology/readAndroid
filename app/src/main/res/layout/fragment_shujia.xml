@@ -69,6 +69,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.dove.readandroid.view.AdView
+        android:visibility="gone"
         android:id="@+id/ad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -51,6 +51,7 @@ class AdView : FrameLayout {
 
     fun setData(ad: AdData) {
         this.ad = ad
+        this.visibility=View.VISIBLE
         setValue()
     }
 

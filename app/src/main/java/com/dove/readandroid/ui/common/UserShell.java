@@ -94,11 +94,11 @@ public class UserShell {
         token = "";
 
     }
-
-    public void exitLoginButSavePre() {
-        mUserBean = null;
-        isLogin = false;
-        token = "";
-    }
+//
+//    public void exitLoginButSavePre() {
+//        mUserBean = null;
+//        isLogin = false;
+//        token = "";
+//    }
 
 }

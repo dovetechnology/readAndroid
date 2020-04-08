@@ -85,7 +85,7 @@ android {
             buildConfigField "String", "BASE_URL", "\"http://66.212.31.234/\""
             buildConfigField "boolean", "SIGN_RELEASE", "false"
             buildConfigField "boolean", "SIGN_RELEASE", "false"
-            resValue("string", "appName", "轻点读书-测试版")
+            resValue("string", "appName", "彩虹小说-测试版")
             ndk {
 //                abiFilters "armeabi", "armeabi-v7a", "x86"
                 abiFilters "armeabi", "armeabi-v7a"
@@ -100,7 +100,7 @@ android {
         release {
             buildConfigField "String", "BASE_URL", "\"http://66.212.31.234/\""
             buildConfigField "boolean", "SIGN_RELEASE", "true"
-            resValue("string", "appName", "轻点读书")
+            resValue("string", "appName", "彩虹小说")
             ndk {
 //                abiFilters "armeabi", "armeabi-v7a", "x86"
                 abiFilters "armeabi-v7a", "x86"
