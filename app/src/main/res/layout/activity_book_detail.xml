@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.BookDetailActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -140,10 +140,10 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <LinearLayout
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <com.dove.readandroid.view.AdView
@@ -157,23 +157,26 @@
             app:cardElevation="1dp">
 
 
-
-
         </com.dove.readandroid.view.AdView>
 
-        <View
+
+        <androidx.cardview.widget.CardView
+            android:layout_marginTop="4dp"
+            app:cardElevation="2dp"
             android:layout_width="match_parent"
-            android:background="#B2B2B2"
-            android:layout_height="1px"/>
-        <TextView
-            android:id="@+id/tv_start"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="16dp"
-            android:text="开始阅读"
-            android:textColor="#3B3B3B"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="开始阅读"
+                android:textColor="#3B3B3B"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
 
     </LinearLayout>
 

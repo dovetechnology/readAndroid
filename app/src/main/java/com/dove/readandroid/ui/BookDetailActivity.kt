@@ -128,6 +128,9 @@ class BookDetailActivity : BaseMvcActivity() {
                         ad.setData(it)
                     }
                 }
+                else{
+                    ad.visibility=View.GONE
+                }
 
             }
         rv_mulu.layoutManager =
