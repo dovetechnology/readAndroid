@@ -22,6 +22,9 @@ import com.dove.readandroid.ui.*
 import com.dove.readandroid.ui.common.UserShell
 import com.dove.readandroid.ui.model.BookShelf
 import com.dove.readandroid.ui.shucheng.BookShelfAdapter
+import com.safframework.ext.postDelayed
+import kotlinx.android.synthetic.main.activity_book_detail.*
+import kotlinx.android.synthetic.main.fragment_shujia.ad
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.text.SimpleDateFormat
@@ -118,7 +121,7 @@ class ShujiaFragment : BaseRefreshFragment<BookShelf>() {
     override fun requestData() {
 
         http().mApiService.shujiaList()
-            .get3(next = {
+            .get3(mContext,isShowDialog = false,next = {
 
                 it?.forEach {
                     val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")

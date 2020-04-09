@@ -82,7 +82,7 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "BASE_URL", "\"http://66.212.31.234/\""
+            buildConfigField "String", "BASE_URL", "\"http://www.imuguang.com/rainbow/\""
             buildConfigField "boolean", "SIGN_RELEASE", "false"
             buildConfigField "boolean", "SIGN_RELEASE", "false"
             resValue("string", "appName", "彩虹小说-测试版")
@@ -98,7 +98,7 @@ android {
         }
 
         release {
-            buildConfigField "String", "BASE_URL", "\"http://66.212.31.234/\""
+            buildConfigField "String", "BASE_URL", "\"http://www.imuguang.com/rainbow/\""
             buildConfigField "boolean", "SIGN_RELEASE", "true"
             resValue("string", "appName", "彩虹小说")
             ndk {

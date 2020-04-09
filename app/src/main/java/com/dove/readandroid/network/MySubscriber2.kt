@@ -136,7 +136,7 @@ abstract class MySubscriber2<T>(
     private fun login() {
         UserShell.getInstance().exitLogin()
         var intent = Intent( AppManager.getInstance().currentActivity, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+       // intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         AppManager.getInstance().currentActivity.startActivity(intent)
     }
 

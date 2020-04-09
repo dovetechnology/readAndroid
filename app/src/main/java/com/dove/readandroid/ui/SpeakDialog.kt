@@ -96,10 +96,10 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
         }
         tv_exit.click {
             //暂停
-            isReading = false
-            tts?.stop()
+            tts?.pause()
             dismiss()
         }
+
         read_yinliang.setProgress((yusu * 100).toInt())
         read_yinliang.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -170,13 +170,10 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
 
         tts = ChinaTTSManager(context, texts) {
 
-            isReading = true
-
         }
         setParam() //初始化参数
         tts?.mSpeech?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
             override fun onDone(utteranceId: String?) {
-                isReading = false
                 complete() //播放完成回调下一章
             }
 
@@ -184,7 +181,6 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
             }
 
             override fun onStart(utteranceId: String?) {
-                isReading = true
 
             }
         })
@@ -213,7 +209,6 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
             tts?.stop()
         }
     }
-
 
 
     private fun setParam() {

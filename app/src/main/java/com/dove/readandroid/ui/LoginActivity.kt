@@ -5,14 +5,17 @@ import android.os.Bundle
 import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.utils.PreferenceUtils
 import com.dove.readandroid.R
+import com.dove.readandroid.event.ShujiaEvent
 import com.dove.readandroid.event.UserEvent
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.common.Constants
 import com.dove.readandroid.ui.common.UserShell
 import com.dove.readandroid.ui.me.WangjiPassActivity
+import com.dove.readandroid.ui.model.Book
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.safframework.ext.click
+import com.safframework.ext.postDelayed
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function4
@@ -47,8 +50,10 @@ class LoginActivity : BaseMvcActivity() {
                     PreferenceUtils.setPrefString(mContext, Constants.TOKEN, it?.token)
                     UserShell.getInstance().userBean = it?.user
                     UserShell.getInstance().token = it?.token
+
+                  //  start(MainActivity::class.java)
                     EventBus.getDefault().post(UserEvent())
-                    start(MainActivity::class.java)
+                    EventBus.getDefault().post(ShujiaEvent(Book())) //更新书架
                     finish()
                 }
         }

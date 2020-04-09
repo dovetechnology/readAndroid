@@ -124,6 +124,8 @@ fun <T> Observable<ResponseBean<T>>.get4(context: Context = AppManager.getInstan
     })
 }
 
+
+
 //-------------------------------------------------------------------------------------------------------------
 //简化网络库的调用
 fun Any.http(): RetrofitHelper {

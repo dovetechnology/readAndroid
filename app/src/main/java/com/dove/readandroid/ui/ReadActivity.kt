@@ -262,10 +262,8 @@ class ReadActivity : BaseMvcActivity() {
                     mSpeakDialog?.speak()
                 }
             } else {
-                //
-//                if (!(mSpeakDialog?.isReading ?: true)) {
-//                    mSpeakDialog?.tts?.resume()
-//                }
+                // 已经初始化过
+                mSpeakDialog?.tts?.resume()
             }
 
             mSpeakDialog?.show()
@@ -319,9 +317,9 @@ class ReadActivity : BaseMvcActivity() {
 
     //手动翻页的时候 播放语音
     fun speakByhand() {
-        if (mSpeakDialog?.isReading ?: false) {
-            mSpeakDialog?.setText(getPageText())
-            mSpeakDialog?.speak()
+        mSpeakDialog?.let {
+            it.setText(getPageText())
+            it.speak()
         }
     }
 

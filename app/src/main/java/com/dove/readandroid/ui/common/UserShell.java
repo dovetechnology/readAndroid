@@ -6,11 +6,13 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.appbaselib.app.AppManager;
 import com.appbaselib.utils.PreferenceUtils;
+import com.dove.readandroid.event.UserEvent;
 import com.dove.readandroid.ui.App;
 import com.dove.readandroid.ui.RetrofitHelper;
 import com.dove.readandroid.ui.model.UserBean;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -92,6 +94,8 @@ public class UserShell {
         mUserBean = null;
         isLogin = false;
         token = "";
+        //清除设置界面的用户信息
+        EventBus.getDefault().post(new UserEvent());
 
     }
 //

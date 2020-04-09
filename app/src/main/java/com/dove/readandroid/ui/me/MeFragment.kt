@@ -134,9 +134,9 @@ class MeFragment : BaseMvcFragment() {
         }
     }
 
-    private fun setValue(userBean: UserBean) {
+    private fun setValue(userBean: UserBean?) {
 
-        tvName.text = UserShell.getInstance().userBean.name
+        tvName.text = userBean?.name ?: "登录"
 
     }
 

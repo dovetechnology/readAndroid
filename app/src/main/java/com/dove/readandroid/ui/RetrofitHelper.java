@@ -7,7 +7,6 @@ import com.appbaselib.utils.PreferenceUtils;
 import com.dove.readandroid.BuildConfig;
 import com.dove.readandroid.ui.common.CommonParamsInterceptor;
 import com.dove.readandroid.ui.common.Constants;
-import com.dove.readandroid.ui.common.Retry;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;

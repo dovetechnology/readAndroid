@@ -31,6 +31,11 @@ import kotlin.concurrent.thread
 class BookDetailActivity : BaseMvcActivity() {
     lateinit var book: Book //传过来的书 可能信息不完整
     var progressDialog: ProgressDialog? = null
+
+    override fun getLoadingTargetView(): View? {
+        return rv_mulu
+    }
+
     override fun initView(mSavedInstanceState: Bundle?) {
         StatusBarUtil.setTransparentForWindow(this)
         StatusBarUtil.setDarkMode(this)
@@ -78,7 +83,7 @@ class BookDetailActivity : BaseMvcActivity() {
         if (b == null) {
             //如果本地没有就从网络获取
             //   progressDialog = ProgressDialog.show(mContext, "", "加载中", false, true)
-
+            toggleShowLoading(true,"目录加载中……")
             http().mApiService.open(book.articleId)
                 .compose(RxHttpUtil.handleResult2(mContext as LifecycleOwner))
                 .map {
@@ -89,6 +94,8 @@ class BookDetailActivity : BaseMvcActivity() {
                 }
                 .get4(next = {
                     //     progressDialog?.dismiss()
+                    toggleShowLoading(false)
+
                     App.instance.db.getBookDao().add(it?.data)
                     App.instance.db.getChapDao().addAll(it?.data?.novelList) //sb room数据库
                     //很重要     // 必须用 数据库查出来的 数据  不然那阅读数据 章节没法保存（因为主键id是自增）
