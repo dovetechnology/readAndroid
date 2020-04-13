@@ -37,6 +37,8 @@ import android.content.Intent
 import android.widget.Toast
 import com.appbaselib.utils.DateUtils
 import com.dove.readandroid.ui.huodong.HuodongFragment2
+import com.shuyu.gsyvideoplayer.GSYVideoManager
+import java.util.*
 
 
 class MainActivity : BaseMvcActivity() {
@@ -49,6 +51,7 @@ class MainActivity : BaseMvcActivity() {
     override fun getContentViewLayoutID(): Int {
         return com.dove.readandroid.R.layout.activity_main
     }
+
     @SuppressLint("MissingSuperCall")
     override fun onSaveInstanceState(outState: Bundle) {
     }
@@ -60,7 +63,7 @@ class MainActivity : BaseMvcActivity() {
         huodongfragment = HuodongFragment()
         mefragment = MeFragment()
         shuchengfragment = ShuchengFragment()
-      //  navigator.showFragment(shuchengfragment)//提前请求网络
+        //  navigator.showFragment(shuchengfragment)//提前请求网络
         navigator.showFragment(mshujia)
         navigation.setOnNavigationItemSelectedListener {
             if (id == it.itemId) {
@@ -143,8 +146,8 @@ class MainActivity : BaseMvcActivity() {
     }
 
     private fun getUrl() {
-      //  var url = "https://raw.githubusercontent.com/dovetechnology/address/master/readingUrl"
-        var url="https://raw.githubusercontent.com/wawowa/test1/master/1.txt"
+        //  var url = "https://raw.githubusercontent.com/dovetechnology/address/master/readingUrl"
+        var url = "https://raw.githubusercontent.com/wawowa/test1/master/1.txt"
 //        if (BuildConfig.BASE_URL.contains("imuguang")) {
 //            if (BuildConfig.DEBUG) {
 //                url = "${Constants.IMAGE}rluri-test.txt?"
@@ -174,26 +177,21 @@ class MainActivity : BaseMvcActivity() {
 
     }
 
-//    //按两次返回到桌面
-//    private var exitTime: Long = 0
-//
-//    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-//        if (keyCode == KeyEvent.KEYCODE_BACK
-//            && event.getAction() == KeyEvent.ACTION_DOWN
-//        ) {
-//            if ((System.currentTimeMillis() - exitTime) > 2000) {
-//                toast("再按一下返回到桌面")
-//                exitTime = System.currentTimeMillis();
-//            } else {
-//                var i = Intent(Intent.ACTION_MAIN);
-//                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                i.addCategory(Intent.CATEGORY_HOME);
-//                startActivity(i);
-//            }
-//            return true;
-//        }
-//        return super.onKeyDown(keyCode, event);
-//
-//    }
+    //    //按两次返回到桌面
+    private var mBackKeyPressed = false//记录是否有首次按键
+
+    override fun onBackPressed() {
+        if (!mBackKeyPressed) {
+            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show()
+            mBackKeyPressed = true
+            Timer().schedule(object : TimerTask() {
+                override fun run() {
+                    mBackKeyPressed = false
+                }
+            }, 2000)
+        } else {
+            finish()
+        }
+    }
 
 }

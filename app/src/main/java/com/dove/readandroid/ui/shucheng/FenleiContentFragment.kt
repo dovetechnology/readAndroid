@@ -55,10 +55,7 @@ class FenleiContentFragment : BaseRefreshFragment<Book>() {
                 mAdapter.weakRecyclerView.get()?.findViewHolderForLayoutPosition(position) as BaseViewHolder
             var image = viewHolder.getView<RatioImageView>(R.id.iv_shu)
             start(BookDetailActivity::class.java, Bundle().apply {
-                putSerializable("data", Book().apply {
-                    articleId = mList.get(position).articleId
-                    name = mList.get(position).name
-                })
+                putSerializable("data",  mList.get(position))
             }, image, "book")
         }
 

@@ -189,10 +189,11 @@ class ReadActivity : BaseMvcActivity() {
                 mSectionItem = mbook.novelList.get(pos)
                 mbook.currentSetion = pos
                 sectionAdapter.setSingleChoosed(pos) //选中当前章节
-
+                read_rv_section.scrollToPosition(pos)
                 //章节切换的时候自动加载上一章下一章
                 addPreZhangjie()
                 addNextZhangjie()
+
             }
 
             override fun onPageCountChange(count: Int) {
@@ -244,6 +245,8 @@ class ReadActivity : BaseMvcActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 flzhangjie.visibility = View.GONE
                 read()
+                read_rv_section.scrollToPosition(mbook.novelList.indexOf(mSectionItem))
+                sectionAdapter.setSingleChoosed(mbook.novelList.indexOf(mSectionItem)) //选中当前章节
 
             }
 

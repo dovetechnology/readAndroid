@@ -23,6 +23,7 @@ class PaihangContentFragment : BaseRefreshFragment<Book>() {
     override fun getContentViewLayoutID(): Int {
         return R.layout.fragment_fenlei_paihang_content;
     }
+
     fun toTop() {
         mRecyclerview.scrollToPosition(0)
 
@@ -35,7 +36,7 @@ class PaihangContentFragment : BaseRefreshFragment<Book>() {
         setLoadMoreListener()
 
         iv_up.click {
-          toTop()
+            toTop()
 
         }
         mRecyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -58,10 +59,7 @@ class PaihangContentFragment : BaseRefreshFragment<Book>() {
                 mAdapter.weakRecyclerView.get()?.findViewHolderForLayoutPosition(position) as BaseViewHolder
             var image = viewHolder.getView<RatioImageView>(R.id.iv_shu)
             start(BookDetailActivity::class.java, Bundle().apply {
-                putSerializable("data", Book().apply {
-                    articleId = mList.get(position).articleId
-                    name = mList.get(position).name
-                })
+                putSerializable("data", mList.get(position))
             }, image, "book")
         }
 

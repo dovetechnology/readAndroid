@@ -51,6 +51,7 @@ interface ApiService {
         @Query("type") id: String, @Query("edition") edition: String, @Query("page") page: Int, //页码号
         @Query("size") size: Int
     ): Observable<ResponseBean<PagingBean<Book>>>
+
     @GET("read/novel/top/classify")
     fun paihangTag(): Observable<ResponseBean<List<Top>>>
 
@@ -58,8 +59,10 @@ interface ApiService {
     fun home(): Observable<ResponseBean<HomeData>>
 
     @GET("read/novel/lastupdate")
-    fun lastupdate(@Query("edition") edition: String,@Query("page") page: Int, //页码号
-                   @Query("size") size: Int): Observable<ResponseBean<PagingBean<Book>>>
+    fun lastupdate(
+        @Query("edition") edition: String, @Query("page") page: Int, //页码号
+        @Query("size") size: Int
+    ): Observable<ResponseBean<PagingBean<Book>>>
 
 
     @GET("read/novel/search")
@@ -99,6 +102,12 @@ interface ApiService {
 
     @GET("read/novel/open")
     fun open(@Query("bookUrl") bookUrl: String): Observable<ResponseBean<BookWrap>>
+
+    @GET("read/novel/chapter/list")
+    fun chapterList(
+        @Query("bookId") bookId: String, @Query("page") page: Int, //页码号
+        @Query("size") size: Int
+    ): Observable<ResponseBean<ChapterWrap>>
 
     @GET("read/novel/open")
     fun openChap(@Query("bookUrl") bookUrl: String, @Query("chapterUrl") chapterUrl: String): Observable<ResponseBean<ChapWrap>>
