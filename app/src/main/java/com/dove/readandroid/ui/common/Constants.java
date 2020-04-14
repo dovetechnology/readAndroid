@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  * ===============================
  */
 public class Constants {
-    public static final String PATH_CACHE_DIR = PhoneUtil.getCachePath() + "/dove/";//图片缓存根目录
+    public static final String PATH_CACHE_DIR = PhoneUtil.getCachePath() + "/readbook/";//图片缓存根目录
     public static final String IS_SHOW_AD = "is_show_ad";
 
     public static final String PATH_ROOT_DIR = PhoneUtil.getSdCardRootPath() + "/dove/";//图片缓存根目录

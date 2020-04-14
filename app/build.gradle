@@ -82,7 +82,8 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "BASE_URL", "\"http://test.imuguang.com/\""
+          //  buildConfigField "String", "BASE_URL", "\"http://test.imuguang.com/\""
+            buildConfigField "String", "BASE_URL", "\"http://47.57.30.47/rainbow/\""
             buildConfigField "boolean", "SIGN_RELEASE", "false"
             buildConfigField "boolean", "SIGN_RELEASE", "false"
             resValue("string", "appName", "彩虹小说-测试版")

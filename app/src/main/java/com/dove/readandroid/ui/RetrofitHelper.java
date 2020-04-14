@@ -34,7 +34,6 @@ public class RetrofitHelper {
 
         //创建OkHttpClient
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-       // builder.addInterceptor(new Retry(3));//重试次数  不知道为什么没效果
         builder.addInterceptor(new CommonParamsInterceptor());//添加参数拦截器
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
@@ -47,12 +46,10 @@ public class RetrofitHelper {
             builder.addInterceptor(loggingInterceptor);
         }
         //设置超时
-        builder.connectTimeout(5, TimeUnit.SECONDS);
-        builder.readTimeout(5, TimeUnit.SECONDS);
-        builder.writeTimeout(5, TimeUnit.SECONDS);
-        builder.callTimeout(5, TimeUnit.SECONDS);
-        //错误重连
-        builder.retryOnConnectionFailure(true);
+        builder.connectTimeout(10, TimeUnit.SECONDS);
+        builder.readTimeout(10, TimeUnit.SECONDS);
+        builder.writeTimeout(10, TimeUnit.SECONDS);
+        builder.callTimeout(10, TimeUnit.SECONDS);
         File httpCacheDirectory = new File(App.instance.getCacheDir(), "responses");
         int cacheSize = 10 * 1024 * 1024; // 10 MiB
         Cache cache = new Cache(httpCacheDirectory, cacheSize);

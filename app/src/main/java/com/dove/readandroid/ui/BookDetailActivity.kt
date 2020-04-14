@@ -10,12 +10,14 @@ import com.appbaselib.base.BaseMvcActivity
 import com.appbaselib.common.load
 import com.appbaselib.ext.toast
 import com.appbaselib.network.RxHttpUtil
+import com.chad.library.adapter.base.entity.SectionEntity
 import com.dove.readandroid.R
 import com.dove.readandroid.event.ShujiaEvent
 import com.dove.readandroid.network.get3
 import com.dove.readandroid.network.get4
 import com.dove.readandroid.network.http
 import com.dove.readandroid.ui.model.Book
+import com.dove.readandroid.ui.model.BookSectionItem
 import com.leaf.library.StatusBarUtil
 import com.safframework.ext.click
 import com.safframework.ext.postDelayed
@@ -54,7 +56,7 @@ class BookDetailActivity : BaseMvcActivity() {
                 }
         }
         tv_start.click {
-           startReadBook()
+            startReadBook()
         }
         tv_more.click {
             if (it.text.equals("全文")) {
@@ -136,9 +138,13 @@ class BookDetailActivity : BaseMvcActivity() {
         http().mApiService.chapterList(book.articleId, page, pageSize)
             .get3 {
                 toggleShowLoading(false)
-                page++
-                book.novelList.addAll(it?.data?.list!!)
-                addMuluData()
+                if (!it?.data?.list.isNullOrEmpty()) {
+                    book.novelList.addAll(it?.data?.list!!)
+                    addMuluData(it?.data?.list!!)
+                    page++
+                } else {
+                    //加载完毕i
+                }
             }
 
     }
@@ -193,9 +199,9 @@ class BookDetailActivity : BaseMvcActivity() {
 
     lateinit var muluAdapter: MuluAdapter
     //当从网络加载的时候 加载目录信息
-    fun addMuluData() {
+    fun addMuluData(list: MutableList<BookSectionItem>) {
         var titles = mutableListOf<String>()
-        book.novelList?.forEach {
+        list?.forEach {
             titles.add(it.title)
         }
         muluAdapter.addData(titles)

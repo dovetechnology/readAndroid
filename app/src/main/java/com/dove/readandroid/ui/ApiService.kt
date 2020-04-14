@@ -138,13 +138,12 @@ interface ApiService {
     @POST("read/novel/other/message")
     fun fankui(@Field("content") content: String): Observable<ResponseBean<Any>>
 
+    @GET
+    @Streaming
+    fun download(@Url url: String): Observable<ResponseBody>
 
     @GET("read/novel/other/app/config")
     fun appData(@Query("edition") edition: String, @Query("version") version: Int): Observable<ResponseBean<AppData>>
-
-    @Streaming
-    @GET
-    fun download(@Url url: String): Observable<ResponseBody>
 
     @GET
     fun test(@Url url: String): Observable<ResponseBean<Any>>

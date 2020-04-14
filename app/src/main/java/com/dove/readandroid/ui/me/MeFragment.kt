@@ -109,6 +109,9 @@ class MeFragment : BaseMvcFragment() {
                     PreferenceUtils.saveObjectAsGson(mContext, Constants.APPDATA, it)
                     //更新 mefragment 的小红点
                     it?.let {
+                        appData=it
+                        PreferenceUtils.saveObjectAsGson(mContext, Constants.APPDATA, it)
+
                         if (it.refreshWebsite.isNullOrEmpty()) {
                             toast("已是最新版本")
                         } else {
@@ -141,7 +144,7 @@ class MeFragment : BaseMvcFragment() {
     }
 
     private fun updateApp(url: String) {
-        val mFile = File(Constants.PATH_DOWNLOAD_FILES_DIR + "qingdian_new.apk")
+        var mFile = File(Constants.PATH_DOWNLOAD_FILES_DIR + "caihong_new.apk")
         http().mApiService.download(url)
             .subscribeOn(Schedulers.io())
             .unsubscribeOn(Schedulers.io())
