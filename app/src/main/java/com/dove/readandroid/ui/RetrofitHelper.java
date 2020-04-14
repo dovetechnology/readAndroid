@@ -7,6 +7,7 @@ import com.appbaselib.utils.PreferenceUtils;
 import com.dove.readandroid.BuildConfig;
 import com.dove.readandroid.ui.common.CommonParamsInterceptor;
 import com.dove.readandroid.ui.common.Constants;
+import com.dove.readandroid.ui.shujia.DownLoadApiService;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -78,55 +79,22 @@ public class RetrofitHelper {
         return mRetrofitHelper;
     }
 
-    private Retrofit.Builder provideRetrofitBuilder() {
-        return new Retrofit.Builder();
-    }
+    private Retrofit mRetrofitDownload;
+    private DownLoadApiService mService;
 
-    private OkHttpClient.Builder provideOkHttpClientBuilder() {
-        return new OkHttpClient.Builder();
-    }
+    public DownLoadApiService getDownLoadService() {
+        if (mService==null)
+        {
+            mRetrofitDownload = new Retrofit.Builder()
+                    .baseUrl(BuildConfig.BASE_URL)
+                    .client(new OkHttpClient())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
-    public OkHttpClient provideOkHttpClient(OkHttpClient.Builder builder) {
-        return OkHttpClientConfig(builder);
-    }
-
-    public Retrofit provideRetrofit(Retrofit.Builder builder, OkHttpClient okHttpClient) {
-        String url = PreferenceUtils.getPrefString(App.Companion.getInstance(), Constants.URL, "");
-        if (TextUtils.isEmpty(url)) {
-            url = BuildConfig.BASE_URL; //用默认的
+            mService = mRetrofitDownload.create(DownLoadApiService.class);
         }
-        mRetrofit = builder
-                .baseUrl(url)
-                .client(okHttpClient)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        return mRetrofit;
+        return  mService;
     }
 
-    public OkHttpClient OkHttpClientConfig(OkHttpClient.Builder builder) {
-        builder.addInterceptor(new CommonParamsInterceptor());//添加参数拦截器
-        if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-                @Override
-                public void log(String message) {
-                    Log.e("HttpReponse:", message);
-                }
-            });
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            builder.addInterceptor(loggingInterceptor);
-        }
-        //设置超时
-        builder.connectTimeout(10, TimeUnit.SECONDS);
-        builder.readTimeout(10, TimeUnit.SECONDS);
-        builder.writeTimeout(10, TimeUnit.SECONDS);
-        builder.callTimeout(10, TimeUnit.SECONDS);
-        //错误重连
-        builder.retryOnConnectionFailure(true);
-        File httpCacheDirectory = new File(App.instance.getCacheDir(), "responses");
-        int cacheSize = 10 * 1024 * 1024; // 10 MiB
-        Cache cache = new Cache(httpCacheDirectory, cacheSize);
-        builder.cache(cache);
-        return builder.build();
-    }
 }

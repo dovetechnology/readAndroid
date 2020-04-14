@@ -145,7 +145,7 @@ class MeFragment : BaseMvcFragment() {
 
     private fun updateApp(url: String) {
         var mFile = File(Constants.PATH_DOWNLOAD_FILES_DIR + "caihong_new.apk")
-        http().mApiService.download(url)
+        http().downLoadService.download(url)
             .subscribeOn(Schedulers.io())
             .unsubscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
