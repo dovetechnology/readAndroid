@@ -317,7 +317,7 @@ public class FileUtlis {
         long currentLength = 0;
         if (!file.exists()) {
             if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdir();
+                file.getParentFile().mkdirs();
             }
             try {
                 file.createNewFile();

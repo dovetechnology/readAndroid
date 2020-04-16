@@ -109,13 +109,17 @@ class MeFragment : BaseMvcFragment() {
                     PreferenceUtils.saveObjectAsGson(mContext, Constants.APPDATA, it)
                     //更新 mefragment 的小红点
                     it?.let {
-                        appData=it
+                        appData = it
                         PreferenceUtils.saveObjectAsGson(mContext, Constants.APPDATA, it)
 
                         if (it.refreshWebsite.isNullOrEmpty()) {
                             toast("已是最新版本")
                         } else {
-                            DialogUtils.getDefaultDialog(mContext, "发现新版本，需要更新吗", title = "提") {
+                            DialogUtils.getDefaultDialog(
+                                mContext,
+                                appData?.refreshContent ?: "",
+                                title = "版本更新"
+                            ) {
                                 toast("后台更新中")
                                 updateApp(appData!!.refreshWebsite)
                             }.show()
