@@ -63,6 +63,16 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
         setParam()
         tts?.speak(texts)
     }
+    fun pause()
+    {
+        isReading=false
+        tts?.pause()
+    }
+    fun resume()
+    {
+        isReading=true
+        tts?.resume()
+    }
 
     private fun initView() {
 
@@ -96,6 +106,7 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
         }
         tv_exit.click {
             //暂停
+            isReading=false
             tts?.pause()
             dismiss()
         }
@@ -181,7 +192,7 @@ class SpeakDialog(context: Context, var texts: String, var complete: (() -> Unit
             }
 
             override fun onStart(utteranceId: String?) {
-
+                isReading=true
             }
         })
 

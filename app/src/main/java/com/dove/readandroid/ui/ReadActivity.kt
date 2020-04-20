@@ -109,10 +109,11 @@ class ReadActivity : BaseMvcActivity() {
                 toggleMenu(true)
                 if (appbar.isVisible) {
                     //暂停
-                    mSpeakDialog?.tts?.pause()
+                    // mSpeakDialog?.tts?.pause()
+                    mSpeakDialog?.pause()
                 } else {
-                    mSpeakDialog?.tts?.resume()
-
+                    // mSpeakDialog?.tts?.resume()
+                    mSpeakDialog?.resume()
                 }
 
             }
@@ -260,13 +261,21 @@ class ReadActivity : BaseMvcActivity() {
             if (mSpeakDialog == null) {
                 mSpeakDialog = SpeakDialog(mContext, content) {
                     //回调
-                    pv_read.autoNextPage()
+                    pv_read.autoNextPage() //也会出发页面改变的回调
                     mSpeakDialog?.setText(getPageText())
                     mSpeakDialog?.speak()
                 }
             } else {
                 // 已经初始化过
-                mSpeakDialog?.tts?.resume()
+                if (getPageText().equals(mSpeakDialog?.texts)) {
+                    //没翻页
+                    mSpeakDialog?.resume()
+                }
+                else {
+                    //说明已经翻页
+                    mSpeakDialog?.setText(getPageText())
+                    mSpeakDialog?.speak()
+                }
             }
 
             mSpeakDialog?.show()
@@ -321,8 +330,10 @@ class ReadActivity : BaseMvcActivity() {
     //手动翻页的时候 播放语音
     fun speakByhand() {
         mSpeakDialog?.let {
-            it.setText(getPageText())
-            it.speak()
+            if (it.isReading) {
+                it.setText(getPageText())
+                it.speak()
+            }
         }
     }
 
