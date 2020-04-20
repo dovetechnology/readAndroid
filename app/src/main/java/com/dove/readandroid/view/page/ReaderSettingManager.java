@@ -121,7 +121,7 @@ public class ReaderSettingManager {
     }
 
     public boolean isBrightnessAuto() {
-        return mPreferences.getBoolean(SHARED_READ_IS_BRIGHTNESS_AUTO, false);
+        return mPreferences.getBoolean(SHARED_READ_IS_BRIGHTNESS_AUTO, true);
     }
 
 
