@@ -37,7 +37,7 @@ public class BrightnessUtils {
      * 设置亮度
      *
      * @param activity
-     * @param brightness
+     * @param brightnessMessageHelper
      */
     public static void setBrightness(Activity activity, int brightness) {
         WindowManager.LayoutParams lp = activity.getWindow().getAttributes();

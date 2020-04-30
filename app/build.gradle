@@ -11,8 +11,8 @@ android {
         minSdkVersion rootProject.ext.android["minSdkVersion"]
         targetSdkVersion rootProject.ext.android["targetSdkVersion"]
         multiDexEnabled true
-        versionCode 6
-        versionName "1.0.3"
+        versionCode 9
+        versionName "1.0.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -86,7 +86,7 @@ android {
             buildConfigField "String", "BASE_URL", "\"http://47.57.30.47/rainbow/\""
             buildConfigField "boolean", "SIGN_RELEASE", "false"
             buildConfigField "boolean", "SIGN_RELEASE", "false"
-            resValue("string", "appName", "彩虹小说-测试版")
+            resValue("string", "appName", "烟云小说-测试版")
             ndk {
 //                abiFilters "armeabi", "armeabi-v7a", "x86"
                 abiFilters "armeabi", "armeabi-v7a"
@@ -101,7 +101,7 @@ android {
         release {
             buildConfigField "String", "BASE_URL", "\"http://47.57.30.47/rainbow/\""
             buildConfigField "boolean", "SIGN_RELEASE", "true"
-            resValue("string", "appName", "彩虹小说")
+            resValue("string", "appName", "烟云小说")
             ndk {
 //                abiFilters "armeabi", "armeabi-v7a", "x86"
                 abiFilters "armeabi-v7a", "x86"
