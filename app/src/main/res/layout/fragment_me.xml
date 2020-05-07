@@ -164,7 +164,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawablePadding="8dp"
-                        android:text="分享轻读"
+                        android:text="分享烟云"
                         android:textColor="#212121"
                         android:textSize="16sp" />
 

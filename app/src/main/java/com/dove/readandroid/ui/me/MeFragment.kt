@@ -110,8 +110,6 @@ class MeFragment : BaseMvcFragment() {
                     //更新 mefragment 的小红点
                     it?.let {
                         appData = it
-                        PreferenceUtils.saveObjectAsGson(mContext, Constants.APPDATA, it)
-
                         if (it.refreshWebsite.isNullOrEmpty()) {
                             toast("已是最新版本")
                         } else {
@@ -176,6 +174,9 @@ class MeFragment : BaseMvcFragment() {
                     Log.d("更新文件", "下载完成")
                     //安装文件
                     iv_tishi.visibility = View.GONE
+                    appData?.refreshWebsite = ""
+                    PreferenceUtils.saveObjectAsGson(mContext, Constants.APPDATA, appData)
+
                     mContext.installApk(mFile)
                 }
 
